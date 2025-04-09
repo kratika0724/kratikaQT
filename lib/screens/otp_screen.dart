@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import '../constants/app_colors.dart';
-import '../constants/app_assets.dart';
+import '../providers/auth_provider.dart';
+import 'home_screen.dart';
 
 class OTPScreen extends StatefulWidget {
   final String phoneNumber;
@@ -14,14 +16,13 @@ class OTPScreen extends StatefulWidget {
 
 class _OTPScreenState extends State<OTPScreen> {
   final List<TextEditingController> _controllers = List.generate(
-    6,
+    5,
     (index) => TextEditingController(),
   );
   final List<FocusNode> _focusNodes = List.generate(
-    6,
+    5,
     (index) => FocusNode(),
   );
-  bool _isLoading = false;
   int _remainingTime = 60;
 
   @override
@@ -52,40 +53,59 @@ class _OTPScreenState extends State<OTPScreen> {
     });
   }
 
-  void _handleOTPVerification() {
+  void _handleOTPVerification() async {
     String otp = _controllers.map((c) => c.text).join();
-    if (otp.length != 6) {
+    if (otp.length != 5) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter complete OTP')),
+        const SnackBar(
+          content: Text('Please enter complete 5-digit OTP'),
+          backgroundColor: Colors.red,
+        ),
       );
       return;
     }
 
-    setState(() {
-      _isLoading = true;
-    });
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final success = await authProvider.verifyOtp(widget.phoneNumber, otp);
 
-    // Simulate API call
-    Future.delayed(const Duration(seconds: 2), () {
-      if (!mounted) return;
-      setState(() {
-        _isLoading = false;
-      });
-      // Navigate to home screen or show success message
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('OTP verified successfully')),
+    if (!mounted) return;
+
+    if (success) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => HomeScreen(),
+        ),
       );
-    });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(authProvider.error ?? 'Failed to verify OTP'),
+          backgroundColor: Colors.red,
+          duration: const Duration(seconds: 3),
+          action: SnackBarAction(
+            label: 'OK',
+            textColor: Colors.white,
+            onPressed: () {
+              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            },
+          ),
+        ),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(context);
+
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
         title: const Text(
           'OTP Verification',
-          style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              color: AppColors.textPrimary, fontWeight: FontWeight.bold),
         ),
         backgroundColor: AppColors.background,
         elevation: 0,
@@ -141,7 +161,7 @@ class _OTPScreenState extends State<OTPScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: List.generate(
-                      6,
+                      5,
                       (index) => SizedBox(
                         width: 45,
                         child: TextField(
@@ -178,7 +198,7 @@ class _OTPScreenState extends State<OTPScreen> {
                             ),
                           ),
                           onChanged: (value) {
-                            if (value.isNotEmpty && index < 5) {
+                            if (value.isNotEmpty && index < 4) {
                               _focusNodes[index + 1].requestFocus();
                             }
                           },
@@ -214,20 +234,22 @@ class _OTPScreenState extends State<OTPScreen> {
                     ),
                   const SizedBox(height: 30),
                   ElevatedButton(
-                    onPressed: _isLoading ? null : _handleOTPVerification,
+                    onPressed:
+                        authProvider.isLoading ? null : _handleOTPVerification,
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 50,
                         vertical: 15,
                       ),
                     ),
-                    child: _isLoading
+                    child: authProvider.isLoading
                         ? const SizedBox(
                             height: 20,
                             width: 20,
                             child: CircularProgressIndicator(
                               strokeWidth: 2,
-                              valueColor: AlwaysStoppedAnimation<Color>(AppColors.buttonText),
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                  AppColors.buttonText),
                             ),
                           )
                         : const Text(
@@ -243,4 +265,4 @@ class _OTPScreenState extends State<OTPScreen> {
       ),
     );
   }
-} 
+}
