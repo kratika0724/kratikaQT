@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'login_screen.dart';
+import 'home_screen.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_assets.dart';
+import '../providers/auth_provider.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -24,7 +27,7 @@ class _SplashScreenState extends State<SplashScreen>
     );
     _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(_controller);
     _controller.forward();
-    _navigateToLogin();
+    _checkAuthState();
   }
 
   @override
@@ -33,13 +36,22 @@ class _SplashScreenState extends State<SplashScreen>
     super.dispose();
   }
 
-  _navigateToLogin() async {
+  _checkAuthState() async {
     await Future.delayed(const Duration(seconds: 3));
     if (!mounted) return;
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const LoginScreen()),
-    );
+
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    if (!authProvider.isAuthenticated) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomeScreen()),
+      );
+    } else {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
+      );
+    }
   }
 
   @override
@@ -57,43 +69,10 @@ class _SplashScreenState extends State<SplashScreen>
         child: Center(
           child: FadeTransition(
             opacity: _fadeAnimation,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: AppColors.primary.withOpacity(0.1),
-                  ),
-                  child: Image.asset(
-                    AppAssets.logo,
-                    width: 120,
-                    height: 120,
-                  ),
-                ),
-                const SizedBox(height: 30),
-                const Text(
-                  'Welcome',
-                  style: TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                const Text(
-                  'Login to continue',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: AppColors.textSecondary,
-                  ),
-                ),
-                const SizedBox(height: 40),
-                const CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
-                ),
-              ],
+            child: Image.asset(
+              AppAssets.distributer_logo,
+              width: 200,
+              height: 200,
             ),
           ),
         ),

@@ -1,0 +1,2 @@
+C:/Users/yogit/Desktop/flutter projects/qt_distributer/android/app/.cxx/RelWithDebInfo/1nblz253/x86/CMakeFiles/edit_cache.dir
+C:/Users/yogit/Desktop/flutter projects/qt_distributer/android/app/.cxx/RelWithDebInfo/1nblz253/x86/CMakeFiles/rebuild_cache.dir

@@ -1,0 +1,2 @@
+C:/Users/yogit/Desktop/flutter projects/qt_distributer/android/app/.cxx/Debug/2h5z4a1e/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/Users/yogit/Desktop/flutter projects/qt_distributer/android/app/.cxx/Debug/2h5z4a1e/armeabi-v7a/CMakeFiles/rebuild_cache.dir
