@@ -103,7 +103,7 @@ class PaymentsScreen extends StatelessWidget {
                                   child: Text(
                                       "${payment['status']}",
                                     style: TextStyle(
-                                      fontSize: 15,fontWeight: FontWeight.bold,color: payment['status'] == "Pending" ? Colors.yellow.shade700 : payment['status'] == "Success" ? Colors.green: Colors.red,
+                                      fontSize: 13,fontWeight: FontWeight.bold,color: payment['status'] == "Pending" ? Colors.yellow.shade700 : payment['status'] == "Success" ? Colors.green: Colors.red,
 
                                     ),
                                   ),
@@ -130,8 +130,8 @@ class PaymentsScreen extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 6),
       child: Row(
         children: [
-          SizedBox(width: 150, child: Text('$label:', style: const TextStyle(fontSize:16,fontWeight: FontWeight.w600))),
-          Expanded(child: Text(value,style: const TextStyle(fontSize:15))),
+          SizedBox(width: 150, child: Text('$label:', style: const TextStyle(fontSize:14,fontWeight: FontWeight.w600))),
+          Expanded(child: Text(value,style: const TextStyle(fontSize:13))),
         ],
       ),
     );
