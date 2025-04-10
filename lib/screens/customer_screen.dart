@@ -42,7 +42,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            SizedBox(height: 10,),
+
             // Header
             Container(
               color: Colors.white,
@@ -53,7 +53,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                   Text(
                     'Customer List',
                     style: TextStyle(
-                        fontSize: 28,
+                        fontSize: 22,
                         fontWeight: FontWeight.bold,
                         color: Colors.black),
                   ),

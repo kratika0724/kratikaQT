@@ -100,11 +100,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         children: [
                           Text("User Name",
                               style: TextStyle(
-                                  fontSize: 22, color: Colors.black)),
+                                  fontSize: 15, color: Colors.black,fontWeight: FontWeight.w600)),
                           SizedBox(height: 5,),
                           Text("9165329901",
                               style:
-                              TextStyle(fontSize: 18, color: Colors.black)),
+                              TextStyle(fontSize: 14, color: Colors.black)),
                         ],
                       )
                     ],
@@ -206,7 +206,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             label: Padding(
                               padding: const EdgeInsets.symmetric(vertical: 8.0),
                               child: Text("Logout",
-                                  style: TextStyle(fontSize:15,fontWeight: FontWeight.bold,color: Colors.white)),
+                                  style: TextStyle(fontSize:14,fontWeight: FontWeight.bold,color: Colors.white)),
                             ),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Theme.of(context).colorScheme.primary,

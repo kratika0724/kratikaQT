@@ -18,7 +18,7 @@ class DashboardScreen extends StatelessWidget {
                   Text(
                     'Dashboard',
                     style: TextStyle(
-                        fontSize: 28,
+                        fontSize: 22,
                         fontWeight: FontWeight.bold,
                         color: Colors.black),
                   ),

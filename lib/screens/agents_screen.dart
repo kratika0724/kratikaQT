@@ -16,7 +16,7 @@ class AgentsScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            SizedBox(height: 10,),
+
             // Header
             Container(
               color: Colors.white,
@@ -27,7 +27,7 @@ class AgentsScreen extends StatelessWidget {
                   Text(
                     ' Agents List',
                     style: TextStyle(
-                        fontSize: 28,
+                        fontSize: 22,
                         fontWeight: FontWeight.bold,
                         color: Colors.black),
                   ),
