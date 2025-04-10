@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import '../constants/app_colors.dart';
-import '../providers/auth_provider.dart';
-import 'home_screen.dart';
+import '../../constants/app_colors.dart';
+import '../../providers/auth_provider.dart';
+import 'base main/home_screen.dart';
+
 
 class OTPScreen extends StatefulWidget {
   final String phoneNumber;

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'otp_screen.dart';
-import '../constants/app_colors.dart';
-import '../constants/app_assets.dart';
-import '../providers/auth_provider.dart';
+
+import '../../constants/app_colors.dart';
+import '../../constants/app_assets.dart';
+import '../../providers/auth_provider.dart';
+import '../otp_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

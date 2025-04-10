@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../constants/app_textstyles.dart';
+import '../../constants/app_textstyles.dart';
 
 class AddAgentScreen extends StatefulWidget {
   const AddAgentScreen({super.key});

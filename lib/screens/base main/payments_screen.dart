@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qt_distributer/constants/app_colors.dart';
 import 'package:dotted_line/dotted_line.dart';
-import '../constants/app_textstyles.dart';
+import '../../constants/app_textstyles.dart';
 
 
 class PaymentsScreen extends StatelessWidget {
@@ -85,7 +85,6 @@ class PaymentsScreen extends StatelessWidget {
                                 payment['transactionId']!,
                                 style: semiBoldTextStyle(fontSize: dimen14, color: Colors.black),
                               ),
-
                             ],
                           ),
                           SizedBox(height: 3,),

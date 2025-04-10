@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 
-import '../constants/app_textstyles.dart';
+import '../../constants/app_textstyles.dart';
 
 class AddCustomerScreen extends StatefulWidget {
   const AddCustomerScreen({super.key});

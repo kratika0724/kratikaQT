@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../constants/app_textstyles.dart';
-import 'add_agent_screen.dart'; // We'll define this screen below
+import 'package:qt_distributer/constants/app_colors.dart';
+import '../../constants/app_textstyles.dart';
+import '../agent/add_agent_screen.dart'; // We'll define this screen below
 
 class AgentsScreen extends StatelessWidget {
   AgentsScreen({super.key});
@@ -37,10 +38,10 @@ class AgentsScreen extends StatelessWidget {
                         MaterialPageRoute(builder: (_) => const AddAgentScreen()),
                       );
                     },
-                    style: ElevatedButton.styleFrom(backgroundColor: Colors.white),
+                    style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary),
                     child: Text(
                       'Add New',
-                      style: TextStyle(color: Theme.of(context).colorScheme.primary),
+                      style: boldTextStyle(fontSize: dimen14, color: Colors.white),
                     ),
                   ),
                 ],
@@ -69,7 +70,7 @@ class AgentsScreen extends StatelessWidget {
           elevation: 3,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 15),
+            padding: const EdgeInsets.symmetric(horizontal: 2.0,vertical: 0),
             child: ListTile(
               leading: ShaderMask(
                 shaderCallback: (Rect bounds) {
@@ -81,7 +82,7 @@ class AgentsScreen extends StatelessWidget {
                 },
                 child: const Icon(
                   Icons.person,
-                  size: 70,
+                  size: 50,
                   color: Colors.white, // This color becomes the base for the gradient
                 ),
               ),
@@ -90,7 +91,7 @@ class AgentsScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('Contact: ${agent['contact']}',style: regularTextStyle(fontSize: dimen14, color: Colors.black)),
-                  SizedBox(height: 10,),
+                  SizedBox(height: 5,),
                   Text('Region: ${agent['region']}',style: regularTextStyle(fontSize: dimen13, color: Colors.black54)),
                 ],
               ),

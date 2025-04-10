@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:qt_distributer/screens/agents_screen.dart';
-import 'package:qt_distributer/screens/allocations_screen.dart';
-import 'package:qt_distributer/screens/customer_screen.dart';
-import 'package:qt_distributer/screens/dashboard_screen.dart';
-import 'package:qt_distributer/screens/payments_screen.dart';
-import 'package:qt_distributer/screens/profile_screen.dart';
+import 'package:qt_distributer/screens/base%20main/agents_screen.dart';
+import 'package:qt_distributer/screens/base%20main/allocations_screen.dart';
+import 'package:qt_distributer/screens/base%20main/customer_screen.dart';
+import 'package:qt_distributer/screens/base%20main/dashboard_screen.dart';
+import 'package:qt_distributer/screens/base%20main/payments_screen.dart';
+import 'package:qt_distributer/screens/base%20main/profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override

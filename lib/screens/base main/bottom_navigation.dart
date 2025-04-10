@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:qt_distributer/screens/payments_screen.dart';
+import 'package:qt_distributer/screens/base%20main/payments_screen.dart';
 import 'dashboard_screen.dart';
 import 'allocations_screen.dart';
 import 'customer_screen.dart';

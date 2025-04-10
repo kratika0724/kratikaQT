@@ -20,8 +20,9 @@
 // }
 
 import 'package:flutter/material.dart';
-import '../constants/app_textstyles.dart';
-import 'add_customer_screen.dart';
+import 'package:qt_distributer/constants/app_colors.dart';
+import '../../constants/app_textstyles.dart';
+import '../customer/add_customer_screen.dart';
 
 class CustomerScreen extends StatefulWidget {
   const CustomerScreen({super.key});
@@ -63,10 +64,10 @@ class _CustomerScreenState extends State<CustomerScreen> {
                         MaterialPageRoute(builder: (_) => const AddCustomerScreen()),
                       );
                     },
-                    style: ElevatedButton.styleFrom(backgroundColor: Colors.white),
+                    style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary),
                     child: Text(
                       'Add New',
-                      style: TextStyle(color: Theme.of(context).colorScheme.primary),
+                      style: boldTextStyle(fontSize: dimen14, color: Colors.white),
                     ),
                   ),
                 ],
@@ -95,7 +96,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
           elevation: 3,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 15),
+            padding: const EdgeInsets.symmetric(horizontal: 2.0,vertical: 0.0),
             child: ListTile(
               leading: ShaderMask(
                 shaderCallback: (Rect bounds) {
@@ -107,7 +108,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                 },
                 child: const Icon(
                   Icons.person,
-                  size: 70,
+                  size: 50,
                   color: Colors.white, // This color becomes the base for the gradient
                 ),
               ),
@@ -116,7 +117,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('Contact: ${customer['contact']}',style: regularTextStyle(fontSize: dimen14, color: Colors.black)),
-                  SizedBox(height: 10,),
+                  SizedBox(height: 5,),
                   Text('Service: ${customer['service']}',style: regularTextStyle(fontSize: dimen13, color: Colors.black54)),
                 ],
               ),
