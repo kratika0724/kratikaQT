@@ -12,7 +12,7 @@ class AppColors {
 
   // Text Colors
   static const Color textPrimary = Color(0xFF0C99D2);
-  static const Color textSecondary = Colors.grey;
+  static const Color textSecondary = Color(0xFF0A5F86);
 
   // Input Colors
   static const Color inputBackground = Color(0xFFF5F5F5);

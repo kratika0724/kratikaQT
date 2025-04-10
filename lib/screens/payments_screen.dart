@@ -15,24 +15,24 @@ class PaymentsScreen extends StatelessWidget {
         'transactionId': 'TXN123456',
         'name': 'John Doe',
         'email': 'john@example.com',
-        'amount': '₹500',
-        'createdAt': '10 Apr 2025',
+        'amount': '₹ 500',
+        'createdAt': '10 Apr 2025, 10:00 AM',
       },
       {
         'status': 'Pending',
         'transactionId': 'TXN654321',
         'name': 'Jane Smith',
         'email': 'jane@example.com',
-        'amount': '₹850',
-        'createdAt': '09 Apr 2025',
+        'amount': '₹ 850',
+        'createdAt': '09 Apr 2025, 8:50 AM',
       },
       {
         'status': 'Failed',
         'transactionId': 'TXN123789',
         'name': 'Smith B.',
         'email': 'smith@example.com',
-        'amount': '₹1300',
-        'createdAt': '11 Apr 2025',
+        'amount': '₹ 1300',
+        'createdAt': '11 Apr 2025, 1:00 PM',
       },
     ];
 
@@ -74,24 +74,53 @@ class PaymentsScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _buildRow('Transaction ID', payment['transactionId']!),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Transaction ID: ",
+                                style: regularTextStyle(fontSize: dimen14, color: Colors.black),
+                              ),
+                              Text(
+                                payment['transactionId']!,
+                                style: semiBoldTextStyle(fontSize: dimen14, color: Colors.black),
+                              ),
+
+                            ],
+                          ),
+                          SizedBox(height: 3,),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                "${payment['createdAt']}",
+                                style: thinTextStyle(fontSize: dimen12, color: Colors.black54),
+                              )
+                            ],
+                          ),
                           const Padding(
-                            padding: EdgeInsets.only(top: 4, bottom: 8),
+                            padding: EdgeInsets.only(top: 4, bottom: 15),
                             child: DottedLine(
                               dashLength: 6.0,
                               dashColor: Colors.grey,
                             ),
                           ),
 
+
                           // _buildRow('Status', payment['status']!),
                           _buildRow('Name', payment['name']!),
                           _buildRow('Email', payment['email']!),
-                          _buildRow('Amount', payment['amount']!),
-                          _buildRow('Created At', payment['createdAt']!),
+
+                          SizedBox(height: 10,),
+                          Divider(thickness: 0.3,color: Colors.grey.shade300,),
 
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
+                            mainAxisAlignment:MainAxisAlignment.spaceBetween,
                             children: [
+                              Text(
+                                  payment['amount']!,
+                                style: semiBoldTextStyle(fontSize: dimen16, color: AppColors.textSecondary),
+                              ),
                               Container(
                                 decoration: BoxDecoration(
                                   color: payment['status'] == "Pending" ? Colors.yellow.withOpacity(0.2) : payment['status'] == "Success" ? Colors.green.withOpacity(0.2) : Colors.red.withOpacity(0.2) ,
@@ -126,7 +155,7 @@ class PaymentsScreen extends StatelessWidget {
 
   Widget _buildRow(String label, String value) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 6),
+      padding: const EdgeInsets.only(bottom: 3),
       child: Row(
         children: [
           Expanded(
@@ -135,13 +164,14 @@ class PaymentsScreen extends StatelessWidget {
                   '$label:',
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
-                  style: semiBoldTextStyle(fontSize: dimen14, color: Colors.black))),
+                  style: regularTextStyle(fontSize: dimen13, color: Colors.black))),
           Expanded(
+            flex: 3,
               child: Text(
                   value,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
-                  style: regularTextStyle(fontSize: dimen14, color: Colors.black))),
+                  style: semiBoldTextStyle(fontSize: dimen13, color: Colors.black))),
         ],
       ),
     );
