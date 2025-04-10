@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../constants/app_textstyles.dart';
 import 'add_agent_screen.dart'; // We'll define this screen below
 
 class AgentsScreen extends StatelessWidget {
@@ -25,11 +26,9 @@ class AgentsScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    ' Agents List',
-                    style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black),
+                    'Agents List',
+                style: headTextStyle(
+                    fontSize: dimen20, color: Colors.black),
                   ),
                   ElevatedButton(
                     onPressed: () {
@@ -86,13 +85,13 @@ class AgentsScreen extends StatelessWidget {
                   color: Colors.white, // This color becomes the base for the gradient
                 ),
               ),
-              title: Text(agent['name']!, style: TextStyle(fontWeight: FontWeight.bold),),
+              title: Text(agent['name']!, style: semiBoldTextStyle(fontSize: dimen15, color: Colors.black),),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Contact: ${agent['contact']}'),
+                  Text('Contact: ${agent['contact']}',style: regularTextStyle(fontSize: dimen14, color: Colors.black)),
                   SizedBox(height: 10,),
-                  Text('Region: ${agent['region']}'),
+                  Text('Region: ${agent['region']}',style: regularTextStyle(fontSize: dimen13, color: Colors.black54)),
                 ],
               ),
             ),

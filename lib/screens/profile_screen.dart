@@ -19,6 +19,7 @@
 // }
 import 'package:flutter/material.dart';
 import '../utils/ui_utils.dart';
+import '../constants/app_textstyles.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -35,7 +36,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('User Profile'),
+        title: Text('User Profile',style: headTextStyle(
+            fontSize: dimen20, color: Colors.white),
+        ),
         centerTitle: true,
         backgroundColor: Theme.of(context).colorScheme.primary,
         foregroundColor: Colors.white,

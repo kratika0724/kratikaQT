@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:qt_distributer/constants/app_textstyles.dart';
 
 class DashboardScreen extends StatelessWidget {
   @override
@@ -17,10 +17,8 @@ class DashboardScreen extends StatelessWidget {
                 children: [
                   Text(
                     'Dashboard',
-                    style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black),
+                  style: headTextStyle(
+                      fontSize: dimen20, color: Colors.black),
                   ),
                 ],
               ),

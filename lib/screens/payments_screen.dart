@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qt_distributer/constants/app_colors.dart';
 import 'package:dotted_line/dotted_line.dart';
+import '../constants/app_textstyles.dart';
 
 
 class PaymentsScreen extends StatelessWidget {
@@ -47,10 +48,8 @@ class PaymentsScreen extends StatelessWidget {
                 children: [
                   Text(
                     'Payments',
-                    style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black),
+                style: headTextStyle(
+                    fontSize: dimen20, color: Colors.black),
                   ),
                 ],
               ),
@@ -99,11 +98,11 @@ class PaymentsScreen extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 8.0,horizontal: 12.0),
+                                  padding: const EdgeInsets.symmetric(vertical: 6.0,horizontal: 10.0),
                                   child: Text(
                                       "${payment['status']}",
                                     style: TextStyle(
-                                      fontSize: 13,fontWeight: FontWeight.bold,color: payment['status'] == "Pending" ? Colors.yellow.shade700 : payment['status'] == "Success" ? Colors.green: Colors.red,
+                                      fontSize: 11,fontWeight: FontWeight.bold,color: payment['status'] == "Pending" ? Colors.yellow.shade700 : payment['status'] == "Success" ? Colors.green: Colors.red,
 
                                     ),
                                   ),
@@ -130,8 +129,19 @@ class PaymentsScreen extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 6),
       child: Row(
         children: [
-          SizedBox(width: 150, child: Text('$label:', style: const TextStyle(fontSize:14,fontWeight: FontWeight.w600))),
-          Expanded(child: Text(value,style: const TextStyle(fontSize:13))),
+          Expanded(
+              flex:1,
+              child: Text(
+                  '$label:',
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  style: semiBoldTextStyle(fontSize: dimen14, color: Colors.black))),
+          Expanded(
+              child: Text(
+                  value,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  style: regularTextStyle(fontSize: dimen14, color: Colors.black))),
         ],
       ),
     );

@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 
+import '../constants/app_textstyles.dart';
+
 class AddCustomerScreen extends StatefulWidget {
   const AddCustomerScreen({super.key});
 
@@ -20,10 +22,9 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title:  Text('Add Customer',style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: Colors.black),),
+        title:  Text('Add Customer',style: headTextStyle(
+            fontSize: dimen20, color: Colors.black),
+        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),

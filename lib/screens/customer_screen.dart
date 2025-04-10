@@ -20,6 +20,7 @@
 // }
 
 import 'package:flutter/material.dart';
+import '../constants/app_textstyles.dart';
 import 'add_customer_screen.dart';
 
 class CustomerScreen extends StatefulWidget {
@@ -52,10 +53,8 @@ class _CustomerScreenState extends State<CustomerScreen> {
                 children: [
                   Text(
                     'Customer List',
-                    style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black),
+                    style: headTextStyle(
+                        fontSize: dimen20, color: Colors.black),
                   ),
                   ElevatedButton(
                     onPressed: () {
@@ -112,13 +111,13 @@ class _CustomerScreenState extends State<CustomerScreen> {
                   color: Colors.white, // This color becomes the base for the gradient
                 ),
               ),
-              title: Text(customer['name']!,style: TextStyle(fontWeight: FontWeight.bold),),
+              title: Text(customer['name']!,style:  semiBoldTextStyle(fontSize: dimen15, color: Colors.black),),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Contact: ${customer['contact']}'),
+                  Text('Contact: ${customer['contact']}',style: regularTextStyle(fontSize: dimen14, color: Colors.black)),
                   SizedBox(height: 10,),
-                  Text('Service: ${customer['service']}'),
+                  Text('Service: ${customer['service']}',style: regularTextStyle(fontSize: dimen13, color: Colors.black54)),
                 ],
               ),
             ),

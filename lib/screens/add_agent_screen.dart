@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../constants/app_textstyles.dart';
 
 class AddAgentScreen extends StatefulWidget {
   const AddAgentScreen({super.key});
@@ -15,10 +16,9 @@ class _AddAgentScreenState extends State<AddAgentScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title:  Text('Add Agent',style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color:Colors.black),),
+        title:  Text('Add Agent',style: headTextStyle(
+            fontSize: dimen20, color: Colors.black),
+        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
