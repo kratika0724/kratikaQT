@@ -6,7 +6,7 @@ class ApiPath{
   static const String sendOtp = '/qt/agents/sendOtp';
 
 
-  static const String getDashboardData = '/qt/ds/dashboard';
+  static const String getUSerCountDashboardData = '/qt/ds/dashboard';
 
 
   static const String createProduct = '/qt/product/create';

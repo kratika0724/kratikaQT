@@ -37,7 +37,7 @@ class DashboardProvider extends ChangeNotifier {
     error = null;
     notifyListeners();
     try {
-      final response = await apiService.getAuth(ApiPath.getDashboardData, {});
+      final response = await apiService.getAuth(ApiPath.getUSerCountDashboardData, {});
       final mResponse = UserCountResponse.fromJson(response);
       if (mResponse.success) {
         _userCountData = mResponse;
