@@ -5,6 +5,8 @@ import 'package:qt_distributer/screens/products/add_product_screen.dart';
 import 'package:qt_distributer/screens/user%20profile/edit_profile_screen.dart';
 import '../constants/app_textstyles.dart';
 import '../screens/base main/payments_screen.dart';
+import '../screens/help_center.dart';
+import '../screens/products/product_screen.dart';
 import '../screens/web view/web_view_screen.dart';
 import '../widgets/navigators.dart';
 
@@ -21,13 +23,13 @@ class UiUtils {
           Navigator.push(context, MaterialPageRoute(builder: (_) => EditUserProfileScreen()));
         }
         if(title.toLowerCase() == 'products'){
-          Navigator.push(context, MaterialPageRoute(builder: (_) => AddProductScreen()));
+          Navigator.push(context, MaterialPageRoute(builder: (_) => ProductScreen()));
         }
         if(title.toLowerCase() == 'payments'){
           Navigator.push(context, MaterialPageRoute(builder: (_) => PaymentsScreen()));
         }
         if(title.toLowerCase() == 'services'){
-          Navigator.push(context, MaterialPageRoute(builder: (_) => PaymentsScreen()));
+          Navigator.push(context, MaterialPageRoute(builder: (_) => ProductScreen()));
         }
 
       },
@@ -59,14 +61,16 @@ class UiUtils {
         // Handle navigation here
         if(title.toLowerCase()=="help center")
         {
-          Navigator.push(context, MaterialPageRoute(builder: (_) => PaymentsScreen()));
+          Navigator.push(context, MaterialPageRoute(builder: (_) => HelpScreen()));
         }
         if(title.toLowerCase()=="terms & conditions")
         {
-          Navigator.push(context, WebViewScreen(
-            url: "https://vosovyapar.com/terms-and-conditions",
-            title: "Terms & Conditions",
-          ) as Route<Object?>, );
+          CustomNavigators.pushNavigate(
+              WebViewScreen(
+                url: "https://flutter.dev",
+                title: "Terms & Conditions",
+              ),
+              context);
         }
         if(title.toLowerCase()=="privacy policies")
         {
@@ -77,12 +81,14 @@ class UiUtils {
               ),
               context);
         }
-        if(title.toLowerCase()=="about voso shop")
+        if(title.toLowerCase()=="about us")
         {
-          Navigator.push(context, WebViewScreen(
-            url: "https://vosovyapar.com/terms-and-conditions",
-            title: "Terms & Conditions",
-          ) as Route<Object?>, );
+          CustomNavigators.pushNavigate(
+              WebViewScreen(
+                url: "https://vosovyapar.com/privacy-policy",
+                title: "About Us",
+              ),
+              context);
         }
       },
       child: Padding(

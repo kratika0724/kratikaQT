@@ -27,7 +27,7 @@ class PaymentCard extends StatelessWidget {
           children: [
             // _buildTransactionRow(payment.transactionId),
             Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Flexible(
                   child: Text(
@@ -45,16 +45,16 @@ class PaymentCard extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 3),
+            // const SizedBox(height: 3),
 
             const Padding(
-              padding: EdgeInsets.symmetric(vertical: 10),
+              padding: EdgeInsets.symmetric(vertical: 6),
               child: DottedLine(dashLength: 6.0, dashColor: Colors.white70),
             ),
-            _buildLabelValueRow('Name', payment.name),
-            _buildLabelValueRow('Email', payment.email),
-            const SizedBox(height: 10),
-            const Divider(thickness: 0.3, color: AppColors.primary),
+            _buildLabelValueRow(payment.name),
+            // _buildLabelValueRow('Email', payment.email),
+            // const SizedBox(height: 10),
+            // const Divider(thickness: 0.3, color: AppColors.primary),
             _buildAmountAndStatus(payment.amount, status, bgColor, textColor),
           ],
         ),
@@ -78,29 +78,29 @@ class PaymentCard extends StatelessWidget {
     );
   }
 
-  Widget _buildLabelValueRow(String label, String value){
+  Widget _buildLabelValueRow( String value){
     return Padding(
       padding: const EdgeInsets.only(bottom: 3),
       child: Row(
         children: [
-          Expanded(
-            flex: 1,
-            child: Text(
-              '$label:',
-              style: regularTextStyle(fontSize: dimen13, color: Colors.white),
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
-            ),
-          ),
-          Expanded(
-            flex: 3,
+          // Expanded(
+          //   flex: 1,
+          //   child: Text(
+          //     '$label:',
+          //     style: regularTextStyle(fontSize: dimen13, color: Colors.white),
+          //     overflow: TextOverflow.ellipsis,
+          //     maxLines: 1,
+          //   ),
+          // ),
+          Flexible(
             child: Text(
               value,
-              style: semiBoldTextStyle(fontSize: dimen13, color: Colors.white),
               overflow: TextOverflow.ellipsis,
               maxLines: 1,
+              style: semiBoldTextStyle(fontSize: dimen14, color: Colors.white),
             ),
           ),
+
         ],
       ),
     );

@@ -121,8 +121,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           context, "Services", Icons.description_outlined),
                       UiUtils().menuItem(
                           context, "Allocations", Icons.assignment_outlined),
-                      UiUtils().menuItem(
-                          context, "Payments", Icons.payment_outlined),
+                      // UiUtils().menuItem(
+                      //     context, "Payments", Icons.payment_outlined),
 
                       // Base Menu
                       const SizedBox(height: 15,),
