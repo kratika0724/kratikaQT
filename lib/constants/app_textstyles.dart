@@ -1,5 +1,78 @@
 import 'package:flutter/material.dart';
 
+regularTextStyle({required fontSize, required color, height}) {
+  return TextStyle(
+      fontSize: fontSize,
+      color: color,
+      fontWeight: FontWeight.w400,
+      fontFamily: 'poppinsRegular'
+      );
+}
+regularTextSkretchStyle({required fontSize, required color, height}) {
+  return TextStyle(
+      fontSize: fontSize,
+      color: color,
+      fontWeight: FontWeight.w400,
+      decoration: TextDecoration.lineThrough,
+      fontFamily: 'poppinsRegular'
+      );
+}
+thinTextStyle({required fontSize, required color, height}) {
+  return TextStyle(
+      fontSize: fontSize,
+      color: color,
+      fontWeight: FontWeight.w100,
+      fontFamily: 'Poppins'
+      );
+}
+mediumTextStyle({required fontSize, required color, height}) {
+  return TextStyle(
+      fontSize: fontSize,
+      color: color,
+      fontWeight: FontWeight.w500,
+      height: height,
+      fontFamily: 'PoppinsMedium'
+  );
+}
+
+semiBoldTextStyle({required fontSize, required color, height}) {
+  return TextStyle(
+      fontSize: fontSize,
+      color: color,
+      fontWeight: FontWeight.w600,
+      fontFamily: 'poppinsSemiBold'
+  );
+}
+
+boldTextStyle({required fontSize, required color, height, latterSpace}) {
+  return TextStyle(
+      fontSize: fontSize,
+      color: color,
+      fontWeight: FontWeight.w700,
+      fontFamily: 'poppinsBold',
+      letterSpacing: latterSpace);
+}
+
+headTextStyle({required fontSize, required color, height, latterSpace}){
+  return TextStyle(
+      fontSize: fontSize,
+      color: color,
+      fontWeight: FontWeight.w800,
+      // fontFamily: 'PoppinsMedium',
+      letterSpacing: latterSpace);
+}
+
+appBarTextStyle({fontSize, required color, height}) {
+  return TextStyle(
+      fontSize: fontSize,
+      color: color,
+      fontWeight: FontWeight.w500,
+      height: height,
+      fontFamily: 'PoppinsMedium'
+  );
+}
+
+
 // font size
 var dimen8 = 8.0;
 var dimen9 = 9.0;
@@ -23,66 +96,3 @@ var dimen26 = 26.0;
 var dimen27 = 27.0;
 var dimen28 = 28.0;
 var btn50 = 50.0;
-
-
-regularTextStyle({required fontSize, required color, height}) {
-  return TextStyle(
-      fontSize: fontSize,
-      color: color,
-      fontWeight: FontWeight.w400,
-      );
-}
-regularTextSkretchStyle({required fontSize, required color, height}) {
-  return TextStyle(
-      fontSize: fontSize,
-      color: color,
-      fontWeight: FontWeight.w400,
-      decoration: TextDecoration.lineThrough,
-      );
-}
-thinTextStyle({required fontSize, required color, height}) {
-  return TextStyle(
-      fontSize: fontSize,
-      color: color,
-      fontWeight: FontWeight.w100,
-      );
-}
-mediumTextStyle({required fontSize, required color, height}) {
-  return TextStyle(
-      fontSize: fontSize,
-      color: color,
-      fontWeight: FontWeight.w500,
-      height: height,);
-}
-
-semiBoldTextStyle({required fontSize, required color, height}) {
-  return TextStyle(
-      fontSize: fontSize,
-      color: color,
-      fontWeight: FontWeight.w600,);
-}
-
-boldTextStyle({required fontSize, required color, height, latterSpace}) {
-  return TextStyle(
-      fontSize: fontSize,
-      color: color,
-      fontWeight: FontWeight.w700,
-      letterSpacing: latterSpace);
-}
-
-headTextStyle({required fontSize, required color, height, latterSpace}){
-  return TextStyle(
-      fontSize: fontSize,
-      color: color,
-      fontWeight: FontWeight.w800,
-      letterSpacing: latterSpace);
-}
-
-appBarTextStyle({fontSize, required color, height}) {
-  return TextStyle(
-      fontSize: fontSize,
-      color: color,
-      fontWeight: FontWeight.w500,
-      height: height,);
-}
-

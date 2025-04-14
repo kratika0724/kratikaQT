@@ -41,7 +41,13 @@ class _SplashScreenState extends State<SplashScreen>
     if (!mounted) return;
 
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    if (!authProvider.isAuthenticated) {
+
+    if (!authProvider.isInitialized) {
+      await Future.delayed(const Duration(milliseconds: 500));
+      return _checkAuthState();
+    }
+
+    if (authProvider.isAuthenticated) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => HomeScreen()),
@@ -53,6 +59,7 @@ class _SplashScreenState extends State<SplashScreen>
       );
     }
   }
+
 
   @override
   Widget build(BuildContext context) {

@@ -20,6 +20,11 @@ class AuthProvider extends ChangeNotifier {
   VerifyOtpResponse? get loginResponse => _loginResponse;
   bool get isAuthenticated => _isAuthenticated;
 
+
+  bool _isInitialized = false;
+  bool get isInitialized => _isInitialized;
+
+
   AuthProvider() {
     _loadAuthState();
   }
@@ -41,8 +46,12 @@ class AuthProvider extends ChangeNotifier {
         }
       }
     }
+    _isInitialized = true;
     notifyListeners();
   }
+
+
+
 
   Future<void> _saveAuthState() async {
     final prefs = await SharedPreferences.getInstance();
@@ -51,6 +60,7 @@ class AuthProvider extends ChangeNotifier {
       await prefs.setBool(_isAuthenticatedKey, _isAuthenticated);
     }
   }
+
 
   // Send OTP
   Future<bool> sendOtp(String phoneNumber) async {

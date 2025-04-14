@@ -5,6 +5,10 @@ class AppColors {
   static const Color primary = Color(0xFF0C99D2);
   static const Color primaryLight = Color(0xFF0C99D2);
 
+  // Secondary Colors
+  static const Color secondary = Color(0xFF0A5F86);
+  static const Color secondaryLight = Color(0xFF0A5F86);
+
   // Background Colors
   static const Color background = Colors.white;
   static const Color surface = Colors.white;
@@ -13,6 +17,7 @@ class AppColors {
   // Text Colors
   static const Color textPrimary = Color(0xFF0C99D2);
   static const Color textSecondary = Color(0xFF0A5F86);
+  // static const Color
 
   // Input Colors
   static const Color inputBackground = Color(0xFFF5F5F5);
@@ -26,8 +31,5 @@ class AppColors {
   static const Color iconPrimary = Color(0xFF0C99D2);
 
   // Gradient Colors
-  static List<Color> get backgroundGradient => [
-        primary.withOpacity(0.1),
-        background,
-      ];
+  static List<Color> get backgroundGradient => [primary.withOpacity(0.1), background];
 }

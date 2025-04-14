@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-
 import '../../constants/app_colors.dart';
 import '../../constants/app_assets.dart';
 import '../../providers/auth_provider.dart';
@@ -83,7 +82,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       const SizedBox(height: 20),
-                      // Distributer Logo
+                      // Distributor Logo
                       Image.asset(
                         AppAssets.distributer_logo,
                         width: 50,

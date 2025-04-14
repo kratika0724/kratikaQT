@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:qt_distributer/providers/dashboard_provider.dart';
+import 'package:qt_distributer/providers/product_provider.dart';
 import 'screens/splash_screen.dart';
 import 'screens/base main/bottom_navigation.dart';
 import 'constants/app_colors.dart';
@@ -18,16 +20,18 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => DashboardProvider()),
+        ChangeNotifierProvider(create: (_) => ProductProvider()),
       ],
       child: MaterialApp(
         title: 'Mobile Login Demo',
         debugShowCheckedModeBanner: false,
         theme: AppTheme.lightTheme.copyWith(
-          colorScheme: ColorScheme.light(
+          colorScheme: const ColorScheme.light(
             primary: AppColors.primary,
             secondary: AppColors.primaryLight,
             background: AppColors.background,
-            surface: AppColors.surface,
+            // surface: AppColors.surface,
           ),
           elevatedButtonTheme: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(

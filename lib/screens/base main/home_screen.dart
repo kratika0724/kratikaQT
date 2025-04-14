@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:qt_distributer/constants/app_colors.dart';
 import 'package:qt_distributer/screens/base%20main/agents_screen.dart';
-import 'package:qt_distributer/screens/base%20main/allocations_screen.dart';
+import 'package:qt_distributer/screens/allocations/allocations_screen.dart';
 import 'package:qt_distributer/screens/base%20main/customer_screen.dart';
 import 'package:qt_distributer/screens/base%20main/dashboard_screen.dart';
 import 'package:qt_distributer/screens/base%20main/payments_screen.dart';
@@ -46,8 +47,11 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.white,
-        elevation: 0,
-        items: <BottomNavigationBarItem>[
+        currentIndex: _selectedIndex,
+        selectedItemColor: AppColors.primary,
+        unselectedItemColor: AppColors.secondary,
+        onTap: _onItemTapped,
+        items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.dashboard),
             label: 'Dashboard',
@@ -69,10 +73,6 @@ class _HomeScreenState extends State<HomeScreen> {
             label: 'Profile',
           ),
         ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.blue,
-        unselectedItemColor: Colors.grey,
-        onTap: _onItemTapped,
       ),
     );
   }

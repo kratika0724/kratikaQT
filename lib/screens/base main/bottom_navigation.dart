@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:qt_distributer/constants/app_colors.dart';
 import 'package:qt_distributer/screens/base%20main/payments_screen.dart';
 import 'dashboard_screen.dart';
-import 'allocations_screen.dart';
 import 'customer_screen.dart';
 import 'agents_screen.dart';
 import 'profile_screen.dart';
@@ -34,14 +34,14 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: _screens[_selectedIndex],
+      body: Container(color: Colors.black,),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.white,
         type: BottomNavigationBarType.fixed,
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
-        selectedItemColor: Theme.of(context).colorScheme.primary,
-        unselectedItemColor: Colors.grey,
+        selectedItemColor: AppColors.primary,
+        unselectedItemColor: AppColors.secondary,
         items:  [
           BottomNavigationBarItem(
             icon: Icon(Icons.dashboard),

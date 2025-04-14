@@ -5,7 +5,6 @@ import '../../constants/app_colors.dart';
 import '../../providers/auth_provider.dart';
 import 'base main/home_screen.dart';
 
-
 class OTPScreen extends StatefulWidget {
   final String phoneNumber;
 
