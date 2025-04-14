@@ -9,6 +9,7 @@ class UiUtils {
   Widget menuItem(BuildContext context, String title, IconData icon, {Widget? trailing}) {
     return GestureDetector(
       onTap: () {
+
         // Handle navigation here
         if(title.toLowerCase() == 'allocations'){
           Navigator.push(context, MaterialPageRoute(builder: (_) => AllocationsScreen()));
