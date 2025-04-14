@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_assets.dart';
+import '../../constants/app_textstyles.dart';
 import '../../providers/auth_provider.dart';
 import '../otp_screen.dart';
 
@@ -88,21 +89,29 @@ class _LoginScreenState extends State<LoginScreen> {
                         width: 50,
                         height: 50,
                       ),
+                      const SizedBox(height: 60),
+                      Text(
+                        'Hello, welcome',
+                        style: semiBoldTextStyle(
+                          fontSize: dimen20,
+                          color: AppColors.primary,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
                       const SizedBox(height: 30),
-                      const Text(
+                      Text(
                         'Enter your mobile number',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.textPrimary,
+                        style: regularTextStyle(
+                          fontSize: dimen15,
+                          color: AppColors.textSecondary,
                         ),
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 10),
-                      const Text(
+                      Text(
                         'We will send you a verification code',
-                        style: TextStyle(
-                          fontSize: 14,
+                        style: regularTextStyle(
+                          fontSize: dimen15,
                           color: AppColors.textSecondary,
                         ),
                         textAlign: TextAlign.center,
@@ -119,7 +128,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           fontSize: 16,
                           color: AppColors.textPrimary,
                         ),
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                           labelText: 'Mobile Number',
                           labelStyle: TextStyle(
                             fontSize: 14,
@@ -132,13 +141,14 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           prefixIcon: Icon(
                             Icons.phone,
-                            color: AppColors.iconPrimary,
+                            color: AppColors.secondary,
                             size: 20,
                           ),
                           contentPadding: EdgeInsets.symmetric(
                             horizontal: 16,
                             vertical: 16,
                           ),
+                          fillColor: AppColors.secondary.withOpacity(0.1),
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -166,9 +176,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                       AppColors.buttonText),
                                 ),
                               )
-                            : const Text(
-                                'Get OTP',
-                                style: TextStyle(fontSize: 18),
+                            : Text(
+                                'Send OTP',
+                                style: boldTextStyle(fontSize: dimen20, color: Colors.white)
                               ),
                       ),
                     ],

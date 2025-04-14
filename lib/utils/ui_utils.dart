@@ -4,6 +4,9 @@ import 'package:qt_distributer/screens/allocations/allocations_screen.dart';
 import 'package:qt_distributer/screens/products/add_product_screen.dart';
 import 'package:qt_distributer/screens/user%20profile/edit_profile_screen.dart';
 import '../constants/app_textstyles.dart';
+import '../screens/base main/payments_screen.dart';
+import '../screens/web view/web_view_screen.dart';
+import '../widgets/navigators.dart';
 
 class UiUtils {
   Widget menuItem(BuildContext context, String title, IconData icon, {Widget? trailing}) {
@@ -20,6 +23,13 @@ class UiUtils {
         if(title.toLowerCase() == 'products'){
           Navigator.push(context, MaterialPageRoute(builder: (_) => AddProductScreen()));
         }
+        if(title.toLowerCase() == 'payments'){
+          Navigator.push(context, MaterialPageRoute(builder: (_) => PaymentsScreen()));
+        }
+        if(title.toLowerCase() == 'services'){
+          Navigator.push(context, MaterialPageRoute(builder: (_) => PaymentsScreen()));
+        }
+
       },
       child: Card(
         color: Colors.white,
@@ -47,6 +57,33 @@ class UiUtils {
     return GestureDetector(
       onTap: () {
         // Handle navigation here
+        if(title.toLowerCase()=="help center")
+        {
+          Navigator.push(context, MaterialPageRoute(builder: (_) => PaymentsScreen()));
+        }
+        if(title.toLowerCase()=="terms & conditions")
+        {
+          Navigator.push(context, WebViewScreen(
+            url: "https://vosovyapar.com/terms-and-conditions",
+            title: "Terms & Conditions",
+          ) as Route<Object?>, );
+        }
+        if(title.toLowerCase()=="privacy policies")
+        {
+          CustomNavigators.pushNavigate(
+              WebViewScreen(
+                url: "https://vosovyapar.com/privacy-policy",
+                title: "Privacy Policies",
+              ),
+              context);
+        }
+        if(title.toLowerCase()=="about voso shop")
+        {
+          Navigator.push(context, WebViewScreen(
+            url: "https://vosovyapar.com/terms-and-conditions",
+            title: "Terms & Conditions",
+          ) as Route<Object?>, );
+        }
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 5.0),

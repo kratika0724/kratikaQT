@@ -226,71 +226,71 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 15,),
-                    Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [AppColors.secondary,AppColors.primary],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                        color: AppColors.secondary.withOpacity(0.9),
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15.0,vertical: 0),
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(top: 10.0,bottom: 8,left: 6),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Overview",
-                                    style: boldTextStyle(fontSize: dimen20, color: Colors.white, latterSpace: 2.0),
-                                  ),
-                                ],
-                              ),
-                            ),
-
-                            GridView.count(
-                              shrinkWrap: true,
-                              crossAxisCount: 2,
-                              crossAxisSpacing: 8.0,
-                              mainAxisSpacing: 8.0,
-                              childAspectRatio: 1.2,
-                              children: [
-                                _buildCard(
-                                  'User Count',
-                                  '${userCount?.total ?? 0}',
-                                  AppColors.primary,
-                                  Icons.analytics_outlined,
-                                  1.0,
-                                ),
-                                _buildCard(
-                                  'Product Count',
-                                  '0',
-                                  AppColors.primary,
-                                  Icons.analytics_outlined,
-                                  1.0,
-                                ),
-                                _buildCard(
-                                  'Customer Count',
-                                  '0',
-                                  AppColors.primary,
-                                  Icons.analytics_outlined,
-                                  1.0,
-                                ),
-                              ],
-                            ),
-
-                            SizedBox(height: 15,),
-                          ],
-                        ),
-                      ),
-                    ),
+                    // const SizedBox(height: 15,),
+                    // Container(
+                    //   width: double.infinity,
+                    //   decoration: BoxDecoration(
+                    //     gradient: LinearGradient(
+                    //       colors: [AppColors.secondary,AppColors.primary],
+                    //       begin: Alignment.topLeft,
+                    //       end: Alignment.bottomRight,
+                    //     ),
+                    //     color: AppColors.secondary.withOpacity(0.9),
+                    //     borderRadius: BorderRadius.circular(25),
+                    //   ),
+                    //   child: Padding(
+                    //     padding: const EdgeInsets.symmetric(horizontal: 15.0,vertical: 0),
+                    //     child: Column(
+                    //       children: [
+                    //         Padding(
+                    //           padding: const EdgeInsets.only(top: 10.0,bottom: 8,left: 6),
+                    //           child: Row(
+                    //             mainAxisAlignment: MainAxisAlignment.start,
+                    //             children: [
+                    //               Text(
+                    //                 "Overview",
+                    //                 style: boldTextStyle(fontSize: dimen20, color: Colors.white, latterSpace: 2.0),
+                    //               ),
+                    //             ],
+                    //           ),
+                    //         ),
+                    //
+                    //         GridView.count(
+                    //           shrinkWrap: true,
+                    //           crossAxisCount: 2,
+                    //           crossAxisSpacing: 8.0,
+                    //           mainAxisSpacing: 8.0,
+                    //           childAspectRatio: 1.2,
+                    //           children: [
+                    //             _buildCard(
+                    //               'User Count',
+                    //               '${userCount?.total ?? 0}',
+                    //               AppColors.primary,
+                    //               Icons.analytics_outlined,
+                    //               1.0,
+                    //             ),
+                    //             _buildCard(
+                    //               'Product Count',
+                    //               '0',
+                    //               AppColors.primary,
+                    //               Icons.analytics_outlined,
+                    //               1.0,
+                    //             ),
+                    //             _buildCard(
+                    //               'Customer Count',
+                    //               '0',
+                    //               AppColors.primary,
+                    //               Icons.analytics_outlined,
+                    //               1.0,
+                    //             ),
+                    //           ],
+                    //         ),
+                    //
+                    //         SizedBox(height: 15,),
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
@@ -318,7 +318,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            SizedBox(height: 10,),
+            const SizedBox(height: 10,),
             Text(
               count,
               textAlign: TextAlign.center,

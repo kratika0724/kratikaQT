@@ -25,14 +25,28 @@ class PaymentCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildTransactionRow(payment.transactionId),
-            const SizedBox(height: 3),
-            Text(
-              payment.createdAt,
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
-              style: thinTextStyle(fontSize: dimen12, color: Colors.white),
+            // _buildTransactionRow(payment.transactionId),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Flexible(
+                  child: Text(
+                    payment.transactionId,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    style: semiBoldTextStyle(fontSize: dimen14, color: Colors.white),
+                  ),
+                ),
+                Text(
+                  payment.createdAt,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  style: thinTextStyle(fontSize: dimen12, color: Colors.white),
+                ),
+              ],
             ),
+            const SizedBox(height: 3),
+
             const Padding(
               padding: EdgeInsets.symmetric(vertical: 10),
               child: DottedLine(dashLength: 6.0, dashColor: Colors.white70),
