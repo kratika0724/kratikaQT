@@ -28,21 +28,21 @@ class _AddAllocationScreenState extends State<AddAllocationScreen> {
             child: SingleChildScrollView(
               child:  Column(
                 children: [
-                  Card(
-                    elevation: 4,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 12),
-                      child: Column(
-                        children: [
-                          buildTextField('Area'),
-                          buildTextField('Pincode'),
-                        ],
-                      ),
-                    ),
-                  ),
+                  // Card(
+                  //   elevation: 4,
+                  //   shape: RoundedRectangleBorder(
+                  //     borderRadius: BorderRadius.circular(12),
+                  //   ),
+                  //   child: Padding(
+                  //     padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 12),
+                  //     child: Column(
+                  //       children: [
+                  //         buildTextField('Area'),
+                  //         buildTextField('Pincode'),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
 
                   const SizedBox(height: 20),
                   // Upload Excel Section

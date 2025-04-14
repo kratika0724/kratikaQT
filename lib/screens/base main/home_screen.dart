@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qt_distributer/constants/app_colors.dart';
 import 'package:qt_distributer/screens/base%20main/agents_screen.dart';
-import 'package:qt_distributer/screens/allocations/allocations_screen.dart';
-import 'package:qt_distributer/screens/base%20main/customer_screen.dart';
 import 'package:qt_distributer/screens/base%20main/dashboard_screen.dart';
 import 'package:qt_distributer/screens/base%20main/payments_screen.dart';
 import 'package:qt_distributer/screens/base%20main/profile_screen.dart';
@@ -19,7 +17,6 @@ class _HomeScreenState extends State<HomeScreen> {
    List<Widget> _pages = [
     DashboardScreen(),
     PaymentsScreen(),
-    CustomerScreen(),
     AgentsScreen(),
     ProfileScreen(),
   ];
@@ -59,10 +56,6 @@ class _HomeScreenState extends State<HomeScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.credit_card),
             label: 'Payments',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Customer',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.people),

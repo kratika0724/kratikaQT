@@ -19,7 +19,6 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
   List<Widget> _screens = [
     DashboardScreen(),
      PaymentsScreen(),
-    CustomerScreen(),
      AgentsScreen(),
     ProfileScreen(),
   ];
@@ -50,10 +49,6 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.assignment),
             label: 'Payments',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.people),
-            label: 'Customer',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),

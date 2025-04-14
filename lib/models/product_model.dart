@@ -1,9 +1,9 @@
-class ProductModel{
+class ProductAddModel{
   final bool success;
   final String message;
   final List<CreateProductModel> data;
 
-  ProductModel({
+  ProductAddModel({
     required this.success,
     required this.message,
     this.data = const [],
@@ -13,8 +13,8 @@ class ProductModel{
     'message': message,
     'data': data.map((address) => address.toJson()).toList(),
   };
-  factory ProductModel.fromJson(Map<String, dynamic> json) {
-    return ProductModel(
+  factory ProductAddModel.fromJson(Map<String, dynamic> json) {
+    return ProductAddModel(
       success: json['success'] ?? false,
       message: json['message'] ?? '',
       data: json['data'] != null
@@ -67,52 +67,3 @@ class CreateProductModel {
 }
 
 
-
-
-class Product {
-  final String? productName;
-  final String? productCode;
-  final int? productAmount;
-  final String? quaterDiscount;
-  final String? halfyearDiscount;
-  final String? yearlyDiscount;
-
-  Product({
-    this.productName = '',
-    this.productCode = '',
-    this.productAmount = 0,
-    this.quaterDiscount = '',
-    this.halfyearDiscount = '',
-    this.yearlyDiscount = '',
-  });
-
-}
-
-
-
-final List<Map<String, String>> samplePayments = [
-  {
-    'product': 'Success',
-    'transactionId': 'TXN123456',
-    'name': 'John Doe',
-    'email': 'john@example.com',
-    'amount': '₹ 500',
-    'createdAt': '10 Apr 2025, 10:00 AM',
-  },
-  {
-    'status': 'Pending',
-    'transactionId': 'TXN654321',
-    'name': 'Jane Smith',
-    'email': 'jane@example.com',
-    'amount': '₹ 850',
-    'createdAt': '09 Apr 2025, 8:50 AM',
-  },
-  {
-    'status': 'Failed',
-    'transactionId': 'TXN123789',
-    'name': 'Smith B.',
-    'email': 'smith@example.com',
-    'amount': '₹ 1300',
-    'createdAt': '11 Apr 2025, 1:00 PM',
-  },
-];

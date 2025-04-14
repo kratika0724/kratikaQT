@@ -4,6 +4,7 @@ import 'package:qt_distributer/screens/allocations/allocations_screen.dart';
 import 'package:qt_distributer/screens/products/add_product_screen.dart';
 import 'package:qt_distributer/screens/user%20profile/edit_profile_screen.dart';
 import '../constants/app_textstyles.dart';
+import '../screens/base main/customer_screen.dart';
 import '../screens/base main/payments_screen.dart';
 import '../screens/help_center.dart';
 import '../screens/products/product_screen.dart';
@@ -28,8 +29,8 @@ class UiUtils {
         if(title.toLowerCase() == 'payments'){
           Navigator.push(context, MaterialPageRoute(builder: (_) => PaymentsScreen()));
         }
-        if(title.toLowerCase() == 'services'){
-          Navigator.push(context, MaterialPageRoute(builder: (_) => ProductScreen()));
+        if(title.toLowerCase() == 'customers'){
+          Navigator.push(context, MaterialPageRoute(builder: (_) => CustomerScreen()));
         }
 
       },

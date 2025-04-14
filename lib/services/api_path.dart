@@ -10,6 +10,7 @@ class ApiPath{
 
 
   static const String createProduct = '/qt/product/create';
+  static const String getProduct = '/qt/product/getList';
 
 
 }

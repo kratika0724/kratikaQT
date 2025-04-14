@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../models/product_model.dart';
+import '../models/product_response.dart';
 import '../services/api_path.dart';
 import '../services/api_service.dart';
 import '../utils/ui_utils.dart';
@@ -9,7 +10,9 @@ class ProductProvider with ChangeNotifier {
 
   bool isLoading = false;
   String? errorMessage;
-  ProductModel? responseModel;
+  ProductAddModel? responseModel;
+  List<ProductModel> products = [];
+
 
   final ApiService apiService = ApiService();
 
@@ -37,7 +40,7 @@ class ProductProvider with ChangeNotifier {
       };
 
       final response = await apiService.post_auth(ApiPath.createProduct, body);
-      final mResponse = ProductModel.fromJson(response);
+      final mResponse = ProductAddModel.fromJson(response);
       if (mResponse.success) {
         UiUtils().showSuccessSnackBar(context,"Product added successfully!");
           WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -57,4 +60,35 @@ class ProductProvider with ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<void> getProductData() async {
+    isLoading = true;
+    errorMessage = null;
+    notifyListeners();
+
+    try {
+      final response = await apiService.getAuth(ApiPath.getProduct, {});
+      final productResponse = ProductResponseModel.fromJson(response);
+
+      if (productResponse.success) {
+        products = productResponse.data;
+      } else {
+        errorMessage = productResponse.message;
+        Fluttertoast.showToast(msg: errorMessage!);
+        debugPrint("Get product failed: ${productResponse.message}");
+      }
+    } catch (error) {
+      errorMessage = "Error fetching products: $error";
+      Fluttertoast.showToast(msg: errorMessage!);
+      debugPrint(errorMessage);
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
 }
+
+
+
+
+
