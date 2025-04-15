@@ -53,8 +53,8 @@ class _HomeScreenState extends State<HomeScreen> {
           BottomNavigationBarItem(
             icon: Image.asset(
               AppAssets.dashboardIcon, // Adjust path if needed
-              width: 24,
-              height: 24,
+              width: 16,
+              height: 16,
             ),
             label: 'Dashboard',
           ),
@@ -68,7 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           BottomNavigationBarItem(
             icon: Image.asset(
-              AppAssets.realStateSellerIcon, // Adjust path if needed
+              AppAssets.customerIcon, // Adjust path if needed
               width: 24,
               height: 24,
             ),

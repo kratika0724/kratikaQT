@@ -9,7 +9,7 @@ class AppAssets {
   static const String lockIcon = 'assets/icons/lock.png';
   static const String userIcon = 'assets/icons/user_icon.png';
   static const String dashboardIcon = 'assets/icons/dashboard_icon.png';
-  static const String phoneIcon = 'assets/icons/customers_icon.png';
+  static const String customerIcon = 'assets/icons/customers_icon.png';
   static const String paymentIcon = 'assets/icons/payment_icon.png';
   static const String realStateSellerIcon = 'assets/icons/real_state_seller_icon.png';
 
