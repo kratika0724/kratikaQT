@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:qt_distributer/constants/app_assets.dart';
 import 'package:qt_distributer/constants/app_colors.dart';
 import 'package:qt_distributer/screens/base%20main/agents_screen.dart';
 import 'package:qt_distributer/screens/base%20main/dashboard_screen.dart';
@@ -48,21 +49,37 @@ class _HomeScreenState extends State<HomeScreen> {
         selectedItemColor: AppColors.primary,
         unselectedItemColor: AppColors.secondary,
         onTap: _onItemTapped,
-        items: const <BottomNavigationBarItem>[
+        items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.dashboard),
+            icon: Image.asset(
+              AppAssets.dashboardIcon, // Adjust path if needed
+              width: 24,
+              height: 24,
+            ),
             label: 'Dashboard',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.credit_card),
+           BottomNavigationBarItem(
+            icon: Image.asset(
+              AppAssets.paymentIcon, // Adjust path if needed
+              width: 24,
+              height: 24,
+            ),
             label: 'Payments',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.people),
+            icon: Image.asset(
+              AppAssets.realStateSellerIcon, // Adjust path if needed
+              width: 24,
+              height: 24,
+            ),
             label: 'Agents',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle),
+            icon: Image.asset(
+              AppAssets.userIcon, // Adjust path if needed
+              width: 24,
+              height: 24,
+            ),
             label: 'Profile',
           ),
         ],

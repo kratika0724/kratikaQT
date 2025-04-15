@@ -16,12 +16,12 @@ class PaymentCard extends StatelessWidget {
     final textColor = _getStatusColor(status);
 
     return Card(
-      margin: const EdgeInsets.only(bottom: 12),
+      margin: const EdgeInsets.only(bottom: 6),
       color: AppColors.secondary,
       elevation: 3,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -31,31 +31,31 @@ class PaymentCard extends StatelessWidget {
               children: [
                 Flexible(
                   child: Text(
-                    payment.transactionId,
+                    payment.amount,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
-                    style: semiBoldTextStyle(fontSize: dimen14, color: Colors.white),
+                    style: boldTextStyle(fontSize: dimen14, color: Colors.white),
                   ),
                 ),
                 Text(
-                  payment.createdAt,
+                  payment.transactionId,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
-                  style: thinTextStyle(fontSize: dimen12, color: Colors.white),
+                  style: mediumTextStyle(fontSize: dimen14, color: Colors.white),
                 ),
               ],
             ),
             // const SizedBox(height: 3),
 
             const Padding(
-              padding: EdgeInsets.symmetric(vertical: 6),
-              child: DottedLine(dashLength: 6.0, dashColor: Colors.white70),
+              padding: EdgeInsets.symmetric(vertical: 4),
+              child: DottedLine(dashLength: 4.0, dashColor: Colors.white70,lineThickness: 0.3,),
             ),
-            _buildLabelValueRow(payment.name),
+            _buildLabelValueRow(payment.name, payment.createdAt, status,bgColor, textColor),
             // _buildLabelValueRow('Email', payment.email),
             // const SizedBox(height: 10),
             // const Divider(thickness: 0.3, color: AppColors.primary),
-            _buildAmountAndStatus(payment.amount, status, bgColor, textColor),
+            // _buildAmountAndStatus(payment.amount, status, bgColor, textColor),
           ],
         ),
       ),
@@ -78,27 +78,28 @@ class PaymentCard extends StatelessWidget {
     );
   }
 
-  Widget _buildLabelValueRow( String value){
+  Widget _buildLabelValueRow( String value,String transactionId ,String status,Color bgColor, Color textColor){
     return Padding(
-      padding: const EdgeInsets.only(bottom: 3),
+      padding: const EdgeInsets.only(bottom: 0),
       child: Row(
         children: [
-          // Expanded(
-          //   flex: 1,
-          //   child: Text(
-          //     '$label:',
-          //     style: regularTextStyle(fontSize: dimen13, color: Colors.white),
-          //     overflow: TextOverflow.ellipsis,
-          //     maxLines: 1,
-          //   ),
-          // ),
-          Flexible(
-            child: Text(
-              value,
+          Text(
+            value+', ',
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+            style: mediumTextStyle(fontSize: dimen14, color: Colors.white),
+          ),
+          Text(
+              transactionId,
               overflow: TextOverflow.ellipsis,
               maxLines: 1,
-              style: semiBoldTextStyle(fontSize: dimen14, color: Colors.white),
-            ),
+              style: thinTextStyle(fontSize: dimen12, color: Colors.white)),
+          Spacer(),
+          Text(
+            status,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+            style: boldTextStyle(fontSize: dimen12, color: textColor),
           ),
 
         ],

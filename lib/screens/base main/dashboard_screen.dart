@@ -1,3 +1,4 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qt_distributer/constants/app_textstyles.dart';
@@ -14,6 +15,22 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+
+  LineChartBarData _buildLineBarData(List<double> values, Color color) {
+    return LineChartBarData(
+      isCurved: false,
+      color: color,
+      barWidth: 3,
+      isStrokeCapRound: true,
+      dotData: FlDotData(show: false),
+      belowBarData: BarAreaData(show: false),
+      spots: values
+          .asMap()
+          .entries
+          .map((e) => FlSpot(e.key.toDouble(), e.value))
+          .toList(),
+    );
+  }
 
   @override
   void initState() {
@@ -41,18 +58,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
         title: HeaderTextThemeSecondary("Dashboard"),
         backgroundColor: Colors.white,
         foregroundColor: AppColors.primary,
-        elevation: 3,
+        // elevation: 3,
         actions: [
           GestureDetector(
             onTap: (){},
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 7.0),
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
               child: Container(
                 height: 30,
                 width: 30,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(9),
-                  color: Colors.transparent,
+                  color: AppColors.primary.withOpacity(0.1),
                   border: Border.all(color: AppColors.secondary),
                 ),
                 child: Icon(
@@ -74,7 +91,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 width: 30,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(9),
-                  color: Colors.transparent,
+                  color: AppColors.primary.withOpacity(0.1),
                   border: Border.all(color: AppColors.secondary),
                 ),
                 child: ShaderMask(
@@ -99,32 +116,25 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ? Center(child: Text(dashboardProvider.error!))
             : SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 16.0),
+                padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 4.0),
                 child: Column(
                   children: [
-                    Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [AppColors.secondary,AppColors.primary],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                        color: AppColors.secondary.withOpacity(0.9),
-                        borderRadius: BorderRadius.circular(25),
-                      ),
+                    Card(
+                      elevation: 1.5,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                        color: Colors.white,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 10),
                           child: Column(
                             children: [
                               Padding(
-                                padding: const EdgeInsets.only(top: 6.0,bottom: 0,left: 8),
+                                padding: const EdgeInsets.only(top: 0.0,bottom: 0,left: 8),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Text(
                                         "Payments",
-                                      style: boldTextStyle(fontSize: dimen18, color: Colors.white, latterSpace: 2.0),
+                                      style: boldTextStyle(fontSize: dimen18, color: Colors.black, latterSpace: 1.0),
                                     ),
                                   ],
                                 ),
@@ -133,99 +143,177 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 padding: const EdgeInsets.symmetric(vertical: 6.0,horizontal: 8),
                                 child: Container(
                                   width: double.infinity,
-                                  height: 120,
+                                  height: 105,
                                   decoration: BoxDecoration(
                                     color: Colors.transparent,
                                     borderRadius: BorderRadius.circular(25),
                                   ),
-                                    child: _buildCardSuccessPayments('Successful', '₹ 5009', Colors.green, Icons.check, 1.0)),
+                                    child: _buildCardSuccessPayments('Successful', '₹ 5009', Colors.green, Icons.check_circle_rounded, 1.0)),
                               ),
                               Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 6.0),
+                                padding: const EdgeInsets.symmetric(horizontal: 8.0),
                                 child: GridView.count(
                                   shrinkWrap: true,
                                   crossAxisCount: 2,
-                                  crossAxisSpacing: 2.0,
+                                  crossAxisSpacing: 8.0,
                                   mainAxisSpacing: 10.0,
-                                  childAspectRatio: 1.5,
+                                  childAspectRatio: 1.8,
                                   children: [
-                                    _buildCardPayments('Pending', '₹ 7261', Colors.amber,Icons.error,0.7),
-                                    _buildCardPayments('Failed', '₹ 4025', Colors.red,Icons.cancel,0.5),
+                                    _buildCardPayments('Pending', '₹ 7261', Color(0xfff59d1b),Icons.error,0.7),
+                                    _buildCardPayments('Failed', '₹ 4025', Color(0xfffd6363),Icons.cancel,0.5),
                                   ],
                                 ),
                               ),
-                              SizedBox(height: 10,),
+                              SizedBox(height: 5,),
                             ],
                           ),
                         ),
                     ),
-                    const SizedBox(height: 15,),
-                    Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [AppColors.secondary,AppColors.primary],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                        color: AppColors.secondary.withOpacity(0.9),
-                        borderRadius: BorderRadius.circular(25),
-                      ),
+                    const SizedBox(height: 10,),
+                    Card(
+                      elevation: 1.5,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                      color: Colors.white,
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0,vertical: 0),
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 10),
                         child: Column(
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(top: 10.0,bottom: 8,left: 6),
+                              padding: const EdgeInsets.only(top: 0.0,bottom: 0,left: 8),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Text(
                                     "Overview",
-                                    style: boldTextStyle(fontSize: dimen20, color: Colors.white, latterSpace: 2.0),
+                                    style: boldTextStyle(fontSize: dimen18, color: Colors.black, latterSpace: 1.0),
                                   ),
                                 ],
                               ),
                             ),
-                            SizedBox(
-                              height: 120, // Set a fixed height for all cards
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: _buildCard(
-                                      'User\nCount',
-                                      '${userCount?.total ?? 0}',
-                                      AppColors.primary,
-                                      Icons.analytics_outlined,
-                                      1.0,
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 6.0),
+                              child: SizedBox(
+                                height: 110, // Set a fixed height for all cards
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: _buildCard(
+                                        'User\nCount',
+                                        '${userCount?.total ?? 0}',
+                                        AppColors.primary,
+                                        Icons.analytics_outlined,
+                                        1.0,
+                                      ),
                                     ),
-                                  ),
-                                  Expanded(
-                                    child: _buildCard(
-                                      'Customer\nCount',
-                                      '0',
-                                      AppColors.primary,
-                                      Icons.analytics_outlined,
-                                      1.0,
+                                    SizedBox(width: 10,),
+                                    Expanded(
+                                      child: _buildCard(
+                                        'Customer\nCount',
+                                        '0',
+                                        AppColors.primary,
+                                        Icons.analytics_outlined,
+                                        1.0,
+                                      ),
                                     ),
-                                  ),
-                                  Expanded(
-                                    child: _buildCard(
-                                      'Product\nCount',
-                                      '0',
-                                      AppColors.primary,
-                                      Icons.analytics_outlined,
-                                      1.0,
+                                    SizedBox(width: 10,),
+                                    Expanded(
+                                      child: _buildCard(
+                                        'Product\nCount',
+                                        '0',
+                                        AppColors.primary,
+                                        Icons.analytics_outlined,
+                                        1.0,
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
-                            SizedBox(height: 15,),
                           ],
                         ),
                       ),
                     ),
+                    const SizedBox(height: 10,),
+                    Card(
+                      elevation: 1.5,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                      color: Colors.white,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 12.0,bottom: 12.0,left: 8,right: 16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "KPI Trends",
+                              style: boldTextStyle(
+                                fontSize: dimen18,
+                                color: Colors.black,
+                                latterSpace: 1.0,
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            SizedBox(
+                              height: 200,
+                              child: LineChart(
+                                LineChartData(
+                                  gridData: FlGridData(show: false),
+                                  borderData: FlBorderData(
+                                    show: true,
+                                    border: Border.all(color: AppColors.primary.withOpacity(0.2)),
+                                  ),
+                                  titlesData: FlTitlesData(
+                                    bottomTitles: AxisTitles(
+                                      sideTitles: SideTitles(
+                                        showTitles: true,
+                                        reservedSize: 22,
+                                        interval: 1,
+                                        getTitlesWidget: (value, meta) {
+                                          return Text(
+                                            'Day ${value.toInt()}',
+                                            style: TextStyle(fontSize: 10,color: AppColors.secondary),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                    leftTitles: AxisTitles(
+                                      sideTitles: SideTitles(
+                                        showTitles: true,
+                                        interval: 20,
+                                        getTitlesWidget: (value, meta) {
+                                          return Text(
+                                            '${value.toInt()}',
+                                            style: TextStyle(fontSize: 10,color: AppColors.secondary),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                    topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                                    rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                                  ),
+                                  lineBarsData: [
+                                    _buildLineBarData([10, 20, 30, 25, 35, 40], Colors.green),
+                                    _buildLineBarData([12, 24, 20, 30, 28, 22], Colors.amberAccent),
+                                    _buildLineBarData([7, 15, 17, 22, 20, 27], Colors.red.shade600),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                _buildLegend(Colors.green, "Users"),
+                                SizedBox(width: 10),
+                                _buildLegend(Colors.amberAccent, "Products"),
+                                SizedBox(width: 10),
+                                _buildLegend(Colors.red, "Payments"),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 10,),
                     // const SizedBox(height: 15,),
                     // Container(
                     //   width: double.infinity,
@@ -299,38 +387,64 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
+  Widget _buildLegend(Color color, String title) {
+    return Row(
+      children: [
+        Container(
+          width: 10,
+          height: 10,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: color,
+          ),
+        ),
+        SizedBox(width: 4),
+        Text(
+          title,
+          style: TextStyle(fontSize: 12),
+        ),
+      ],
+    );
+  }
+
   Widget _buildCard(String title, String count, Color color, IconData checkCircle, double value) {
     return Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      elevation: 2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
       child: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [color.withOpacity(0.2), color.withOpacity(0.1)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
+          // gradient: LinearGradient(
+          //   colors: [color.withOpacity(0.2), color.withOpacity(0.1)],
+          //   begin: Alignment.topLeft,
+          //   end: Alignment.bottomRight,
+          // ),
+          // color: Colors.white,
+          color: AppColors.primary.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(4),
           // border: Border.all(color: AppColors.secondary)
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
+        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(height: 10,),
             Text(
               count,
               textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
               style: semiBoldTextStyle(
-                fontSize: dimen24,
+                fontSize: dimen20,
                 color: AppColors.secondary,
               ),
             ),
             Text(
                 title,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,
-                style: semiBoldTextStyle(
+                style: mediumTextStyle(
                   fontSize: dimen14,
                   color: AppColors.secondary,
                 )),
@@ -365,65 +479,67 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Widget _buildCardPayments(String title, String amount, Color color, IconData checkCircle, double value) {
     return Card(
-      elevation: 4,
+      elevation: 2,
       color: Colors.white,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       child: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [color.withOpacity(0.6),color.withOpacity(0.4)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
+          // gradient: LinearGradient(
+          //   colors: [color.withOpacity(0.6),color.withOpacity(0.4)],
+          //   begin: Alignment.topLeft,
+          //   end: Alignment.bottomRight,
+          // ),
+          // color: Colors.white,
+          color: color.withOpacity(0.2),
+          borderRadius: BorderRadius.circular(8),
         ),
         padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 8),
-        child : Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child : Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+            Stack(
+              alignment: Alignment.center,
               children: [
-                Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Container(
-                      height: 25,
-                      width: 25,
-                      decoration: BoxDecoration(
-                        color: color.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(8), // Rounded corners
-                      ),
-                    ),
-                    Icon(
-                      checkCircle,
-                      color: color,
-                      size: 15,
-                    ),
-                  ],
+                Container(
+                  height: 40,
+                  width: 40,
+                  decoration: BoxDecoration(
+                    color: color.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(6), // Rounded corners
+                  ),
+                ),
+                Icon(
+                  checkCircle,
+                  color: color,
+                  size: 23,
                 ),
               ],
             ),
-            Text(
-              amount,
-              style: semiBoldTextStyle(
-                fontSize: dimen24,
-                color: AppColors.secondary,
-              ),
-            ),
-
-            Text(
-                title,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 2,
-                style: boldTextStyle(
-                    fontSize: dimen14,
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  amount,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                  style: semiBoldTextStyle(
+                    fontSize: dimen18,
                     color: AppColors.secondary,
-                    latterSpace: 1.5
-                )),
+                  ),
+                ),
+                Text(
+                    title,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
+                    style: semiBoldTextStyle(
+                        fontSize: dimen16,
+                        color: AppColors.secondary,
+                        // latterSpace: 1.5
+                    )),
+              ],
+            ),
             // SizedBox(height: 10,),
-
           ],
         ),
 
@@ -432,24 +548,25 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Widget _buildCardSuccessPayments(String title, String amount, Color color, IconData checkCircle, double value) {
     return Card(
-        elevation: 4,
+        elevation: 2,
         color: Colors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         child: Container(
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [color.withOpacity(0.7), color.withOpacity(0.5)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(25),
+            // gradient: LinearGradient(
+            //   colors: [color.withOpacity(0.7), color.withOpacity(0.5)],
+            //   begin: Alignment.topLeft,
+            //   end: Alignment.bottomRight,
+            // ),
+            // color: Colors.white,
+            color: Color(0xff13c898).withOpacity(0.1),
+            borderRadius: BorderRadius.circular(8),
           ),
           padding: const EdgeInsets.all(16),
           child : Row(
             children: [
               Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // SizedBox(width: 50,),
@@ -458,14 +575,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
                       style: boldTextStyle(
-                        fontSize: dimen18,
+                        fontSize: dimen16,
                         color: Colors.green.shade900,
                           latterSpace: 1.5
                       )),
                   Text(
                     amount,
                     style: semiBoldTextStyle(
-                      fontSize: dimen24,
+                      fontSize: dimen18,
                       color: Colors.green.shade900,
                     ),
                   ),
@@ -475,20 +592,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
               Stack(
                 alignment: Alignment.center,
                 children: [
-                  SizedBox(
-                    height: 70,
-                    width: 70,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      value: value,
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.green.shade800),
-                      backgroundColor: Colors.green.shade800.withOpacity(0.1),
+                  Container(
+                    height: 56,
+                    width: 56,
+                    decoration: BoxDecoration(
+                      color: color.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(6), // Rounded corners
                     ),
                   ),
                   Icon(
                     checkCircle,
-                    color: Colors.green.shade800,
-                    size: 40,
+                    color: Color(0xff1c5e20),
+                    size: 34,
                   ),
                 ],
               ),

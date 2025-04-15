@@ -28,11 +28,11 @@ class AgentCard extends StatelessWidget {
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 6),
-              _buildBaseInfoRow('Company:', agent.companyName),
+              const SizedBox(height: 2),
+              // _buildBaseInfoRow('Company:', agent.companyName),
               _buildBaseInfoRow('Contact:', agent.contact),
               _buildBaseInfoRow('Email Id:', agent.email),
-              const SizedBox(height: 6),
+              // const SizedBox(height: 3),
               _buildStatusRow('Status:', agent.status),
               _buildCreatedRow('Created At:', agent.createdAt),
             ],
@@ -57,7 +57,7 @@ class AgentCard extends StatelessWidget {
 
   Widget _buildBaseInfoRow(String label, String value) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 2),
+      padding: const EdgeInsets.only(bottom: 0),
       child: Row(
         children: [
           Expanded(
@@ -85,12 +85,12 @@ class AgentCard extends StatelessWidget {
 
   Widget _buildCreatedRow(String label, String value) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 2,right: 10),
+      padding: const EdgeInsets.only(bottom: 0,right: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Text(
-            '$label $value',
+            value,
             style: regularTextStyle(fontSize: dimen13, color: Colors.black54),
             overflow: TextOverflow.ellipsis,
             maxLines: 1,
@@ -102,12 +102,12 @@ class AgentCard extends StatelessWidget {
 
   Widget _buildStatusRow(String label, String value) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 2,right: 10),
+      padding: const EdgeInsets.only(bottom: 0,right: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Text(
-            '$label $value',
+            value,
             style: regularTextStyle(
                 fontSize: dimen13,
                 color: value.toLowerCase() == 'active'

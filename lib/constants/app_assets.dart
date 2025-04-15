@@ -7,6 +7,11 @@ class AppAssets {
 
   // Icon Paths
   static const String lockIcon = 'assets/icons/lock.png';
+  static const String userIcon = 'assets/icons/user_icon.png';
+  static const String dashboardIcon = 'assets/icons/dashboard_icon.png';
+  static const String phoneIcon = 'assets/icons/customers_icon.png';
+  static const String paymentIcon = 'assets/icons/payment_icon.png';
+  static const String realStateSellerIcon = 'assets/icons/real_state_seller_icon.png';
 
   // Animation Paths
   static const String splashAnimation = 'assets/animations/splash.json';

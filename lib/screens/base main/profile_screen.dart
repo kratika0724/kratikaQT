@@ -118,7 +118,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       UiUtils().menuItem(
                           context, "Products", Icons.payment_outlined),
                       UiUtils().menuItem(
-                          context, "Customers", Icons.description_outlined),
+                          context, "Customers", Icons.people_alt_outlined),
                       UiUtils().menuItem(
                           context, "Allocations", Icons.assignment_outlined),
                       // UiUtils().menuItem(

@@ -15,7 +15,7 @@ class PaymentCardList extends StatelessWidget {
     }
 
     return ListView.builder(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(vertical: 16,horizontal: 12),
       itemCount: paymentList.length,
       itemBuilder: (context, index) {
         return PaymentCard(payment: paymentList[index]); // You can create this card widget
