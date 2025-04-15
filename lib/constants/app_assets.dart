@@ -12,6 +12,7 @@ class AppAssets {
   static const String customerIcon = 'assets/icons/customers_icon.png';
   static const String paymentIcon = 'assets/icons/payment_icon.png';
   static const String realStateSellerIcon = 'assets/icons/real_state_seller_icon.png';
+  static const String contactUs = 'assets/icons/contactUs_icon.png';
 
   // Animation Paths
   static const String splashAnimation = 'assets/animations/splash.json';

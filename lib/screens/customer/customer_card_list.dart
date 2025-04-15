@@ -17,10 +17,13 @@ class CustomerList extends StatelessWidget {
     }
 
     return ListView.builder(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 12,vertical: 8),
       itemCount: customerList.length,
       itemBuilder: (context, index) {
-        return CustomerCard(customer: customerList[index]);
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4.0),
+          child: CustomerCard(customer: customerList[index]),
+        );
       },
     );
   }

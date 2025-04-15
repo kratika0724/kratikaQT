@@ -15,10 +15,13 @@ class PaymentCardList extends StatelessWidget {
     }
 
     return ListView.builder(
-      padding: const EdgeInsets.symmetric(vertical: 16,horizontal: 12),
+      padding: const EdgeInsets.symmetric(vertical: 8,horizontal: 12),
       itemCount: paymentList.length,
       itemBuilder: (context, index) {
-        return PaymentCard(payment: paymentList[index]); // You can create this card widget
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4.0),
+          child: PaymentCard(payment: paymentList[index]),
+        ); // You can create this card widget
       },
     );
   }

@@ -51,11 +51,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final userCount = dashboardProvider.userCountData;
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.ghostWhite.withOpacity(0.7),
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: HeaderTextThemeSecondary("Dashboard"),
+        title: HeaderTextBlack("Dashboard"),
         backgroundColor: Colors.white,
         foregroundColor: AppColors.primary,
         // elevation: 3,
@@ -116,19 +116,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ? Center(child: Text(dashboardProvider.error!))
             : SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 4.0),
+                padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 10.0),
                 child: Column(
                   children: [
-                    Card(
-                      elevation: 1.5,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8.0),
                         color: Colors.white,
+                      ),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 10),
                           child: Column(
                             children: [
                               Padding(
-                                padding: const EdgeInsets.only(top: 0.0,bottom: 0,left: 8),
+                                padding: const EdgeInsets.only(left: 8),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
@@ -143,7 +144,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 padding: const EdgeInsets.symmetric(vertical: 6.0,horizontal: 8),
                                 child: Container(
                                   width: double.infinity,
-                                  height: 105,
                                   decoration: BoxDecoration(
                                     color: Colors.transparent,
                                     borderRadius: BorderRadius.circular(25),
@@ -151,13 +151,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     child: _buildCardSuccessPayments('Successful', '₹ 5009', Colors.green, Icons.check_circle_rounded, 1.0)),
                               ),
                               Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                padding: const EdgeInsets.only(left: 8.0,right: 8.0,top:6),
                                 child: GridView.count(
                                   shrinkWrap: true,
                                   crossAxisCount: 2,
                                   crossAxisSpacing: 8.0,
                                   mainAxisSpacing: 10.0,
-                                  childAspectRatio: 1.8,
+                                  childAspectRatio: 1.9,
                                   children: [
                                     _buildCardPayments('Pending', '₹ 7261', Color(0xfff59d1b),Icons.error,0.7),
                                     _buildCardPayments('Failed', '₹ 4025', Color(0xfffd6363),Icons.cancel,0.5),
@@ -170,16 +170,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         ),
                     ),
                     const SizedBox(height: 10,),
-                    Card(
-                      elevation: 1.5,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                      color: Colors.white,
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8.0),
+                        color: Colors.white,
+                      ),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 10),
                         child: Column(
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(top: 0.0,bottom: 0,left: 8),
+                              padding: const EdgeInsets.only(left: 8),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
@@ -191,7 +192,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 6.0),
+                              padding: const EdgeInsets.symmetric(vertical: 6.0,horizontal: 4.0),
                               child: SizedBox(
                                 height: 110, // Set a fixed height for all cards
                                 child: Row(
@@ -234,10 +235,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ),
                     ),
                     const SizedBox(height: 10,),
-                    Card(
-                      elevation: 1.5,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                      color: Colors.white,
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8.0),
+                        color: Colors.white,
+                      ),
                       child: Padding(
                         padding: const EdgeInsets.only(top: 12.0,bottom: 12.0,left: 8,right: 16),
                         child: Column(
@@ -408,22 +410,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget _buildCard(String title, String count, Color color, IconData checkCircle, double value) {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-      child: Container(
-        decoration: BoxDecoration(
-          // gradient: LinearGradient(
-          //   colors: [color.withOpacity(0.2), color.withOpacity(0.1)],
-          //   begin: Alignment.topLeft,
-          //   end: Alignment.bottomRight,
-          // ),
-          // color: Colors.white,
-          color: AppColors.primary.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(4),
-          // border: Border.all(color: AppColors.secondary)
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8.0),
+        color: AppColors.primary.withOpacity(0.1),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(4.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -478,23 +471,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget _buildCardPayments(String title, String amount, Color color, IconData checkCircle, double value) {
-    return Card(
-      elevation: 2,
-      color: Colors.white,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      child: Container(
+    return Container(
         decoration: BoxDecoration(
-          // gradient: LinearGradient(
-          //   colors: [color.withOpacity(0.6),color.withOpacity(0.4)],
-          //   begin: Alignment.topLeft,
-          //   end: Alignment.bottomRight,
-          // ),
-          // color: Colors.white,
+          borderRadius: BorderRadius.circular(8.0),
           color: color.withOpacity(0.2),
-          borderRadius: BorderRadius.circular(8),
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 8),
-        child : Row(
+      child: Padding(
+        padding: EdgeInsets.all(8.0),
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -542,28 +526,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
             // SizedBox(height: 10,),
           ],
         ),
-
-    ));
+      ));
   }
 
   Widget _buildCardSuccessPayments(String title, String amount, Color color, IconData checkCircle, double value) {
-    return Card(
-        elevation: 2,
-        color: Colors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        child: Container(
-          decoration: BoxDecoration(
-            // gradient: LinearGradient(
-            //   colors: [color.withOpacity(0.7), color.withOpacity(0.5)],
-            //   begin: Alignment.topLeft,
-            //   end: Alignment.bottomRight,
-            // ),
-            // color: Colors.white,
-            color: Color(0xff13c898).withOpacity(0.1),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          padding: const EdgeInsets.all(16),
-          child : Row(
+    return Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8.0),
+          color: Color(0xff13c898).withOpacity(0.1),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
             children: [
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -613,7 +587,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
             ],
           ),
-
         ));
   }
 }

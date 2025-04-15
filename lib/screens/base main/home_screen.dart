@@ -55,6 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
               AppAssets.dashboardIcon, // Adjust path if needed
               width: 16,
               height: 16,
+              color: _selectedIndex == 0 ? AppColors.primary : AppColors.secondary,
             ),
             label: 'Dashboard',
           ),
@@ -63,6 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
               AppAssets.paymentIcon, // Adjust path if needed
               width: 24,
               height: 24,
+              color: _selectedIndex == 1 ? AppColors.primary : AppColors.secondary,
             ),
             label: 'Payments',
           ),
@@ -71,6 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
               AppAssets.customerIcon, // Adjust path if needed
               width: 24,
               height: 24,
+              color: _selectedIndex == 2 ? AppColors.primary : AppColors.secondary,
             ),
             label: 'Agents',
           ),
@@ -79,6 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
               AppAssets.userIcon, // Adjust path if needed
               width: 24,
               height: 24,
+              color:_selectedIndex == 3 ? AppColors.primary : AppColors.secondary,
             ),
             label: 'Profile',
           ),

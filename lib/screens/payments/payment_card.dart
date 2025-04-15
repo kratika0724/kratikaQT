@@ -12,51 +12,26 @@ class PaymentCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final status = payment.status;
-    final bgColor = _getStatusColor(status).withOpacity(0.3);
+    final bgColor = _getStatusColor(status).withOpacity(0.2);
     final textColor = _getStatusColor(status);
 
-    return Card(
-      margin: const EdgeInsets.only(bottom: 6),
-      color: AppColors.secondary,
-      elevation: 3,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(6.0),
+        color: Colors.white,
+      ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // _buildTransactionRow(payment.transactionId),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Flexible(
-                  child: Text(
-                    payment.amount,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                    style: boldTextStyle(fontSize: dimen14, color: Colors.white),
-                  ),
-                ),
-                Text(
-                  payment.transactionId,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                  style: mediumTextStyle(fontSize: dimen14, color: Colors.white),
-                ),
-              ],
+           _buildAmountAndStatus(payment.amount, payment.createdAt, payment.status, bgColor, textColor),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 6),
+              child: DottedLine(dashLength: 4.0, dashColor: Colors.grey.shade400,lineThickness: 1,),
             ),
-            // const SizedBox(height: 3),
-
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 4),
-              child: DottedLine(dashLength: 4.0, dashColor: Colors.white70,lineThickness: 0.3,),
-            ),
-            _buildLabelValueRow(payment.name, payment.createdAt, status,bgColor, textColor),
-            // _buildLabelValueRow('Email', payment.email),
-            // const SizedBox(height: 10),
-            // const Divider(thickness: 0.3, color: AppColors.primary),
-            // _buildAmountAndStatus(payment.amount, status, bgColor, textColor),
-          ],
+            _buildTransactionRow(payment.transactionId),
+           ],
         ),
       ),
     );
@@ -64,64 +39,56 @@ class PaymentCard extends StatelessWidget {
 
   Widget _buildTransactionRow(String transactionId) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text("Transaction ID: ", style: regularTextStyle(fontSize: dimen14, color: Colors.white)),
+        // Text("Transaction ID: ", style: regularTextStyle(fontSize: dimen14, color: Colors.black)),
         Flexible(
+          flex: 4,
           child: Text(
-            transactionId,
+            "Transaction ID: "+ transactionId,
             overflow: TextOverflow.ellipsis,
             maxLines: 1,
-            style: semiBoldTextStyle(fontSize: dimen14, color: Colors.white),
+            style: regularTextStyle(fontSize: dimen14, color: Colors.black),
           ),
+        ),
+        Spacer(),
+        const Icon(
+          Icons.keyboard_arrow_down,
+          color: Colors.black,size: 22,
         ),
       ],
     );
   }
 
-  Widget _buildLabelValueRow( String value,String transactionId ,String status,Color bgColor, Color textColor){
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 0),
-      child: Row(
-        children: [
-          Text(
-            value+', ',
-            overflow: TextOverflow.ellipsis,
-            maxLines: 1,
-            style: mediumTextStyle(fontSize: dimen14, color: Colors.white),
-          ),
-          Text(
-              transactionId,
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
-              style: thinTextStyle(fontSize: dimen12, color: Colors.white)),
-          Spacer(),
-          Text(
-            status,
-            overflow: TextOverflow.ellipsis,
-            maxLines: 1,
-            style: boldTextStyle(fontSize: dimen12, color: textColor),
-          ),
-
-        ],
-      ),
-    );
-  }
-
-  Widget _buildAmountAndStatus(String amount, String status, Color bgColor, Color textColor) {
+  Widget _buildAmountAndStatus(String amount, String createdAt, String status, Color bgColor, Color textColor) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-            amount,
-            overflow: TextOverflow.ellipsis,
-            maxLines: 1,
-            style: semiBoldTextStyle(fontSize: dimen16, color: Colors.white)),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+                amount,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+                style: semiBoldTextStyle(fontSize: dimen16, color: textColor),
+            ),
+            Text(
+              createdAt,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+              style: thinTextStyle(fontSize: dimen13, color: Colors.black),
+            ),
+
+          ],
+        ),
         Container(
           decoration: BoxDecoration(
             color: bgColor,
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(4),
           ),
-          padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 10.0),
+          padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 8.0),
           child: Text(
             status,
             overflow: TextOverflow.ellipsis,
@@ -136,11 +103,11 @@ class PaymentCard extends StatelessWidget {
   Color _getStatusColor(String status) {
     switch (status) {
       case 'Success':
-        return Colors.green;
+        return Color(0xff1c5e20);
       case 'Pending':
-        return Colors.yellow.shade700;
+        return Color(0xfffdbb00);
       case 'Failed':
-        return Colors.red;
+        return Color(0xfffb0e00);
       default:
         return Colors.grey;
     }

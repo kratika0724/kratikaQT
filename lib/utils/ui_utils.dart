@@ -36,7 +36,7 @@ class UiUtils {
       },
       child: Card(
         color: Colors.white,
-        elevation: 3,
+        elevation: 2,
         margin: const EdgeInsets.only(bottom: 12,left: 2,right: 2),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12),),
         child: Padding(
@@ -47,9 +47,9 @@ class UiUtils {
                 title,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
-                style: regularTextStyle(fontSize: dimen14, color: AppColors.textSecondary)
+                style: regularTextStyle(fontSize: dimen15, color: Colors.black)
             ),
-            leading: Icon(icon, color: AppColors.secondary,),
+            leading: Icon(icon, color: Colors.black,),
           ),
         ),
       ),
@@ -60,9 +60,9 @@ class UiUtils {
     return GestureDetector(
       onTap: () {
         // Handle navigation here
-        if(title.toLowerCase()=="help center")
+        if(title.toLowerCase()=="Contact Us")
         {
-          Navigator.push(context, MaterialPageRoute(builder: (_) => HelpScreen()));
+
         }
         if(title.toLowerCase()=="terms & conditions")
         {
@@ -96,13 +96,13 @@ class UiUtils {
         padding: const EdgeInsets.symmetric(vertical: 5.0),
         child: Row(
           children: [
-            Icon(icon, color: AppColors.primary,size: 22),
+            Icon(icon, color: Colors.black,size: 22),
             SizedBox(width: 10),
             Expanded(
               child: Text(title,
-                  style: regularTextStyle(fontSize: dimen14, color: AppColors.textPrimary)),
+                  style: regularTextStyle(fontSize: dimen15, color: Colors.black)),
             ),
-            const Icon(Icons.arrow_forward_ios, color: AppColors.primary,size: 16,),
+            const Icon(Icons.arrow_forward_ios, color: Colors.black,size: 16,),
 
           ],
 

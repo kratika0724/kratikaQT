@@ -29,45 +29,38 @@ class CustomerScreen extends StatelessWidget {
       );
     }
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor:AppColors.ghostWhite,
       appBar: AppBar(
         // automaticallyImplyLeading: false,
-        title: HeaderTextThemeSecondary("Customers"),
+        title: HeaderTextBlack("Customers"),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 8.0),
             child: IconButton(
-              icon: const Icon(Icons.filter_list, color: AppColors.secondary),
+              icon: const Icon(Icons.filter_list),
               onPressed: () => showFilterSheet(),
             ),
           ),
         ],
         backgroundColor: Colors.white,
-        foregroundColor: AppColors.secondary,
-        elevation: 3,
+        foregroundColor: Colors.black,
+        // elevation: 3,
       ),
       body: SafeArea(
         child: Column(
           children: [
-            //List
             Expanded(child: CustomerList()),
             // Divider(thickness: 1, color: Colors.grey.shade200),
-            Container(
-              color: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  AddNewButton(
-                    label: 'Add New Customer',
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) => const AddCustomerScreen()),
-                      );
-                    },
-                  ),
-                ],
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0,horizontal: 30),
+              child: AddNewButton(
+                label: 'Add New Customer',
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const AddCustomerScreen()),
+                  );
+                },
               ),
             ),
             const SizedBox(height: 10,),

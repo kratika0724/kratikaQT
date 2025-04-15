@@ -10,10 +10,12 @@ class CustomerCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.only(bottom: 12),
-      elevation: 3,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+    return Container(
+      margin: const EdgeInsets.only(bottom: 0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8.0),
+        color: Colors.white
+      ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 2.0),
         child: ListTile(
@@ -50,32 +52,28 @@ class CustomerCard extends StatelessWidget {
     );
   }
 
-
   Widget _buildInfoRow(String label, String value, {Color color = Colors.black}) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 2),
-      child: Row(
-        children: [
-          Expanded(
-            flex: 1,
-            child: Text(
-              '$label',
-              style: regularTextStyle(fontSize: dimen13, color: color),
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
-            ),
+    return Row(
+      children: [
+        Expanded(
+          flex: 1,
+          child: Text(
+            label,
+            style: regularTextStyle(fontSize: dimen13, color: color),
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
           ),
-          Expanded(
-            flex: 3,
-            child: Text(
-              value,
-              style: regularTextStyle(fontSize: dimen13, color: color),
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
-            ),
+        ),
+        Expanded(
+          flex: 3,
+          child: Text(
+            value,
+            style: regularTextStyle(fontSize: dimen13, color: color),
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 

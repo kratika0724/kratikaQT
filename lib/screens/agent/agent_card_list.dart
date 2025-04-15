@@ -15,10 +15,13 @@ class AgentList extends StatelessWidget {
     }
 
     return ListView.builder(
-        padding: const EdgeInsets.symmetric(vertical: 16,horizontal: 8),
+        padding: const EdgeInsets.symmetric(vertical: 12,horizontal: 8),
         itemCount: agentList.length,
         itemBuilder: (context, index) {
-          return AgentCard(agent: agentList[index]);
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4.0),
+            child: AgentCard(agent: agentList[index]),
+          );
         },
       );
   }

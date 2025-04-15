@@ -9,13 +9,13 @@ class PaymentsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.ghostWhite,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: HeaderTextThemeSecondary("Payments"),
+        title: HeaderTextBlack("Payments"),
         backgroundColor: Colors.white,
         foregroundColor: AppColors.primary,
-        elevation: 3,
+        // elevation: 3,
       ),
       body: SafeArea(
         child: Column(

@@ -13,6 +13,8 @@ class AppColors {
   static const Color background = Colors.white;
   static const Color surface = Colors.white;
   static const Color ghostWhite = Color(0xffF8F8FF);
+  static const Color grey100 = Color(0xfff1efef);
+  static const Color grey50 = Color(0xFFFAFAFA);
 
   // Text Colors
   static const Color textPrimary = Color(0xFF0C99D2);
