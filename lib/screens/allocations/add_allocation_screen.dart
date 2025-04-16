@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:qt_distributer/widgets/common_text_widgets.dart';
 import '../../constants/app_colors.dart';
+import '../../providers/allocation_provider.dart';
 import '../../widgets/common_form_widgets.dart';
 class AddAllocationScreen extends StatefulWidget {
   const AddAllocationScreen({super.key});
@@ -10,11 +12,14 @@ class AddAllocationScreen extends StatefulWidget {
 }
 
 class _AddAllocationScreenState extends State<AddAllocationScreen> {
-  String? selectedGender;
+
+  final pincodeController = TextEditingController();
+  final areaController = TextEditingController();
 
   @override
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<AllocationProvider>(context);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -28,22 +33,38 @@ class _AddAllocationScreenState extends State<AddAllocationScreen> {
             child: SingleChildScrollView(
               child:  Column(
                 children: [
-                  // Card(
-                  //   elevation: 4,
-                  //   shape: RoundedRectangleBorder(
-                  //     borderRadius: BorderRadius.circular(12),
-                  //   ),
-                  //   child: Padding(
-                  //     padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 12),
-                  //     child: Column(
-                  //       children: [
-                  //         buildTextField('Area'),
-                  //         buildTextField('Pincode'),
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
-
+                  Card(
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal:12),
+                      child: Column(
+                        children: [
+                          buildTextField('Allocation Pincode'),
+                          buildTextField('Allocation Area'),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: FormActionButtons(
+                      onSubmit: () {
+                        provider.createAllocation(
+                            context,
+                            pincodeController,
+                            areaController
+                        );
+                      },
+                      onCancel: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 20),
                   const SizedBox(height: 20),
                   // Upload Excel Section
                   const Row(
