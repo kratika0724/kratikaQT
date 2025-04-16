@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../models/verify_otp_response.dart';
+import '../models/response models/verify_otp_response.dart';
 import '../services/api_service.dart';
 
 class AuthProvider extends ChangeNotifier {

@@ -1,9 +1,10 @@
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:qt_distributer/constants/app_colors.dart';
 import 'package:qt_distributer/constants/app_textstyles.dart';
-import '../../models/agent_model.dart';
-import '../../models/agent_reponse_model.dart';
+import '../../models/sample models/agent_model.dart';
+import '../../models/response models/agent_response.dart';
 
 class AgentCard extends StatelessWidget {
   final AgentModel agent;
@@ -19,6 +20,8 @@ class AgentCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final formattedDate = DateFormat('dd MMM yyyy, hh:mm a').format(agent.createdAt);
+
     return GestureDetector(
       onTap: onExpandToggle,
       child: Container(
@@ -35,9 +38,8 @@ class AgentCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildNameStatusRow('${agent.firstName} ${agent.middleName} ${agent.lastName}', agent.isActive ? 'Active' : 'Inactive'),
+            _buildBaseInfoRow(agent.email),
             const SizedBox(height: 4),
-            _buildInfoRow('CRM ID', agent.crmId),
-            _buildInfoRow('Quintus ID', agent.quintusId),
             if (isExpanded) ...[
               const SizedBox(height: 8),
               DottedLine(
@@ -46,12 +48,14 @@ class AgentCard extends StatelessWidget {
                 lineThickness: 1,
               ),
               const SizedBox(height: 8),
-              _buildInfoRow('Email', agent.email),
+              // _buildInfoRow('Email', agent.email),
               _buildInfoRow('Mobile', agent.mobile),
+              _buildInfoRow('CRM ID', agent.crmId),
+              _buildInfoRow('Quintus ID', agent.quintusId),
               _buildInfoRow('Gender', agent.gender),
               _buildInfoRow('DOB', agent.dob.toLocal().toString().split(' ')[0]),
               _buildInfoRow('Address', '${agent.address.address1}, ${agent.address.city}, ${agent.address.state}, ${agent.address.country}'),
-              _buildInfoRow('Created At', agent.createdAt.toLocal().toString().split(' ')[0]),
+              _buildInfoRow('Created At', formattedDate),
               // _buildInfoRow('Updated By', agent.updatedBy),
             ]
           ],
@@ -101,6 +105,23 @@ class AgentCard extends StatelessWidget {
         ),
         const Icon(Icons.keyboard_arrow_down, color: Colors.black54),
       ],
+    );
+  }
+
+  Widget _buildBaseInfoRow(String refId) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 6.0),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              refId,
+              style: regularTextStyle(fontSize: dimen15, color: Colors.black),
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
     );
   }
 

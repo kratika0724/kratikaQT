@@ -1,9 +1,9 @@
-class AddAllocationModel {
+class AllocationAddModel {
   final bool success;
   final String message;
   final List<CreateAllocationModel> data;
 
-  AddAllocationModel({
+  AllocationAddModel({
     required this.success,
     required this.message,
     this.data = const [],
@@ -15,8 +15,8 @@ class AddAllocationModel {
     'data': data.map((item) => item.toJson()).toList(),
   };
 
-  factory AddAllocationModel.fromJson(Map<String, dynamic> json) {
-    return AddAllocationModel(
+  factory AllocationAddModel.fromJson(Map<String, dynamic> json) {
+    return AllocationAddModel(
       success: json['success'] ?? false,
       message: json['message'] ?? '',
       data: json['data'] != null

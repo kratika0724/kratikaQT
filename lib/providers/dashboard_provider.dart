@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qt_distributer/services/api_path.dart';
-import '../models/usercount_response.dart';
+import '../models/response models/dashboard_response.dart';
 import '../services/api_service.dart';
 import '../services/user_preferences.dart';
 
@@ -10,8 +10,8 @@ class DashboardProvider extends ChangeNotifier {
   bool isLoading = false;
   String? error;
 
-  UserCountResponse? _userCountData;
-  UserCountResponse? get userCountData => _userCountData;
+  DashboardResponse? _userCountData;
+  DashboardResponse? get userCountData => _userCountData;
 
   int get userCount => _userCountData?.total.userCount ?? 0;
   int get productCount => _userCountData?.total.productCount ?? 0;
@@ -38,7 +38,7 @@ class DashboardProvider extends ChangeNotifier {
 
     try {
       final response = await apiService.getAuth(ApiPath.getUSerCountDashboardData, {});
-      final mResponse = UserCountResponse.fromJson(response);
+      final mResponse = DashboardResponse.fromJson(response);
       if (mResponse.success) {
         _userCountData = mResponse;
       } else {
@@ -54,16 +54,16 @@ class DashboardProvider extends ChangeNotifier {
 
   void getCustomerDatafromLocal() {
     PreferencesServices.getPreferencesData(PreferencesServices.firstName).then((firstname) {
-      user_firstname = (firstname?.toString() ?? "").isEmpty || firstname == "null"
+      user_firstname = (firstname?.toString() ?? "").isEmpty || firstname == ""
           ? "Username"
           : firstname.toString();
     });
     PreferencesServices.getPreferencesData(PreferencesServices.middleName).then((middlename) {
-      user_middlename = (middlename?.toString() ?? "") == "null" ? "" : middlename.toString();
+      user_middlename = (middlename?.toString() ?? "") == "" ? "" : middlename.toString();
     });
     PreferencesServices.getPreferencesData(PreferencesServices.lastName).then((lastname) {
-      user_lastname = (lastname?.toString() ?? "").isEmpty || lastname == "null"
-          ? "Username"
+      user_lastname = (lastname?.toString() ?? "").isEmpty || lastname == ""
+          ? ""
           : lastname.toString();
     });
     PreferencesServices.getPreferencesData(PreferencesServices.mobileNo).then((mobile) {

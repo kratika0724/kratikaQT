@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import '../models/verify_otp_response.dart';
+import '../models/response models/verify_otp_response.dart';
 import '../services/user_preferences.dart';
 
 

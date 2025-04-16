@@ -47,15 +47,15 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
       ),
       body: Consumer<TransactionProvider>(
         builder: (context, provider, _) {
-          final allocations = provider.transactions;
+          final transactions = provider.transactions;
           return Column(
               children: [
                 Expanded(
                   child: ListView.builder(
                     padding: const EdgeInsets.symmetric(vertical: 6,horizontal: 12),
-                    itemCount: provider.transactions.length,
+                    itemCount: transactions.length,
                     itemBuilder: (context, index) {
-                      final transaction = provider.transactions[index];
+                      final transaction = transactions[index];
                       return TransactionCard(transaction: transaction,isExpanded: expandedIndex == index,
                         onExpandToggle: () {
                           toggleExpanded(index);
@@ -68,28 +68,6 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
           );
         },
       ),
-      // body: SafeArea(
-      //   child: Column(
-      //     children: [
-      //       Expanded(
-      //           child: ListView.builder(
-      //             padding: const EdgeInsets.symmetric(vertical: 4,horizontal: 12),
-      //             itemCount: paymentList.length,
-      //             itemBuilder: (context, index) {
-      //               return Padding(
-      //                 padding: const EdgeInsets.symmetric(vertical: 2.0),
-      //                 child: PaymentCard(
-      //                   payment: paymentList[index],
-      //                   isExpanded: expandedIndex == index,
-      //                   onExpandToggle: () => toggleExpanded(index),
-      //                 ),
-      //               ); // You can create this card widget
-      //             },
-      //           ),
-      //       ),
-      //     ],
-      //   ),
-      // ),
     );
   }
 }

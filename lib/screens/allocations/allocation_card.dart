@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qt_distributer/constants/app_textstyles.dart';
-import '../../models/allocation_model.dart';
-import '../../models/allocation_reponse_model.dart';
+
+import '../../models/response models/allocation_response.dart';
 
 class AllocationCard extends StatelessWidget {
   final AllocationModel allocation;

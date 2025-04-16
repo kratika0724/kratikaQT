@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:qt_distributer/widgets/common_text_widgets.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_textstyles.dart';
-import '../../models/product_response.dart';
+import '../../models/response models/product_response.dart';
 import '../../providers/product_provider.dart';
 import '../../widgets/add_new_button.dart';
 import '../../widgets/app_theme_button.dart';

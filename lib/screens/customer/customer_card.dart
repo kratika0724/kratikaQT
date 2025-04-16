@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qt_distributer/constants/app_colors.dart';
-import 'package:qt_distributer/models/customer_model.dart';
+import 'package:qt_distributer/models/sample%20models/customer_model.dart';
 import '../../constants/app_textstyles.dart';
 
 class CustomerCard extends StatelessWidget {

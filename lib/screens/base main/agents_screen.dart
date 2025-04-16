@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:qt_distributer/screens/agent/agent_card.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_textstyles.dart';
-import '../../models/agent_reponse_model.dart';
+import '../../models/response models/agent_response.dart';
 import '../../providers/agent_provider.dart';
 import '../../widgets/common_text_widgets.dart';
 import '../agent/add_agent_screen.dart';
@@ -18,7 +18,8 @@ class AgentsScreen extends StatefulWidget {
 class AgentsScreenState extends State<AgentsScreen> {
   String? filterName;
   String? filterEmail;
-  String? filterStatus;
+  String? filterStatus = 'active';
+
   int? expandedIndex;
 
   void toggleExpanded(int index) {
@@ -38,10 +39,12 @@ class AgentsScreenState extends State<AgentsScreen> {
       Provider.of<AgentProvider>(context, listen: false).getAgentData();
     });
   }
+
   void openFilterBottomSheet(BuildContext context) {
     final provider = Provider.of<AgentProvider>(context, listen: false);
     final nameController = TextEditingController(text: filterName ?? '');
     final emailController = TextEditingController(text: filterEmail ?? '');
+    String? localFilterStatus = filterStatus;
 
     List<String> nameSuggestions = [];
     List<String> emailSuggestions = [];
@@ -75,7 +78,7 @@ class AgentsScreenState extends State<AgentsScreen> {
               setModalState(() => nameSuggestions = matches);
             }
 
-            void updateCodeSuggestions(String input) {
+            void updateEmailSuggestions(String input) {
               if (input.trim().isEmpty) {
                 setModalState(() => emailSuggestions = []);
                 return;
@@ -94,6 +97,7 @@ class AgentsScreenState extends State<AgentsScreen> {
 
               setModalState(() => emailSuggestions = matches);
             }
+
 
             return Padding(
               padding: EdgeInsets.only(
@@ -117,55 +121,55 @@ class AgentsScreenState extends State<AgentsScreen> {
                       onChanged: updateNameSuggestions,
                     ),
                     if (nameSuggestions.isNotEmpty)
-                      ...nameSuggestions.map(
-                            (name) => Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(4.0),
-                            color: AppColors.ghostWhite,
-                          ),
-                          child: ListTile(
-                            dense: true,
-                            visualDensity: const VisualDensity(horizontal: 0, vertical: -4),
-                            minVerticalPadding: 0,
-                            contentPadding: EdgeInsets.only(left: 8.0,right: 8.0),
-                            title: Text(name,style: regularTextStyle(fontSize: dimen13, color: Colors.black),),
-                            onTap: () {
-                              nameController.text = name;
-                              setModalState(() => nameSuggestions.clear());
-                            },
-                          ),
-                        ),
-                      ),
+                      ...nameSuggestions.map((name) => _buildSuggestionTile(name, nameController, setModalState, nameSuggestions)),
                     const SizedBox(height: 16),
                     TextField(
                       controller: emailController,
                       decoration: const InputDecoration(
-                        labelText: 'Product Code',
+                        labelText: 'Email id',
                         border: OutlineInputBorder(),
                       ),
-                      onChanged: updateCodeSuggestions,
+                      onChanged: updateEmailSuggestions,
                     ),
                     if (emailSuggestions.isNotEmpty)
-                      ...emailSuggestions.map(
-                            (code) => Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(4.0),
-                            color: AppColors.ghostWhite,
+                      ...emailSuggestions.map((code) => _buildSuggestionTile(code, emailController, setModalState, emailSuggestions)),
+                    const SizedBox(height: 20),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text("Status", style: mediumTextStyle(fontSize: dimen13, color: Colors.black)),
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        ChoiceChip(
+                          label: Text("Active", style: regularTextStyle(fontSize: dimen13, color: Colors.black)),
+                          selected: localFilterStatus == 'active',
+                          selectedColor: AppColors.primary.withOpacity(0.2),
+                          backgroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(6),
+                            side: BorderSide(color: AppColors.secondary),
                           ),
-                          child: ListTile(
-                            dense: true,
-                            visualDensity: const VisualDensity(horizontal: 0, vertical: -4),
-                            minVerticalPadding: 0,
-                            contentPadding: EdgeInsets.only(left: 8.0,right: 8.0),
-                            title: Text(code,style: regularTextStyle(fontSize: dimen13, color: Colors.black),),
-
-                            onTap: () {
-                              emailController.text = code;
-                              setModalState(() => emailSuggestions.clear());
-                            },
-                          ),
+                          onSelected: (_) {
+                            setModalState(() => localFilterStatus = 'active');
+                          },
                         ),
-                      ),
+                        const SizedBox(width: 10),
+                        ChoiceChip(
+                          label: Text("Inactive", style: regularTextStyle(fontSize: dimen13, color: Colors.black)),
+                          selected: localFilterStatus == 'inactive',
+                          selectedColor: AppColors.primary.withOpacity(0.2),
+                          backgroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(6),
+                            side: BorderSide(color: AppColors.secondary),
+                          ),
+                          onSelected: (_) {
+                            setModalState(() => localFilterStatus = 'inactive');
+                          },
+                        ),
+                      ],
+                    ),
                     const SizedBox(height: 24),
                     Row(
                       children: [
@@ -179,6 +183,7 @@ class AgentsScreenState extends State<AgentsScreen> {
                                 filterEmail = emailController.text.trim().isNotEmpty
                                     ? emailController.text.trim()
                                     : null;
+                                filterStatus = localFilterStatus;
                               });
                               Navigator.pop(context);
                             },
@@ -196,6 +201,7 @@ class AgentsScreenState extends State<AgentsScreen> {
                               setState(() {
                                 filterName = null;
                                 filterEmail = null;
+                                filterStatus = 'active'; // reset to active
                               });
                               Navigator.pop(context);
                             },
@@ -214,6 +220,25 @@ class AgentsScreenState extends State<AgentsScreen> {
     );
   }
 
+  Widget _buildSuggestionTile(String value, TextEditingController controller, void Function(void Function()) setModalState, List<String> list) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(4.0),
+        color: AppColors.ghostWhite,
+      ),
+      child: ListTile(
+        dense: true,
+        visualDensity: const VisualDensity(horizontal: 0, vertical: -4),
+        minVerticalPadding: 0,
+        contentPadding: EdgeInsets.only(left: 8.0, right: 8.0),
+        title: Text(value, style: regularTextStyle(fontSize: dimen13, color: Colors.black)),
+        onTap: () {
+          controller.text = value;
+          setModalState(() => list.clear());
+        },
+      ),
+    );
+  }
 
   List<AgentModel> _applyFilters(List<AgentModel> agents) {
     return agents.where((agent) {
@@ -221,10 +246,12 @@ class AgentsScreenState extends State<AgentsScreen> {
           agent.firstName.toLowerCase().contains(filterName!.toLowerCase());
       final codeMatch = filterEmail == null ||
           agent.email.toLowerCase().contains(filterEmail!.toLowerCase());
-      return nameMatch && codeMatch;
+      final statusMatch = filterStatus == null ||
+          (filterStatus == 'active' && agent.isActive == 'true') ||
+          (filterStatus == 'inactive' && agent.isActive!= 'true');
+      return nameMatch && codeMatch && statusMatch;
     }).toList();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -336,7 +363,7 @@ class AgentsScreenState extends State<AgentsScreen> {
                               if (filterEmail != null)
                                 Chip(
                                   label: Text(
-                                    "Code: $filterEmail",
+                                    "Email: $filterEmail",
                                     style: const TextStyle(
                                       color: AppColors.secondary,
                                       fontSize: 12,
@@ -394,7 +421,7 @@ class AgentsScreenState extends State<AgentsScreen> {
                 ),
               if (filteredAgents.isEmpty)
                 const Expanded(
-                  child: Center(child: Text("No products found")),
+                  child: Center(child: Text("No agents found")),
                 )
               else
                 Expanded(

@@ -40,8 +40,6 @@ class PaymentModel {
   }
 }
 
-
-
 final List<Map<String, String>> samplePayments = [
   {
     'status': 'Success',

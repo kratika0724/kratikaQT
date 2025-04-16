@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import '../models/add_allocation_model.dart';
-import '../models/allocation_reponse_model.dart';
+import '../models/add models/add_allocation_model.dart';
+import '../models/response models/allocation_response.dart';
 import '../services/api_path.dart';
 import '../services/api_service.dart';
 import '../utils/ui_utils.dart';
@@ -10,7 +10,7 @@ class AllocationProvider with ChangeNotifier {
 
   bool isLoading = false;
   String? errorMessage;
-  AddAllocationModel? responseModel;
+  AllocationAddModel? responseModel;
   List<AllocationModel> allocations = [];
 
 
@@ -32,7 +32,7 @@ class AllocationProvider with ChangeNotifier {
       };
 
       final response = await apiService.post_auth(ApiPath.createProduct, body);
-      final mResponse = AddAllocationModel.fromJson(response);
+      final mResponse = AllocationAddModel.fromJson(response);
       if (mResponse.success) {
         UiUtils().showSuccessSnackBar(context,"Allocation added successfully!");
         WidgetsBinding.instance.addPostFrameCallback((_) {

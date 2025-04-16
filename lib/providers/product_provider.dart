@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import '../models/product_model.dart';
-import '../models/product_response.dart';
+import '../models/add models/add_product_model.dart';
+import '../models/response models/product_response.dart';
 import '../services/api_path.dart';
 import '../services/api_service.dart';
 import '../utils/ui_utils.dart';

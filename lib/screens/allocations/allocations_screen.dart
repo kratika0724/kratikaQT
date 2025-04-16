@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:qt_distributer/widgets/common_text_widgets.dart';
 import 'package:qt_distributer/constants/app_colors.dart';
 import '../../constants/app_textstyles.dart';
+import '../../models/response models/allocation_response.dart';
 import '../../providers/allocation_provider.dart';
 import 'add_allocation_screen.dart';
 import 'allocation_card.dart';
@@ -15,12 +16,8 @@ class AllocationsScreen extends StatefulWidget {
 }
 
 class _AllocationsScreenState extends State<AllocationsScreen> {
-  final List<Map<String, String>> agentsList = [
-    {'name': 'John Doe', 'email': 'john@example.com'},
-    {'name': 'Jane Smith', 'email': 'jane@gmail.com'},
-    {'name': 'Alice Johnson', 'email': 'alice@domain.com'},
-  ];
-
+  String? filterPincode;
+  String? filterArea;
 
   @override
   void initState() {
@@ -30,16 +27,151 @@ class _AllocationsScreenState extends State<AllocationsScreen> {
     });
   }
 
-  void showFilterSheet() {
+  void _openFilterBottomSheet(BuildContext context) {
+    final pincodeController = TextEditingController(text: filterPincode ?? '');
+    final areaController = TextEditingController(text: filterArea ?? '');
+    List<String> pincodeSuggestions = [];
+    List<String> areaSuggestions = [];
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.white,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
-      builder: (context) => FilterSheet(agentsList: agentsList),
+      builder: (_) {
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            void updatePincodeSuggestions(String query) {
+              final provider = Provider.of<AllocationProvider>(context, listen: false);
+              setModalState(() {
+                pincodeSuggestions = provider.allocations
+                    .map((e) => e.allocationPincode ?? '')
+                    .where((code) => code.toLowerCase().contains(query.toLowerCase()))
+                    .toSet()
+                    .toList();
+              });
+            }
+
+            void updateAreaSuggestions(String query) {
+              final provider = Provider.of<AllocationProvider>(context, listen: false);
+              setModalState(() {
+                areaSuggestions = provider.allocations
+                    .map((e) => e.allocationArea ?? '')
+                    .where((area) => area.toLowerCase().contains(query.toLowerCase()))
+                    .toSet()
+                    .toList();
+              });
+            }
+
+            return Padding(
+              padding: EdgeInsets.only(
+                left: 16,
+                right: 16,
+                top: 24,
+                bottom: MediaQuery.of(context).viewInsets.bottom + 24,
+              ),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text("Filter Allocations", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                    const SizedBox(height: 20),
+                    TextField(
+                      controller: pincodeController,
+                      decoration: const InputDecoration(
+                        labelText: 'Pincode',
+                        border: OutlineInputBorder(),
+                      ),
+                      onChanged: updatePincodeSuggestions,
+                    ),
+                    if (pincodeSuggestions.isNotEmpty)
+                      ...pincodeSuggestions.map((val) => _buildSuggestionTile(val, pincodeController, setModalState, pincodeSuggestions)),
+                    const SizedBox(height: 16),
+                    TextField(
+                      controller: areaController,
+                      decoration: const InputDecoration(
+                        labelText: 'Area',
+                        border: OutlineInputBorder(),
+                      ),
+                      onChanged: updateAreaSuggestions,
+                    ),
+                    if (areaSuggestions.isNotEmpty)
+                      ...areaSuggestions.map((val) => _buildSuggestionTile(val, areaController, setModalState, areaSuggestions)),
+                    const SizedBox(height: 24),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                filterPincode = pincodeController.text.trim().isNotEmpty
+                                    ? pincodeController.text.trim()
+                                    : null;
+                                filterArea = areaController.text.trim().isNotEmpty
+                                    ? areaController.text.trim()
+                                    : null;
+                              });
+                              Navigator.pop(context);
+                            },
+                            child: const Text("Apply Filters"),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              foregroundColor: AppColors.primary,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                filterPincode = null;
+                                filterArea = null;
+                              });
+                              Navigator.pop(context);
+                            },
+                            child: const Text("Clear Filters"),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
     );
+  }
+
+  Widget _buildSuggestionTile(String value, TextEditingController controller, void Function(void Function()) setModalState, List<String> list) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(4.0),
+        color: AppColors.ghostWhite,
+      ),
+      child: ListTile(
+        dense: true,
+        visualDensity: const VisualDensity(horizontal: 0, vertical: -4),
+        minVerticalPadding: 0,
+        contentPadding: EdgeInsets.only(left: 8.0, right: 8.0),
+        title: Text(value, style: regularTextStyle(fontSize: dimen13, color: Colors.black)),
+        onTap: () {
+          controller.text = value;
+          setModalState(() => list.clear());
+        },
+      ),
+    );
+  }
+
+  List<AllocationModel> _applyFilters(List<AllocationModel> allocations) {
+    return allocations.where((allocation) {
+      final pincodeMatch = filterPincode == null || (allocation.allocationPincode?.contains(filterPincode!) ?? false);
+      final areaMatch = filterArea == null || (allocation.allocationArea?.toLowerCase().contains(filterArea!.toLowerCase()) ?? false);
+      return pincodeMatch && areaMatch;
+    }).toList();
   }
 
   @override
@@ -47,7 +179,7 @@ class _AllocationsScreenState extends State<AllocationsScreen> {
     return Scaffold(
       backgroundColor: AppColors.ghostWhite,
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(90), // 👈 Increase height
+        preferredSize: const Size.fromHeight(90),
         child: AppBar(
           backgroundColor: Colors.white,
           foregroundColor: Colors.black,
@@ -97,7 +229,9 @@ class _AllocationsScreenState extends State<AllocationsScreen> {
                       ),
                       const SizedBox(width: 12),
                       GestureDetector(
-                        onTap: () => showFilterSheet(),
+                        onTap: () {
+                          _openFilterBottomSheet(context);
+                        },
                         child: Container(
                           height: 30,
                           decoration: BoxDecoration(
@@ -132,245 +266,128 @@ class _AllocationsScreenState extends State<AllocationsScreen> {
       ),
       body: Consumer<AllocationProvider>(
         builder: (context, provider, _) {
-          final allocations = provider.allocations;
+          if (provider.isLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (provider.errorMessage != null) {
+            return Center(child: Text("Oops! Something went wrong"));
+          }
+          final filteredAllocations = _applyFilters(provider.allocations);
           return Column(
-              children: [
-                Expanded(
-                  child: ListView.builder(
-                    padding: const EdgeInsets.symmetric(vertical: 6,horizontal: 12),
-                    itemCount: provider.allocations.length,
-                    itemBuilder: (context, index) {
-                      final allocation = allocations[index];
-                      return AllocationCard(allocation: allocation);
-                    },
-                  ),
+            children: [
+              if (filterPincode != null || filterArea != null)
+                Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (filterPincode != null || filterArea != null)
+                          Wrap(
+                            spacing: 8,
+                            runSpacing: 4,
+                            children: [
+                              if (filterPincode != null)
+                                Chip(
+                                  label: Text(
+                                    "Pincode: $filterPincode",
+                                    style: const TextStyle(
+                                      color: AppColors.secondary,
+                                      fontSize: 12,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    maxLines: 1,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(6),
+                                    side: const BorderSide(color: AppColors.secondary,width: 0.7),
+                                  ),
+                                  backgroundColor: Colors.white,
+                                  visualDensity: VisualDensity.compact,
+                                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                ),
+                              if (filterArea != null)
+                                Chip(
+                                  label: Text(
+                                    "Area: $filterArea",
+                                    style: const TextStyle(
+                                      color: AppColors.secondary,
+                                      fontSize: 12,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    maxLines: 1,
+                                  ),
+
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(6),
+                                    side: const BorderSide(color: AppColors.secondary,width: 0.7),
+                                  ),
+                                  backgroundColor: Colors.white,
+                                  visualDensity: VisualDensity.compact,
+                                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                ),
+                            ],
+                          ),
+
+                        if (filterPincode != null || filterArea != null)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 6),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                GestureDetector(
+                                  onTap: (){
+                                    setState(() {
+                                      filterPincode = null;
+                                      filterArea = null;
+                                    });
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(4),
+                                      color: AppColors.ghostWhite,
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(vertical:5,horizontal: 9.0),
+                                      child:  Text(
+                                        "Clear Filters",
+                                        style: regularTextStyle(fontSize: dimen13,color: Colors.black),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                      ],
+                    )
+
+
                 ),
-                SizedBox(height: 10,),
-              ]
+              if (filteredAllocations.isEmpty)
+                const Expanded(
+                  child: Center(child: Text("No allocations found")),
+                )
+              else
+                Expanded(
+                child: ListView.builder(
+                  padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+                  itemCount: filteredAllocations.length,
+                  itemBuilder: (context, index) {
+                    final allocation = filteredAllocations[index];
+                    return AllocationCard(allocation: allocation);
+                  },
+                ),
+              ),
+              const SizedBox(height: 10),
+            ],
           );
         },
       ),
     );
   }
-
-
 }
 
 
-class FilterSheet extends StatefulWidget {
-  final List<Map<String, String>> agentsList;
-  const FilterSheet({super.key, required this.agentsList});
-
-  @override
-  State<FilterSheet> createState() => FilterSheetState();
-}
-
-class FilterSheetState extends State<FilterSheet> {
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final GlobalKey nameFieldKey = GlobalKey();
-  final GlobalKey emailFieldKey = GlobalKey();
-  final LayerLink nameLink = LayerLink();
-  final LayerLink emailLink = LayerLink();
-  OverlayEntry? overlayEntry;
-  String selectedStatus = '';
-  String contactNumber = '';
-
-  @override
-  void dispose() {
-    nameController.dispose();
-    emailController.dispose();
-    overlayEntry?.remove();
-    super.dispose();
-  }
-
-  void showOverlay({
-    required GlobalKey fieldKey,
-    required LayerLink link,
-    required List<String> options,
-    required TextEditingController controller,
-  }) {
-    removeOverlay();
-
-    final renderBox = fieldKey.currentContext?.findRenderObject() as RenderBox?;
-    if (renderBox == null) return;
-
-    final size = renderBox.size;
-    final offset = renderBox.localToGlobal(Offset.zero);
-
-    final filteredOptions = options
-        .where((o) => o.toLowerCase().contains(controller.text.toLowerCase()))
-        .toList();
-
-    if (filteredOptions.isEmpty) return;
-
-    overlayEntry = OverlayEntry(
-      builder: (context) => Positioned(
-        left: offset.dx,
-        top: offset.dy + size.height,
-        width: size.width,
-        child: CompositedTransformFollower(
-          link: link,
-          showWhenUnlinked: false,
-          child: Padding(
-            padding: const EdgeInsets.only(top: 50.0),
-            child: Material(
-              elevation: 4,
-              borderRadius: BorderRadius.circular(20),
-              color: Colors.white,
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: filteredOptions.length,
-                itemBuilder: (context, index) {
-                  final option = filteredOptions[index];
-                  return ListTile(
-                    title: Text(option),
-                    onTap: () {
-                      controller.text = option;
-                      removeOverlay();
-                    },
-                  );
-                },
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-
-    Overlay.of(context).insert(overlayEntry!);
-  }
-
-  void removeOverlay() {
-    overlayEntry?.remove();
-    overlayEntry = null;
-  }
-
-  Widget buildComboField({
-    required String label,
-    required TextEditingController controller,
-    required GlobalKey fieldKey,
-    required LayerLink link,
-    required List<String> options,
-  }) {
-    return CompositedTransformTarget(
-      link: link,
-      child: TextField(
-        key: fieldKey,
-        controller: controller,
-        decoration: InputDecoration(
-          labelText: label,
-          suffixIcon: const Icon(Icons.arrow_drop_down),
-          border: OutlineInputBorder(),
-        ),
-        onTap: () => showOverlay(
-          fieldKey: fieldKey,
-          link: link,
-          options: options,
-          controller: controller,
-        ),
-        onChanged: (_) => showOverlay(
-          fieldKey: fieldKey,
-          link: link,
-          options: options,
-          controller: controller,
-        ),
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final names = widget.agentsList.map((e) => e['name']!).toList();
-    final emails = widget.agentsList.map((e) => e['email']!).toList();
-    final statusOptions = ['Active', 'Inactive'];
-
-    return Padding(
-      padding: EdgeInsets.only(
-        left: 16,
-        right: 16,
-        top: 24,
-        bottom: MediaQuery.of(context).viewInsets.bottom + 16,
-      ),
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            const Text("Filter Allocations", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 20),
-            buildComboField(
-              label: "Select or Enter Name",
-              controller: nameController,
-              fieldKey: nameFieldKey,
-              link: nameLink,
-              options: names,
-            ),
-            const SizedBox(height: 16),
-            buildComboField(
-              label: "Select or Enter Email",
-              controller: emailController,
-              fieldKey: emailFieldKey,
-              link: emailLink,
-              options: emails,
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              keyboardType: TextInputType.number,
-              maxLength: 10,
-              decoration: const InputDecoration(
-                labelText: 'Contact Number',
-                border: OutlineInputBorder(),
-                counterText: "",
-              ),
-              onChanged: (value) {
-                if (value.length <= 10 && RegExp(r'^\d*$').hasMatch(value)) {
-                  setState(() => contactNumber = value);
-                }
-              },
-            ),
-            const SizedBox(height: 20),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text("Status", style: TextStyle(fontWeight: FontWeight.w600)),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Wrap(
-                  spacing: 10,
-                  children: statusOptions.map((status) {
-                    final selected = selectedStatus == status;
-                    return ChoiceChip(
-                      label: Text(status),
-                      selected: selected,
-                      showCheckmark: true,
-                      checkmarkColor: Colors.white,
-                      selectedColor: AppColors.secondary,
-                      labelStyle: mediumTextStyle(
-                        color: selected ? Colors.white : AppColors.secondary  ,
-                        fontSize: 14.0,
-                      ),
-                      backgroundColor: AppColors.primary.withOpacity(0.1),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          side: BorderSide(color: Colors.transparent)
-                      ),
-                      onSelected: (_) => setState(() => selectedStatus = status),
-                    );
-                  }).toList(),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text("Apply Filters"),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import '../models/transaction_response_model.dart';
+import '../models/response models/transaction_response.dart';
 import '../services/api_path.dart';
 import '../services/api_service.dart';
 

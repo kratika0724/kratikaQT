@@ -3,8 +3,8 @@ import 'package:http/http.dart' as http;
 import 'package:qt_distributer/services/user_preferences.dart';
 import 'package:qt_distributer/utils/utils.dart';
 import '../constants/commonString.dart';
-import '../models/otp_response.dart';
-import '../models/verify_otp_response.dart';
+import '../models/response models/otp_response.dart';
+import '../models/response models/verify_otp_response.dart';
 import '../utils/logger.dart';
 import 'api_path.dart';
 
