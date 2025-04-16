@@ -86,9 +86,9 @@ Widget buildProductTextField(
         floatingLabelStyle: regularTextStyle(fontSize: dimen16, color: AppColors.textSecondary),
         filled: true,
         fillColor: AppColors.ghostWhite,
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+        enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(8),borderSide: BorderSide.none),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(
             color: AppColors.secondary,
           ),
@@ -239,40 +239,57 @@ class FormActionButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: ElevatedButton(
-            onPressed: onSubmit,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.secondary,
-              padding: const EdgeInsets.symmetric(vertical: 12),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [AppColors.primary, AppColors.primary.withOpacity(0.3)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(8),
             ),
-            child: Text(
-              submitText,
-              style: semiBoldTextStyle(fontSize: dimen14, color: Colors.white),
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
+            child: Material(
+              color: Colors.transparent,
+              borderRadius: BorderRadius.circular(8),
+              child: InkWell(
+                onTap: onSubmit,
+                borderRadius: BorderRadius.circular(8),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 14.0,horizontal: 50.0),
+                  child: Center(
+                    child: Text(
+                      submitText,
+                      style: semiBoldTextStyle(fontSize: dimen16, color: Colors.white),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                  ),
+                ),
+              ),
             ),
           ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: ElevatedButton(
+
+          ElevatedButton(
             onPressed: onCancel,
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(vertical: 12),
+              shape: RoundedRectangleBorder(side: BorderSide(color: AppColors.primary),borderRadius: BorderRadius.circular(8)),
+              padding: const EdgeInsets.symmetric(vertical: 14.0,horizontal: 50.0),
             ),
             child: Text(
               cancelText,
-              style: semiBoldTextStyle(fontSize: dimen14, color: AppColors.secondary),
+              style: semiBoldTextStyle(fontSize: dimen16, color: AppColors.primary),
               overflow: TextOverflow.ellipsis,
               maxLines: 1,
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

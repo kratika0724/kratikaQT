@@ -41,13 +41,57 @@ class AgentsScreenState extends State<AgentsScreen> {
         automaticallyImplyLeading: false,
         title: HeaderTextBlack("Agents"),
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 8.0),
-            child: IconButton(
-              icon: const Icon(Icons.filter_list),
-              onPressed: () => showFilterSheet(),
+          GestureDetector(
+            onTap: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const AddAgentScreen()),
+              );
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Container(
+                height: 30,
+                width: 95,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(9),
+                  color: AppColors.primary.withOpacity(0.1),
+                  border: Border.all(color: AppColors.secondary),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(" Add Agent ",overflow: TextOverflow.ellipsis,maxLines: 1,style: mediumTextStyle(fontSize: dimen13, color: Colors.black),),
+                    Icon(Icons.add, size: 16,color: Colors.black),
+                  ],
+                ),
+              ),
             ),
           ),
+          GestureDetector(
+              onTap: () => showFilterSheet(),
+              child: Padding(
+                padding: const EdgeInsets.only(right: 20.0),
+                child: Container(
+                  height: 30,
+                  width: 65,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(9),
+                    color: AppColors.primary.withOpacity(0.1),
+                    border: Border.all(color: AppColors.secondary),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text("Filter ",overflow: TextOverflow.ellipsis,maxLines: 1,style: mediumTextStyle(fontSize: dimen13, color: Colors.black),),
+                      Icon(Icons.filter_list, size: 16,color: Colors.black),
+                    ],
+                  ),
+                ),
+              ),
+            ),
         ],
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
@@ -62,18 +106,18 @@ class AgentsScreenState extends State<AgentsScreen> {
                 Expanded(child: AgentList()),
               ],
             ),
-            Positioned(
-              bottom: 20,
-              right: 20,
-              child: FloatingCircularAddButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => const AddAgentScreen()),
-                  );
-                },
-              ),
-            ),
+            // Positioned(
+            //   bottom: 20,
+            //   right: 20,
+            //   child: FloatingCircularAddButton(
+            //     onPressed: () {
+            //       Navigator.push(
+            //         context,
+            //         MaterialPageRoute(builder: (_) => const AddAgentScreen()),
+            //       );
+            //     },
+            //   ),
+            // ),
           ]
         ),
       ),

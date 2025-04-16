@@ -29,9 +29,11 @@ class _AddProductScreenState extends State<AddProductScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        foregroundColor: AppColors.secondary,
-        title: HeaderTextThemeSecondary("Add new product"),
-        elevation: 3,
+        automaticallyImplyLeading: true,
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+        title: HeaderTextBlack("Add new product"),
+        elevation: 0,
       ),
       body: SafeArea(
         child: GestureDetector(
@@ -49,16 +51,16 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       children: [
                         Expanded(
                           child: Card(
-                            elevation: 4,
+                            elevation: 0,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 12),
+                              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 6),
                               child: Column(
                                 children: [
                                   _buildProductImage(),
-                                  const SizedBox(height: 50,),
+                                  const SizedBox(height: 60,),
                                   buildProductTextField('Product Name', controller: nameController),
                                   buildProductTextField('Product Code', controller: codeController),
                                   buildProductTextField('Product Amount', controller: amountController),
@@ -108,8 +110,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
       ),
       child: Image.asset(
         AppAssets.sampleProduct,
-        width: 150,
-        height: 150,
+        width: 120,
+        height: 120,
       ),
     );
   }

@@ -10,6 +10,7 @@ import '../../services/user_preferences.dart';
 import '../../utils/ui_utils.dart';
 import '../../constants/app_textstyles.dart';
 import '../../widgets/app_theme_button.dart';
+import '../user profile/edit_profile_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -90,63 +91,63 @@ class _ProfileScreenState extends State<ProfileScreen> {
               children: [
                 const SizedBox(height: 6),
                 // User Card
-                Card(
-                  color: Colors.white,
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [Colors.indigo.shade700, AppColors.primary.withOpacity(0.5)],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
+                GestureDetector(
+                  onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (_) => EditUserProfileScreen())),
+                  child: Card(
+                    color: Colors.white,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 12),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Icon(
-                            Icons.account_circle_sharp,
-                            size: 90,
-                            color: Colors.white, // This color becomes the base for the gradient
-                          ),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [AppColors.primary, AppColors.primary.withOpacity(0.3)],
+                          begin: Alignment.topLeft,
+                          end: Alignment.topRight,
+                        ),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10.0, horizontal: 12),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Icon(
+                              Icons.account_circle_sharp,
+                              size: 90,
+                              color: Colors.white, // This color becomes the base for the gradient
+                            ),
 
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.only(left:8.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(provider.fullName,
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(left:8.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(provider.fullName,
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                        style: semiBoldTextStyle(
+                                            fontSize: dimen15,
+                                            color: Colors.white)),
+                                    const SizedBox(height: 5,),
+                                    Text(provider.user_mobile_no ?? "",
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,
-                                      style: semiBoldTextStyle(
+                                      style: regularTextStyle(
                                           fontSize: dimen15,
-                                          color: Colors.white)),
-                                  const SizedBox(height: 5,),
-                                  Text(provider.user_mobile_no ?? "",
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                    style: regularTextStyle(
-                                        fontSize: dimen15,
-                                        color: Colors.white),
-                                  ),
-                                ],
+                                          color: Colors.white),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
 
-                          IconButton(
-                              onPressed: (){},
-                              icon: Icon(Icons.arrow_forward_ios,color: Colors.white),
-                          ),
-                        ],
+                            Icon(Icons.arrow_forward_ios,color: Colors.white),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -157,7 +158,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: ListView(
                     children: [
                       // Custom Menu
-                      UiUtils().menuItem(context, "My Profile", Icons.person_outline),
+                      // UiUtils().menuItem(context, "My Profile", Icons.person_outline),
                       UiUtils().menuItem(context, "Products", Icons.payment_outlined),
                       UiUtils().menuItem(context, "Customers", Icons.people_alt_outlined),
                       UiUtils().menuItem(context, "Allocations", Icons.assignment_outlined),

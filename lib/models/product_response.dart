@@ -35,6 +35,7 @@ class ProductResponseModel {
     };
   }
 }
+
 class ProductModel {
   final String id;
   final String topUser;

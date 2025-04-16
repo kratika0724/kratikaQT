@@ -95,6 +95,8 @@ class _ProductScreenState extends State<ProductScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    const Text("Filter Products", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                    const SizedBox(height: 20),
                     TextField(
                       controller: nameController,
                       decoration: const InputDecoration(
@@ -215,19 +217,92 @@ class _ProductScreenState extends State<ProductScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: HeaderTextThemeSecondary("Products"),
-        backgroundColor: Colors.white,
-        foregroundColor: AppColors.secondary,
-        elevation: 3,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.filter_list, color: AppColors.secondary),
-            onPressed: () => openFilterBottomSheet(context),
-          )
-        ],
+      backgroundColor: AppColors.ghostWhite,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(90), // 👈 Increase height
+        child: AppBar(
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.black,
+          elevation: 0,
+          title: HeaderTextBlack("Products"),
+          automaticallyImplyLeading: true,
+          flexibleSpace: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  const SizedBox(height: 40),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => const AddProductScreen()),
+                          );
+                        },
+                        child: Container(
+                          height: 30,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(9),
+                            color: AppColors.primary.withOpacity(0.1),
+                            border: Border.all(color: AppColors.secondary),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Add Products ",
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                  style: mediumTextStyle(fontSize: dimen13, color: Colors.black),
+                                ),
+                                const Icon(Icons.add, size: 16, color: Colors.black),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      GestureDetector(
+                        onTap: () => openFilterBottomSheet(context),
+                        child: Container(
+                          height: 30,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(9),
+                            color: AppColors.primary.withOpacity(0.1),
+                            border: Border.all(color: AppColors.secondary),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Filter ",
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                  style: mediumTextStyle(fontSize: dimen13, color: Colors.black),
+                                ),
+                                const Icon(Icons.filter_list, size: 16, color: Colors.black),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
       ),
+
       body: Consumer<ProductProvider>(
         builder: (context, provider, _) {
           if (provider.isLoading) {
@@ -365,17 +440,17 @@ class _ProductScreenState extends State<ProductScreen> {
                   const SizedBox(height: 10),
                 ],
               ),
-              Positioned(
-                bottom: 40,
-                right: 20,
-                child: FloatingCircularAddButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) => const AddProductScreen()));
-                  },
-                ),
-              ),
+              // Positioned(
+              //   bottom: 40,
+              //   right: 20,
+              //   child: FloatingCircularAddButton(
+              //     onPressed: () {
+              //       Navigator.push(
+              //           context,
+              //           MaterialPageRoute(builder: (_) => const AddProductScreen()));
+              //     },
+              //   ),
+              // ),
             ],
           );
         },

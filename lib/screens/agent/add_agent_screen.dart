@@ -51,6 +51,7 @@ class _AddAgentScreenState extends State<AddAgentScreen> {
                                 buildCalenderTextField(context, 'Date of Birth', hint: 'dd/mm/yyyy'),
                                 buildTextField('Address'),
                                 buildTextField('Pincode'),
+                                buildTextField('City'),
                                 buildTextField('State'),
                                 buildGenderSelector(
                                   selectedGender: selectedGender,
@@ -68,7 +69,6 @@ class _AddAgentScreenState extends State<AddAgentScreen> {
                                 ),
                                 buildTextField('Assigned Pincode'),
                                 buildTextField('Assigned Area'),
-                                buildTextField('City'),
                               ],
                             ),
                           ),
