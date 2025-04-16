@@ -314,143 +314,128 @@ class _ProductScreenState extends State<ProductScreen> {
 
           final filteredProducts = _applyFilters(provider.products);
 
-          return Stack(
+          return Column(
             children: [
-              Column(
-                children: [
-                  if (filterName != null || filterCode != null)
-                    Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            if (filterName != null || filterCode != null)
-                              Wrap(
-                                spacing: 8,
-                                runSpacing: 4,
-                                children: [
-                                  if (filterName != null)
-                                    Chip(
-                                      label: Text(
-                                        "Name: $filterName",
-                                        style: const TextStyle(
-                                          color: AppColors.secondary,
-                                          fontSize: 12,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                        maxLines: 1,
-                                      ),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(6),
-                                        side: const BorderSide(color: AppColors.secondary,width: 0.7),
-                                      ),
-                                      backgroundColor: Colors.white,
-                                      visualDensity: VisualDensity.compact,
-                                      padding: const EdgeInsets.symmetric(horizontal: 4),
-                                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              if (filterName != null || filterCode != null)
+                Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (filterName != null || filterCode != null)
+                          Wrap(
+                            spacing: 8,
+                            runSpacing: 4,
+                            children: [
+                              if (filterName != null)
+                                Chip(
+                                  label: Text(
+                                    "Name: $filterName",
+                                    style: const TextStyle(
+                                      color: AppColors.secondary,
+                                      fontSize: 12,
+                                      overflow: TextOverflow.ellipsis,
                                     ),
-                                  if (filterCode != null)
-                                    Chip(
-                                      label: Text(
-                                        "Code: $filterCode",
-                                        style: const TextStyle(
-                                          color: AppColors.secondary,
-                                          fontSize: 12,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                        maxLines: 1,
-                                      ),
-
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(6),
-                                        side: const BorderSide(color: AppColors.secondary,width: 0.7),
-                                      ),
-                                      backgroundColor: Colors.white,
-                                      visualDensity: VisualDensity.compact,
-                                      padding: const EdgeInsets.symmetric(horizontal: 4),
-                                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                    ),
-                                ],
-                              ),
-
-                            if (filterName != null || filterCode != null)
-                              Padding(
-                                padding: const EdgeInsets.only(top: 6),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    GestureDetector(
-                                      onTap: (){
-                                        setState(() {
-                                          filterName = null;
-                                          filterCode = null;
-                                        });
-                                      },
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(4),
-                                          color: AppColors.ghostWhite,
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(vertical:5,horizontal: 9.0),
-                                          child:  Text(
-                                            "Clear Filters",
-                                            style: regularTextStyle(fontSize: dimen13,color: Colors.black),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
+                                    maxLines: 1,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(6),
+                                    side: const BorderSide(color: AppColors.secondary,width: 0.7),
+                                  ),
+                                  backgroundColor: Colors.white,
+                                  visualDensity: VisualDensity.compact,
+                                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                                 ),
-                              ),
-                          ],
-                        )
+                              if (filterCode != null)
+                                Chip(
+                                  label: Text(
+                                    "Code: $filterCode",
+                                    style: const TextStyle(
+                                      color: AppColors.secondary,
+                                      fontSize: 12,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    maxLines: 1,
+                                  ),
 
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(6),
+                                    side: const BorderSide(color: AppColors.secondary,width: 0.7),
+                                  ),
+                                  backgroundColor: Colors.white,
+                                  visualDensity: VisualDensity.compact,
+                                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                ),
+                            ],
+                          ),
 
-                    ),
-                  if (filteredProducts.isEmpty)
-                    const Expanded(
-                      child: Center(child: Text("No products found")),
-                    )
-                  else
-                    Expanded(
-                      child: ListView.builder(
-                        padding: const EdgeInsets.all(16),
-                        itemCount: filteredProducts.length,
-                        itemBuilder: (context, index) {
-                          final product = filteredProducts[index];
-                          return Card(
-                            margin: const EdgeInsets.only(bottom: 12),
-                            child: Padding(
-                              padding: const EdgeInsets.all(16),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text("Name: ${product.productName}", style: const TextStyle(fontWeight: FontWeight.bold)),
-                                  Text("Code: ${product.productCode}"),
-                                  Text("Amount: ₹${product.productAmount}"),
-                                  Text("Created at: ${product.createdAt.toLocal()}"),
-                                ],
-                              ),
+                        if (filterName != null || filterCode != null)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 6),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                GestureDetector(
+                                  onTap: (){
+                                    setState(() {
+                                      filterName = null;
+                                      filterCode = null;
+                                    });
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(4),
+                                      color: AppColors.ghostWhite,
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(vertical:5,horizontal: 9.0),
+                                      child:  Text(
+                                        "Clear Filters",
+                                        style: regularTextStyle(fontSize: dimen13,color: Colors.black),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                          );
-                        },
-                      ),
-                    ),
-                  const SizedBox(height: 10),
-                ],
-              ),
-              // Positioned(
-              //   bottom: 40,
-              //   right: 20,
-              //   child: FloatingCircularAddButton(
-              //     onPressed: () {
-              //       Navigator.push(
-              //           context,
-              //           MaterialPageRoute(builder: (_) => const AddProductScreen()));
-              //     },
-              //   ),
-              // ),
+                          ),
+                      ],
+                    )
+
+
+                ),
+              if (filteredProducts.isEmpty)
+                const Expanded(
+                  child: Center(child: Text("No products found")),
+                )
+              else
+                Expanded(
+                  child: ListView.builder(
+                    padding: const EdgeInsets.all(16),
+                    itemCount: filteredProducts.length,
+                    itemBuilder: (context, index) {
+                      final product = filteredProducts[index];
+                      return Card(
+                        margin: const EdgeInsets.only(bottom: 12),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("Name: ${product.productName}", style: const TextStyle(fontWeight: FontWeight.bold)),
+                              Text("Code: ${product.productCode}"),
+                              Text("Amount: ₹${product.productAmount}"),
+                              Text("Created at: ${product.createdAt.toLocal()}"),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              const SizedBox(height: 10),
             ],
           );
         },

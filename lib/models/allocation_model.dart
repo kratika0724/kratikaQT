@@ -1,18 +1,18 @@
-class AllocationModel {
+class AllocationAddModel {
   final String allocationPincode;
   final String allocationArea;
   final String actions;
   final String createdAt;
 
-  AllocationModel({
+  AllocationAddModel({
     required this.allocationPincode,
     required this.allocationArea,
     required this.actions,
     required this.createdAt,
   });
 
-  factory AllocationModel.fromMap(Map<String, String> map) {
-    return AllocationModel(
+  factory AllocationAddModel.fromMap(Map<String, String> map) {
+    return AllocationAddModel(
       allocationPincode: map['allocationPincode'] ?? '',
       allocationArea: map['allocationArea'] ?? '',
       actions: map['actions'] ?? '',

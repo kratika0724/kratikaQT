@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:qt_distributer/widgets/common_text_widgets.dart';
-import '../../constants/app_colors.dart';
 import '../../widgets/common_form_widgets.dart';
 
 class AddAgentScreen extends StatefulWidget {
@@ -18,9 +17,9 @@ class _AddAgentScreenState extends State<AddAgentScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        foregroundColor: AppColors.secondary,
-        title: HeaderTextThemeSecondary("Register Agent"),
-        elevation: 3,
+        foregroundColor: Colors.black,
+        title: HeaderTextBlack("Register Agent"),
+        elevation: 0,
       ),
       body: SafeArea(
         child: LayoutBuilder(
@@ -34,12 +33,12 @@ class _AddAgentScreenState extends State<AddAgentScreen> {
                     children: [
                       Expanded(
                         child: Card(
-                          elevation: 4,
+                          elevation: 0,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 12),
+                            padding: const EdgeInsets.symmetric(vertical: 10, horizontal:0),
                             child: Column(
                               children: [
                                 buildTextField('First Name'),
@@ -61,9 +60,7 @@ class _AddAgentScreenState extends State<AddAgentScreen> {
                                     });
                                   },
                                 ),
-                                buildDropdown(
-                                  'Select Services',
-                                  null,
+                                buildDropdown('Select Services', null,
                                   ['Loan Recovery', 'Payment Collection'],
                                       (_) {},
                                 ),
@@ -92,67 +89,6 @@ class _AddAgentScreenState extends State<AddAgentScreen> {
           },
         ),
       ),
-
-      // body: Column(
-      //   children: [
-      //     Expanded(
-      //       child: SingleChildScrollView(
-      //         padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 12),
-      //         child: Card(
-      //           elevation: 4,
-      //           shape: RoundedRectangleBorder(
-      //             borderRadius: BorderRadius.circular(12),
-      //           ),
-      //           child: Padding(
-      //             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 12),
-      //             child: Column(
-      //               children: [
-      //                 buildTextField('First Name'),
-      //                 buildTextField('Middle Name (Optional)'),
-      //                 buildTextField('Last Name'),
-      //                 buildTextField('Email'),
-      //                 buildTextField('Mobile No'),
-      //                 buildTextField('CRM ID'),
-      //                 buildCalenderTextField(context,'Date of Birth', hint: 'dd/mm/yyyy'),
-      //                 buildTextField('Address'),
-      //                 buildTextField('Pincode'),
-      //                 buildTextField('State'),
-      //                 buildGenderSelector(
-      //                   selectedGender: selectedGender,
-      //                   onChanged: (value) {
-      //                     setState(() {
-      //                       selectedGender = value;
-      //                     });
-      //                   },
-      //                 ),
-      //                 buildDropdown(
-      //                   'Select Services',
-      //                   null,
-      //                   ['Loan Recovery', 'Payment Collection'],
-      //                       (_) {},
-      //                 ),
-      //                 buildTextField('Assigned Pincode'),
-      //                 buildTextField('Assigned Area'),
-      //                 buildTextField('City'),
-      //               ],
-      //             ),
-      //           ),
-      //         ),
-      //       ),
-      //     ),
-      //     Padding(
-      //       padding: const EdgeInsets.fromLTRB(16, 10, 16, 20),
-      //       child: FormActionButtons(
-      //         onSubmit: () {
-      //           Navigator.pop(context);
-      //         },
-      //         onCancel: () {
-      //           Navigator.pop(context);
-      //         },
-      //       ),
-      //     ),
-      //   ],
-      // ),
     );
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:qt_distributer/constants/app_colors.dart';
 import 'package:qt_distributer/constants/app_textstyles.dart';
 import '../../models/agent_model.dart';
+import '../../models/agent_reponse_model.dart';
 
 class AgentCard extends StatelessWidget {
   final AgentModel agent;
@@ -22,57 +23,45 @@ class AgentCard extends StatelessWidget {
       onTap: onExpandToggle,
       child: Container(
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(6.0),
-            color: isExpanded ? AppColors.primary.withOpacity(0.03) : Colors.white
+          borderRadius: BorderRadius.circular(6.0),
+          color: isExpanded
+              ? (agent.isActive
+              ? Colors.green.withOpacity(0.1)
+              : Colors.red.withOpacity(0.1))
+              : Colors.white,
         ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
-          child: Column(
-            children: [
-              _buildNameStatusRow(agent.name, agent.status),
-              Padding(
-                padding: const EdgeInsets.only(left:6.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text("CRM Id: "+agent.crmId,style: mediumTextStyle(fontSize: dimen13, color: Colors.black54))
-                  ],
-                ),
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildNameStatusRow('${agent.firstName} ${agent.middleName} ${agent.lastName}', agent.isActive ? 'Active' : 'Inactive'),
+            const SizedBox(height: 4),
+            _buildInfoRow('CRM ID', agent.crmId),
+            _buildInfoRow('Quintus ID', agent.quintusId),
+            if (isExpanded) ...[
+              const SizedBox(height: 8),
+              DottedLine(
+                dashLength: 4.0,
+                dashColor: Colors.grey.shade300,
+                lineThickness: 1,
               ),
-              Padding(
-                padding: const EdgeInsets.only(left:6.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text("Service: "+agent.services,style: mediumTextStyle(fontSize: dimen13, color: Colors.black54))
-                  ],
-                ),
-              ),
-              if(isExpanded)...[
-              SizedBox(height: 4,),
-
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                child: DottedLine(dashLength: 4.0, dashColor: Colors.grey.shade300,lineThickness: 1,),
-              ),
-              SizedBox(height: 8,),
-                _buildBaseInfoRow('Contact', agent.contact),
-              _buildBaseInfoRow('Email Id', agent.email),
-                _buildBaseInfoRow('Gender', agent.gender),
-              _buildBaseInfoRow('Created At', agent.createdAt)
-              ]
-            ],
-          ),
-
+              const SizedBox(height: 8),
+              _buildInfoRow('Email', agent.email),
+              _buildInfoRow('Mobile', agent.mobile),
+              _buildInfoRow('Gender', agent.gender),
+              _buildInfoRow('DOB', agent.dob.toLocal().toString().split(' ')[0]),
+              _buildInfoRow('Address', '${agent.address.address1}, ${agent.address.city}, ${agent.address.state}, ${agent.address.country}'),
+              _buildInfoRow('Created At', agent.createdAt.toLocal().toString().split(' ')[0]),
+              // _buildInfoRow('Updated By', agent.updatedBy),
+            ]
+          ],
         ),
       ),
     );
   }
 
-  Widget _buildAvatar() {
-    final gender = agent.gender.toLowerCase() ?? 'male'; // default to male if null
-    final isMale = gender == 'male';
-
+  Widget _buildAvatar(String gender) {
+    final isMale = gender.toLowerCase() == 'male';
     return CircleAvatar(
       radius: 20,
       backgroundColor: Colors.transparent,
@@ -81,7 +70,7 @@ class AgentCard extends StatelessWidget {
           return LinearGradient(
             colors: isMale
                 ? [Colors.indigo.shade900, Colors.blue]
-                : [Colors.amber.shade600, Colors.amberAccent.shade100],
+                : [Colors.pink.shade300, Colors.pinkAccent.shade100],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ).createShader(bounds);
@@ -90,78 +79,58 @@ class AgentCard extends StatelessWidget {
       ),
     );
   }
+
   Widget _buildNameStatusRow(String name, String status) {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        _buildAvatar(),
-        SizedBox(width: 0,),
+        // _buildAvatar(agent.gender),
+        const SizedBox(width: 6),
         Expanded(
-          flex: 2,
           child: Text(
             name,
             style: semiBoldTextStyle(fontSize: dimen15, color: Colors.black),
             overflow: TextOverflow.ellipsis,
-            maxLines: 1,
           ),
         ),
-        Spacer(),
         Text(
           status,
           style: regularTextStyle(
-              fontSize: dimen14,
-              color: status.toLowerCase() == 'active'
-                  ? Colors.green
-                  : Colors.red
-          ),
-          overflow: TextOverflow.ellipsis,
-          maxLines: 1,
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 8.0),
-          child: const Icon(
-            Icons.keyboard_arrow_down,
-            color: Colors.black54,size: 22,
+            fontSize: dimen14,
+            color: status.toLowerCase() == 'active' ? Colors.green : Colors.red,
           ),
         ),
+        const Icon(Icons.keyboard_arrow_down, color: Colors.black54),
       ],
     );
   }
-  Widget _buildBaseInfoRow(String label, String value) {
+
+  Widget _buildInfoRow(String label, String value) {
     return Padding(
-      padding: const EdgeInsets.only(left: 6.0),
+      padding: const EdgeInsets.only(left: 6.0, bottom: 4.0),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
             flex: 2,
             child: Text(
               label,
-              style: mediumTextStyle(fontSize: dimen13, color: Colors.black),
               overflow: TextOverflow.ellipsis,
-              maxLines: 1,
+              style: mediumTextStyle(fontSize: dimen13, color: Colors.black),
             ),
           ),
+          const Text(': '),
           Expanded(
-            flex: 1,
-            child: Text(
-              ": ",
-              style: mediumTextStyle(fontSize: dimen13, color: Colors.black),
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
-            ),
-          ),
-          Expanded(
-            flex: 6,
+            flex: 5,
             child: Text(
               value,
               style: mediumTextStyle(fontSize: dimen13, color: Colors.black),
+              maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              maxLines: 1,
             ),
           ),
         ],
       ),
     );
   }
-
 }
+

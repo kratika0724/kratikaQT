@@ -1,50 +1,84 @@
 import 'package:flutter/material.dart';
-import 'package:qt_distributer/constants/app_colors.dart';
 import 'package:qt_distributer/constants/app_textstyles.dart';
 import '../../models/allocation_model.dart';
+import '../../models/allocation_reponse_model.dart';
 
 class AllocationCard extends StatelessWidget {
   final AllocationModel allocation;
 
-  const AllocationCard({super.key, required this.allocation});
+  const AllocationCard({
+    Key? key,
+    required this.allocation,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.only(bottom: 12),
-      color: Colors.white,
-      elevation: 3,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _labelValue('Pincode', allocation.allocationPincode),
-            _labelValue('Area', allocation.allocationArea),
-            _labelValue('Actions', allocation.actions),
-            _labelValue('Created At', allocation.createdAt),
-          ],
-        ),
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 2),
+      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(6.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.03),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          )
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildInfoRow("Pincode", allocation.allocationPincode ?? "N/A"),
+          _buildInfoRow("Area", allocation.allocationArea ?? "N/A"),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.end,
+          //   children: [
+          //     Text(
+          //       "Created At " +_formatDate(allocation.createdAt),
+          //       style: mediumTextStyle(fontSize: dimen13, color: Colors.black54),
+          //       overflow: TextOverflow.ellipsis,
+          //     ),
+          //   ],
+          // ),
+          _buildInfoRow("Created At", _formatDate(allocation.createdAt)),
+          // _buildInfoRow("Created By", allocation.createdBy ?? "N/A"),
+        ],
       ),
     );
   }
 
-  Widget _labelValue(String label, String value) {
+  Widget _buildInfoRow(String label, String value) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 6),
+      padding: const EdgeInsets.only(bottom: 0.0),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            flex: 1,
-            child: Text('$label:', style: regularTextStyle(fontSize: dimen13, color: Colors.black54)),
+          SizedBox(
+            width: 100,
+            child: Text(
+              label,
+              style: mediumTextStyle(fontSize: dimen13, color: Colors.black),
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
+          const Text(': '),
           Expanded(
-            flex: 3,
-            child: Text(value, style: mediumTextStyle(fontSize: dimen13, color: Colors.black)),
+            child: Text(
+              value,
+              style: mediumTextStyle(fontSize: dimen13, color: Colors.black54),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
         ],
       ),
     );
+  }
+
+  String _formatDate(DateTime? date) {
+    if (date == null) return 'N/A';
+    return date.toLocal().toString().split(' ')[0];
   }
 }

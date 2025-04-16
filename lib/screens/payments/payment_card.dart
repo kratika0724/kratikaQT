@@ -2,154 +2,94 @@ import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:qt_distributer/models/payment_model.dart';
 import '../../constants/app_textstyles.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:dotted_line/dotted_line.dart';
+import '../../constants/app_textstyles.dart';
+import '../../models/transaction_response_model.dart'; // Assuming your models are in this path
 
-class PaymentCard extends StatelessWidget {
-  final PaymentModel payment;
+class TransactionCard extends StatelessWidget {
+  final TransactionData transaction;
   final bool isExpanded;
   final VoidCallback onExpandToggle;
 
-  const PaymentCard({
+  const TransactionCard({
     Key? key,
-    required this.payment,
+    required this.transaction,
     required this.isExpanded,
     required this.onExpandToggle,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final status = payment.status;
-    final bgColor = _getStatusColor(status).withOpacity(0.2);
-    final textColor = _getStatusColor(status);
+    final statusColor = _getStatusColor(transaction.status);
+    final bgColor = statusColor.withOpacity(0.2);
+    final formattedDate = DateFormat('dd MMM yyyy, hh:mm a').format(transaction.createdAt);
 
     return GestureDetector(
       onTap: onExpandToggle,
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(6.0),
+          borderRadius: BorderRadius.circular(6),
           color: isExpanded ? bgColor.withOpacity(0.1) : Colors.white,
         ),
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: isExpanded ? 8: 4),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-             _buildAmountAndStatus(payment.amount, payment.createdAt, payment.status, bgColor, textColor),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildAmountAndStatus(transaction.transactionAmount, formattedDate, transaction.status, bgColor, statusColor),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 6),
+              child: DottedLine(dashLength: 4.0, dashColor: Colors.grey, lineThickness: 1),
+            ),
+            _buildReferenceRow(transaction.referenceNo),
+            if (isExpanded)
               Padding(
-                padding: EdgeInsets.symmetric(vertical: 6),
-                child: DottedLine(dashLength: 4.0, dashColor: Colors.grey.shade400,lineThickness: 1,),
-              ),
-              _buildTransactionRow(payment.transactionId),
-              if (isExpanded)
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildBaseInfoRow('Contact', payment.name),
-                      _buildBaseInfoRow('Email Id', payment.email),
-                      // Text("Bank: ", style: regularTextStyle(fontSize: 13.0, color: Colors.black)),
-                      // Text("UPI Ref: ", style: regularTextStyle(fontSize: 13.0, color: Colors.black)),
-                      // Text("Notes: ", style: regularTextStyle(fontSize: 13.0, color: Colors.black)),
-                    ],
-                  ),
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildInfoRow("User", "${transaction.user.firstName} ${transaction.user.lastName}"),
+                    _buildInfoRow("Email", transaction.user.email),
+                    _buildInfoRow("Mobile", transaction.user.mobile),
+                    _buildInfoRow("Service Charge", transaction.serviceCharge.toStringAsFixed(2)),
+                    _buildInfoRow("Commission", transaction.customerCommission.toStringAsFixed(2)),
+                    _buildInfoRow("Wallet Type", transaction.walletHistory.walletType),
+                    _buildInfoRow("Transaction Type", transaction.walletHistory.transactionType),
+                  ],
                 ),
-             ],
-          ),
+              ),
+          ],
         ),
       ),
     );
   }
 
-  Widget _buildBaseInfoRow(String label, String value) {
-    return Row(
-      children: [
-        Expanded(
-          flex: 2,
-          child: Text(
-            label,
-            style: mediumTextStyle(fontSize: dimen13, color: Colors.black),
-            overflow: TextOverflow.ellipsis,
-            maxLines: 1,
-          ),
-        ),
-        Expanded(
-          flex: 1,
-          child: Text(
-            ": ",
-            style: mediumTextStyle(fontSize: dimen13, color: Colors.black),
-            overflow: TextOverflow.ellipsis,
-            maxLines: 1,
-          ),
-        ),
-        Expanded(
-          flex: 6,
-          child: Text(
-            value,
-            style: mediumTextStyle(fontSize: dimen13, color: Colors.black),
-            overflow: TextOverflow.ellipsis,
-            maxLines: 1,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildTransactionRow(String transactionId) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        // Text("Transaction ID: ", style: regularTextStyle(fontSize: dimen14, color: Colors.black)),
-        Flexible(
-          flex: 4,
-          child: Text(
-            "Transaction ID: "+ transactionId,
-            overflow: TextOverflow.ellipsis,
-            maxLines: 1,
-            style: regularTextStyle(fontSize: dimen14, color: Colors.black),
-          ),
-        ),
-        Spacer(),
-        const Icon(
-          Icons.keyboard_arrow_down,
-          color: Colors.black,size: 22,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildAmountAndStatus(String amount, String createdAt, String status, Color bgColor, Color textColor) {
+  Widget _buildAmountAndStatus(double amount, String createdAt, String status, Color bgColor, Color textColor) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-                amount,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-                style: semiBoldTextStyle(fontSize: dimen16, color: textColor),
+              "₹${amount.toStringAsFixed(2)}",
+              style: semiBoldTextStyle(fontSize: dimen16, color: textColor),
             ),
             Text(
               createdAt,
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
               style: thinTextStyle(fontSize: dimen13, color: Colors.black),
             ),
-
           ],
         ),
         Container(
+          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
           decoration: BoxDecoration(
             color: bgColor,
             borderRadius: BorderRadius.circular(4),
           ),
-          padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 8.0),
           child: Text(
             status,
-            overflow: TextOverflow.ellipsis,
-            maxLines: 1,
             style: boldTextStyle(fontSize: dimen12, color: textColor),
           ),
         ),
@@ -157,14 +97,42 @@ class PaymentCard extends StatelessWidget {
     );
   }
 
+  Widget _buildReferenceRow(String refId) {
+    return Row(
+      children: [
+        Expanded(
+          child: Text(
+            "Ref ID: $refId",
+            style: regularTextStyle(fontSize: dimen14, color: Colors.black),
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+        const Icon(Icons.keyboard_arrow_down, color: Colors.black, size: 22),
+      ],
+    );
+  }
+
+  Widget _buildInfoRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2.0),
+      child: Row(
+        children: [
+          Expanded(flex: 3, child: Text(label, style: mediumTextStyle(fontSize: dimen13, color: Colors.black))),
+          const Text(": "),
+          Expanded(flex: 6, child: Text(value, style: mediumTextStyle(fontSize: dimen13, color: Colors.black))),
+        ],
+      ),
+    );
+  }
+
   Color _getStatusColor(String status) {
-    switch (status) {
-      case 'Success':
-        return Color(0xff1c5e20);
-      case 'Pending':
-        return Color(0xfffdbb00);
-      case 'Failed':
-        return Color(0xfffb0e00);
+    switch (status.toLowerCase()) {
+      case 'success':
+        return const Color(0xff1c5e20);
+      case 'pending':
+        return const Color(0xfffdbb00);
+      case 'failed':
+        return const Color(0xfffb0e00);
       default:
         return Colors.grey;
     }

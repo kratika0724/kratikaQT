@@ -1,4 +1,4 @@
-class AgentModel {
+class AgentAddModel {
   final String name;
   final String crmId;
   final String contact;
@@ -8,7 +8,7 @@ class AgentModel {
   final String services;
   final String createdAt;
 
-  AgentModel({
+  AgentAddModel({
     required this.name,
     required this.crmId,
     required this.contact,
@@ -19,8 +19,8 @@ class AgentModel {
     required this.createdAt,
   });
 
-  factory AgentModel.fromMap(Map<String, String> map) {
-    return AgentModel(
+  factory AgentAddModel.fromMap(Map<String, String> map) {
+    return AgentAddModel(
       name: map['name'] ?? '',
       crmId: map['crmId'] ?? '',
       contact: map['contact'] ?? '',

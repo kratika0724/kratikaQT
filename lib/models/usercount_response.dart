@@ -2,7 +2,7 @@ class UserCountResponse {
   final bool success;
   final String message;
   final int status;
-  final int total;
+  final TotalCount total;
 
   UserCountResponse({
     required this.success,
@@ -16,7 +16,24 @@ class UserCountResponse {
       success: json['success'] ?? false,
       message: json['message'] ?? '',
       status: json['status'] ?? 0,
-      total: json['total'] ?? 0,
+      total: TotalCount.fromJson(json['total'] ?? {}),
+    );
+  }
+}
+
+class TotalCount {
+  final int userCount;
+  final int productCount;
+
+  TotalCount({
+    required this.userCount,
+    required this.productCount,
+  });
+
+  factory TotalCount.fromJson(Map<String, dynamic> json) {
+    return TotalCount(
+      userCount: json['userCount'] ?? 0,
+      productCount: json['productCount'] ?? 0,
     );
   }
 }

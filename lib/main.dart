@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:qt_distributer/providers/agent_provider.dart';
+import 'package:qt_distributer/providers/allocation_provider.dart';
 import 'package:qt_distributer/providers/dashboard_provider.dart';
 import 'package:qt_distributer/providers/product_provider.dart';
+import 'package:qt_distributer/providers/transaction_provider.dart';
 import 'screens/splash_screen.dart';
 import 'screens/base main/bottom_navigation.dart';
 import 'constants/app_colors.dart';
@@ -22,6 +25,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => DashboardProvider()),
         ChangeNotifierProvider(create: (_) => ProductProvider()),
+        ChangeNotifierProvider(create: (_) => AgentProvider()),
+        ChangeNotifierProvider(create: (_) => AllocationProvider()),
+        ChangeNotifierProvider(create: (_) => TransactionProvider()),
       ],
       child: MaterialApp(
         title: 'Mobile Login Demo',

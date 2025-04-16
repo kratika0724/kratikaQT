@@ -186,7 +186,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     Expanded(
                                       child: _buildCard(
                                         'User\nCount',
-                                        '${userCount?.total ?? 0}',
+                                        '${dashboardProvider.userCount}',
                                         AppColors.primary,
                                         Icons.analytics_outlined,
                                         1.0,
@@ -206,7 +206,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     Expanded(
                                       child: _buildCard(
                                         'Product\nCount',
-                                        '0',
+                                        '${dashboardProvider.productCount}',
                                         AppColors.primary,
                                         Icons.analytics_outlined,
                                         1.0,

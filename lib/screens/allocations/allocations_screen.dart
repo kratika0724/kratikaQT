@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:qt_distributer/widgets/add_new_button.dart';
+import 'package:provider/provider.dart';
 import 'package:qt_distributer/widgets/common_text_widgets.dart';
 import 'package:qt_distributer/constants/app_colors.dart';
 import '../../constants/app_textstyles.dart';
-import '../../widgets/app_theme_button.dart';
+import '../../providers/allocation_provider.dart';
 import 'add_allocation_screen.dart';
-import 'allocation_card_list.dart';
+import 'allocation_card.dart';
 
 class AllocationsScreen extends StatefulWidget {
   const AllocationsScreen({super.key});
@@ -20,6 +20,15 @@ class _AllocationsScreenState extends State<AllocationsScreen> {
     {'name': 'Jane Smith', 'email': 'jane@gmail.com'},
     {'name': 'Alice Johnson', 'email': 'alice@domain.com'},
   ];
+
+
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      Provider.of<AllocationProvider>(context, listen: false).getAllocationData();
+    });
+  }
 
   void showFilterSheet() {
     showModalBottomSheet(
@@ -121,26 +130,25 @@ class _AllocationsScreenState extends State<AllocationsScreen> {
           ),
         ),
       ),
-      body: Stack(
-        children: [
-          Column(
+      body: Consumer<AllocationProvider>(
+        builder: (context, provider, _) {
+          final allocations = provider.allocations;
+          return Column(
               children: [
-                const Expanded(child: AllocationCardList()),
+                Expanded(
+                  child: ListView.builder(
+                    padding: const EdgeInsets.symmetric(vertical: 6,horizontal: 12),
+                    itemCount: provider.allocations.length,
+                    itemBuilder: (context, index) {
+                      final allocation = allocations[index];
+                      return AllocationCard(allocation: allocation);
+                    },
+                  ),
+                ),
+                SizedBox(height: 10,),
               ]
-          ),
-          // Positioned(
-          //   bottom: 40,
-          //   right: 20,
-          //   child: FloatingCircularAddButton(
-          //     onPressed: () {
-          //       Navigator.push(
-          //         context,
-          //         MaterialPageRoute(builder: (_) => const AddAllocationScreen()),
-          //       );
-          //     },
-          //   ),
-          // ),
-        ],
+          );
+        },
       ),
     );
   }

@@ -1,10 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:qt_distributer/widgets/common_text_widgets.dart';
 import '../../constants/app_colors.dart';
-import '../payments/payment_card_list.dart';
+import '../../providers/transaction_provider.dart';
+import '../payments/payment_card.dart';
 
-class PaymentsScreen extends StatelessWidget {
+class PaymentsScreen extends StatefulWidget {
   const PaymentsScreen({super.key});
+
+  @override
+  State<PaymentsScreen> createState() => _PaymentsScreenState();
+}
+
+class _PaymentsScreenState extends State<PaymentsScreen> {
+  int? expandedIndex;
+
+  void toggleExpanded(int index) {
+    setState(() {
+      if (expandedIndex == index) {
+        expandedIndex = null;
+      } else {
+        expandedIndex = index;
+      }
+    });
+  }
+
+
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      Provider.of<TransactionProvider>(context, listen: false).getTransactions();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,16 +45,51 @@ class PaymentsScreen extends StatelessWidget {
         foregroundColor: AppColors.primary,
         // elevation: 3,
       ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            // List of payment cards
-            Expanded(
-              child: PaymentCardList(),
-            ),
-          ],
-        ),
+      body: Consumer<TransactionProvider>(
+        builder: (context, provider, _) {
+          final allocations = provider.transactions;
+          return Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    padding: const EdgeInsets.symmetric(vertical: 6,horizontal: 12),
+                    itemCount: provider.transactions.length,
+                    itemBuilder: (context, index) {
+                      final transaction = provider.transactions[index];
+                      return TransactionCard(transaction: transaction,isExpanded: expandedIndex == index,
+                        onExpandToggle: () {
+                          toggleExpanded(index);
+                        },);
+                    },
+                  ),
+                ),
+                SizedBox(height: 10,),
+              ]
+          );
+        },
       ),
+      // body: SafeArea(
+      //   child: Column(
+      //     children: [
+      //       Expanded(
+      //           child: ListView.builder(
+      //             padding: const EdgeInsets.symmetric(vertical: 4,horizontal: 12),
+      //             itemCount: paymentList.length,
+      //             itemBuilder: (context, index) {
+      //               return Padding(
+      //                 padding: const EdgeInsets.symmetric(vertical: 2.0),
+      //                 child: PaymentCard(
+      //                   payment: paymentList[index],
+      //                   isExpanded: expandedIndex == index,
+      //                   onExpandToggle: () => toggleExpanded(index),
+      //                 ),
+      //               ); // You can create this card widget
+      //             },
+      //           ),
+      //       ),
+      //     ],
+      //   ),
+      // ),
     );
   }
 }

@@ -5,9 +5,7 @@ import '../services/api_service.dart';
 import '../services/user_preferences.dart';
 
 class DashboardProvider extends ChangeNotifier {
-
   final ApiService apiService = ApiService();
-
 
   bool isLoading = false;
   String? error;
@@ -15,6 +13,8 @@ class DashboardProvider extends ChangeNotifier {
   UserCountResponse? _userCountData;
   UserCountResponse? get userCountData => _userCountData;
 
+  int get userCount => _userCountData?.total.userCount ?? 0;
+  int get productCount => _userCountData?.total.productCount ?? 0;
 
   String? user_firstname = "";
   String? user_middlename = "";
@@ -32,10 +32,10 @@ class DashboardProvider extends ChangeNotifier {
   }
 
   Future<void> fetchUserCountData(String token) async {
-
     isLoading = true;
     error = null;
     notifyListeners();
+
     try {
       final response = await apiService.getAuth(ApiPath.getUSerCountDashboardData, {});
       final mResponse = UserCountResponse.fromJson(response);
@@ -47,29 +47,29 @@ class DashboardProvider extends ChangeNotifier {
     } catch (e) {
       error = "Error: $e";
     }
+
     isLoading = false;
     notifyListeners();
   }
 
   void getCustomerDatafromLocal() {
-    PreferencesServices.getPreferencesData(PreferencesServices.firstName)
-        .then((firstname) {
-      user_firstname = firstname.toString() == "null" ? "Username" : firstname.toString();
+    PreferencesServices.getPreferencesData(PreferencesServices.firstName).then((firstname) {
+      user_firstname = (firstname?.toString() ?? "").isEmpty || firstname == "null"
+          ? "Username"
+          : firstname.toString();
     });
-    PreferencesServices.getPreferencesData(PreferencesServices.middleName)
-        .then((middlename) {
-      user_middlename = middlename.toString() == "null" ? "" : middlename.toString();
+    PreferencesServices.getPreferencesData(PreferencesServices.middleName).then((middlename) {
+      user_middlename = (middlename?.toString() ?? "") == "null" ? "" : middlename.toString();
     });
-    PreferencesServices.getPreferencesData(PreferencesServices.lastName)
-        .then((lastname) {
-      user_lastname = lastname.toString() == "null" ? "Username" : lastname.toString();
+    PreferencesServices.getPreferencesData(PreferencesServices.lastName).then((lastname) {
+      user_lastname = (lastname?.toString() ?? "").isEmpty || lastname == "null"
+          ? "Username"
+          : lastname.toString();
     });
-    PreferencesServices.getPreferencesData(PreferencesServices.mobileNo)
-        .then((mobile) {
-      user_mobile_no = mobile.toString()== "null" ? "Mobile number" : mobile.toString();
+    PreferencesServices.getPreferencesData(PreferencesServices.mobileNo).then((mobile) {
+      user_mobile_no = (mobile?.toString() ?? "") == "null" ? "Mobile number" : mobile.toString();
     });
+
     notifyListeners();
   }
 }
-
-

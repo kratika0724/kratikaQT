@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:qt_distributer/screens/agent/agent_card.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_textstyles.dart';
-import '../../widgets/add_new_button.dart';
-import '../../widgets/app_theme_button.dart';
+import '../../models/agent_reponse_model.dart';
+import '../../providers/agent_provider.dart';
 import '../../widgets/common_text_widgets.dart';
 import '../agent/add_agent_screen.dart';
-import '../agent/agent_card_list.dart';
 
 class AgentsScreen extends StatefulWidget {
   const AgentsScreen({super.key});
@@ -15,23 +16,215 @@ class AgentsScreen extends StatefulWidget {
 }
 
 class AgentsScreenState extends State<AgentsScreen> {
-  final List<Map<String, String>> agentsList = [
-    {'name': 'John Doe', 'email': 'john@example.com'},
-    {'name': 'Jane Smith', 'email': 'jane@gmail.com'},
-    {'name': 'Alice Johnson', 'email': 'alice@domain.com'},
-  ];
+  String? filterName;
+  String? filterEmail;
+  String? filterStatus;
+  int? expandedIndex;
 
-  void showFilterSheet() {
+  void toggleExpanded(int index) {
+    setState(() {
+      if (expandedIndex == index) {
+        expandedIndex = null;
+      } else {
+        expandedIndex = index;
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      Provider.of<AgentProvider>(context, listen: false).getAgentData();
+    });
+  }
+  void openFilterBottomSheet(BuildContext context) {
+    final provider = Provider.of<AgentProvider>(context, listen: false);
+    final nameController = TextEditingController(text: filterName ?? '');
+    final emailController = TextEditingController(text: filterEmail ?? '');
+
+    List<String> nameSuggestions = [];
+    List<String> emailSuggestions = [];
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.white,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
-      builder: (context) => FilterSheet(agentsList: agentsList),
+      builder: (_) {
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            void updateNameSuggestions(String input) {
+              if (input.trim().isEmpty) {
+                setModalState(() => nameSuggestions = []);
+                return;
+              }
+
+              final matches = provider.agents
+                  .map((e) => e.firstName)
+                  .where((name) =>
+                  name.toLowerCase().contains(input.toLowerCase()))
+                  .toSet()
+                  .toList();
+
+              matches.sort((a, b) =>
+              a.toLowerCase().indexOf(input.toLowerCase()) -
+                  b.toLowerCase().indexOf(input.toLowerCase()));
+
+              setModalState(() => nameSuggestions = matches);
+            }
+
+            void updateCodeSuggestions(String input) {
+              if (input.trim().isEmpty) {
+                setModalState(() => emailSuggestions = []);
+                return;
+              }
+
+              final matches = provider.agents
+                  .map((e) => e.email)
+                  .where((code) =>
+                  code.toLowerCase().contains(input.toLowerCase()))
+                  .toSet()
+                  .toList();
+
+              matches.sort((a, b) =>
+              a.toLowerCase().indexOf(input.toLowerCase()) -
+                  b.toLowerCase().indexOf(input.toLowerCase()));
+
+              setModalState(() => emailSuggestions = matches);
+            }
+
+            return Padding(
+              padding: EdgeInsets.only(
+                left: 16,
+                right: 16,
+                top: 24,
+                bottom: MediaQuery.of(context).viewInsets.bottom + 24,
+              ),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text("Filter Agents", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                    const SizedBox(height: 20),
+                    TextField(
+                      controller: nameController,
+                      decoration: const InputDecoration(
+                        labelText: 'Agent First Name',
+                        border: OutlineInputBorder(),
+                      ),
+                      onChanged: updateNameSuggestions,
+                    ),
+                    if (nameSuggestions.isNotEmpty)
+                      ...nameSuggestions.map(
+                            (name) => Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(4.0),
+                            color: AppColors.ghostWhite,
+                          ),
+                          child: ListTile(
+                            dense: true,
+                            visualDensity: const VisualDensity(horizontal: 0, vertical: -4),
+                            minVerticalPadding: 0,
+                            contentPadding: EdgeInsets.only(left: 8.0,right: 8.0),
+                            title: Text(name,style: regularTextStyle(fontSize: dimen13, color: Colors.black),),
+                            onTap: () {
+                              nameController.text = name;
+                              setModalState(() => nameSuggestions.clear());
+                            },
+                          ),
+                        ),
+                      ),
+                    const SizedBox(height: 16),
+                    TextField(
+                      controller: emailController,
+                      decoration: const InputDecoration(
+                        labelText: 'Product Code',
+                        border: OutlineInputBorder(),
+                      ),
+                      onChanged: updateCodeSuggestions,
+                    ),
+                    if (emailSuggestions.isNotEmpty)
+                      ...emailSuggestions.map(
+                            (code) => Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(4.0),
+                            color: AppColors.ghostWhite,
+                          ),
+                          child: ListTile(
+                            dense: true,
+                            visualDensity: const VisualDensity(horizontal: 0, vertical: -4),
+                            minVerticalPadding: 0,
+                            contentPadding: EdgeInsets.only(left: 8.0,right: 8.0),
+                            title: Text(code,style: regularTextStyle(fontSize: dimen13, color: Colors.black),),
+
+                            onTap: () {
+                              emailController.text = code;
+                              setModalState(() => emailSuggestions.clear());
+                            },
+                          ),
+                        ),
+                      ),
+                    const SizedBox(height: 24),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                filterName = nameController.text.trim().isNotEmpty
+                                    ? nameController.text.trim()
+                                    : null;
+                                filterEmail = emailController.text.trim().isNotEmpty
+                                    ? emailController.text.trim()
+                                    : null;
+                              });
+                              Navigator.pop(context);
+                            },
+                            child: const Text("Apply Filters"),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              foregroundColor: AppColors.primary,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                filterName = null;
+                                filterEmail = null;
+                              });
+                              Navigator.pop(context);
+                            },
+                            child: const Text("Clear Filters"),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
     );
   }
+
+
+  List<AgentModel> _applyFilters(List<AgentModel> agents) {
+    return agents.where((agent) {
+      final nameMatch = filterName == null ||
+          agent.firstName.toLowerCase().contains(filterName!.toLowerCase());
+      final codeMatch = filterEmail == null ||
+          agent.email.toLowerCase().contains(filterEmail!.toLowerCase());
+      return nameMatch && codeMatch;
+    }).toList();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +263,7 @@ class AgentsScreenState extends State<AgentsScreen> {
             ),
           ),
           GestureDetector(
-              onTap: () => showFilterSheet(),
+              onTap: () => openFilterBottomSheet(context),
               child: Padding(
                 padding: const EdgeInsets.only(right: 20.0),
                 child: Container(
@@ -97,298 +290,133 @@ class AgentsScreenState extends State<AgentsScreen> {
         foregroundColor: Colors.black,
         // elevation: 3,
       ),
-      body: SafeArea(
-        child: Stack(
-          children: [
-            Column(
-              children: [
-                //List
-                Expanded(child: AgentList()),
-              ],
-            ),
-            // Positioned(
-            //   bottom: 20,
-            //   right: 20,
-            //   child: FloatingCircularAddButton(
-            //     onPressed: () {
-            //       Navigator.push(
-            //         context,
-            //         MaterialPageRoute(builder: (_) => const AddAgentScreen()),
-            //       );
-            //     },
-            //   ),
-            // ),
-          ]
-        ),
-      ),
-    );
-  }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: Colors.white,
-//       appBar: AppBar(
-//         automaticallyImplyLeading: false,
-//         title: HeaderTextThemeSecondary("Customers"),
-//         actions: [
-//           Padding(
-//             padding: const EdgeInsets.only(right: 8.0),
-//             child: IconButton(
-//               icon: const Icon(Icons.filter_list, color: AppColors.primary),
-//               onPressed: () => _showFilterSheet(context),
-//             ),
-//           ),
-//         ],
-//         backgroundColor: Colors.white,
-//         foregroundColor: AppColors.primary,
-//         elevation: 3,
-//       ),
-//       body: SafeArea(
-//         child: Column(
-//           children: [
-//             //List
-//             Expanded(child: CustomerList()),
-//             // Divider(thickness: 1, color: Colors.grey.shade200),
-//             Container(
-//               color: Colors.white,
-//               padding: const EdgeInsets.symmetric(horizontal: 16),
-//               child: Row(
-//                 mainAxisAlignment: MainAxisAlignment.center,
-//                 children: [
-//                   AddNewButton(
-//                     label: 'Add New Customer',
-//                     onPressed: () {
-//                       Navigator.push(
-//                         context,
-//                         MaterialPageRoute(builder: (_) => const AddCustomerScreen()),
-//                       );
-//                     },
-//                   ),
-//                 ],
-//               ),
-//             ),
-//             const SizedBox(height: 10,),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-}
+      body: Consumer<AgentProvider>(
+        builder: (context, provider, _) {
+          if (provider.isLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (provider.errorMessage != null) {
+            return Center(child: Text("Oops! Something went wrong"));
+          }
+
+          final filteredAgents = _applyFilters(provider.agents);
+          return Column(
+            children: [
+              if (filterName != null || filterEmail != null)
+                Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (filterName != null || filterEmail != null)
+                          Wrap(
+                            spacing: 8,
+                            runSpacing: 4,
+                            children: [
+                              if (filterName != null)
+                                Chip(
+                                  label: Text(
+                                    "Name: $filterName",
+                                    style: const TextStyle(
+                                      color: AppColors.secondary,
+                                      fontSize: 12,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    maxLines: 1,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(6),
+                                    side: const BorderSide(color: AppColors.secondary,width: 0.7),
+                                  ),
+                                  backgroundColor: Colors.white,
+                                  visualDensity: VisualDensity.compact,
+                                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                ),
+                              if (filterEmail != null)
+                                Chip(
+                                  label: Text(
+                                    "Code: $filterEmail",
+                                    style: const TextStyle(
+                                      color: AppColors.secondary,
+                                      fontSize: 12,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    maxLines: 1,
+                                  ),
+
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(6),
+                                    side: const BorderSide(color: AppColors.secondary,width: 0.7),
+                                  ),
+                                  backgroundColor: Colors.white,
+                                  visualDensity: VisualDensity.compact,
+                                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                ),
+                            ],
+                          ),
+
+                        if (filterName != null || filterEmail != null)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 6),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                GestureDetector(
+                                  onTap: (){
+                                    setState(() {
+                                      filterName = null;
+                                      filterEmail = null;
+                                    });
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(4),
+                                      color: AppColors.ghostWhite,
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(vertical:5,horizontal: 9.0),
+                                      child:  Text(
+                                        "Clear Filters",
+                                        style: regularTextStyle(fontSize: dimen13,color: Colors.black),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                      ],
+                    )
 
 
-class FilterSheet extends StatefulWidget {
-  final List<Map<String, String>> agentsList;
-  const FilterSheet({super.key, required this.agentsList});
-
-  @override
-  State<FilterSheet> createState() => FilterSheetState();
-}
-
-class FilterSheetState extends State<FilterSheet> {
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final GlobalKey nameFieldKey = GlobalKey();
-  final GlobalKey emailFieldKey = GlobalKey();
-  final LayerLink nameLink = LayerLink();
-  final LayerLink emailLink = LayerLink();
-  OverlayEntry? overlayEntry;
-  String selectedStatus = '';
-  String contactNumber = '';
-
-  @override
-  void dispose() {
-    nameController.dispose();
-    emailController.dispose();
-    overlayEntry?.remove();
-    super.dispose();
-  }
-
-  void showOverlay({
-    required GlobalKey fieldKey,
-    required LayerLink link,
-    required List<String> options,
-    required TextEditingController controller,
-  }) {
-    removeOverlay();
-
-    final renderBox = fieldKey.currentContext?.findRenderObject() as RenderBox?;
-    if (renderBox == null) return;
-
-    final size = renderBox.size;
-    final offset = renderBox.localToGlobal(Offset.zero);
-
-    final filteredOptions = options
-        .where((o) => o.toLowerCase().contains(controller.text.toLowerCase()))
-        .toList();
-
-    if (filteredOptions.isEmpty) return;
-
-    overlayEntry = OverlayEntry(
-      builder: (context) => Positioned(
-        left: offset.dx,
-        top: offset.dy + size.height,
-        width: size.width,
-        child: CompositedTransformFollower(
-          link: link,
-          showWhenUnlinked: false,
-          child: Padding(
-            padding: const EdgeInsets.only(top: 50.0),
-            child: Material(
-              elevation: 4,
-              borderRadius: BorderRadius.circular(20),
-              color: Colors.white,
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: filteredOptions.length,
-                itemBuilder: (context, index) {
-                  final option = filteredOptions[index];
-                  return ListTile(
-                    title: Text(option),
-                    onTap: () {
-                      controller.text = option;
-                      removeOverlay();
-                    },
-                  );
-                },
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-
-    Overlay.of(context).insert(overlayEntry!);
-  }
-
-  void removeOverlay() {
-    overlayEntry?.remove();
-    overlayEntry = null;
-  }
-
-  Widget buildComboField({
-    required String label,
-    required TextEditingController controller,
-    required GlobalKey fieldKey,
-    required LayerLink link,
-    required List<String> options,
-  }) {
-    return CompositedTransformTarget(
-      link: link,
-      child: TextField(
-        key: fieldKey,
-        controller: controller,
-        decoration: InputDecoration(
-          labelText: label,
-          suffixIcon: const Icon(Icons.arrow_drop_down),
-          border: OutlineInputBorder(),
-        ),
-        onTap: () => showOverlay(
-          fieldKey: fieldKey,
-          link: link,
-          options: options,
-          controller: controller,
-        ),
-        onChanged: (_) => showOverlay(
-          fieldKey: fieldKey,
-          link: link,
-          options: options,
-          controller: controller,
-        ),
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final names = widget.agentsList.map((e) => e['name']!).toList();
-    final emails = widget.agentsList.map((e) => e['email']!).toList();
-    final statusOptions = ['Active', 'Inactive'];
-
-    return Padding(
-      padding: EdgeInsets.only(
-        left: 16,
-        right: 16,
-        top: 24,
-        bottom: MediaQuery.of(context).viewInsets.bottom + 16,
-      ),
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            const Text("Filter Agents", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 20),
-            buildComboField(
-              label: "Select or Enter Name",
-              controller: nameController,
-              fieldKey: nameFieldKey,
-              link: nameLink,
-              options: names,
-            ),
-            const SizedBox(height: 16),
-            buildComboField(
-              label: "Select or Enter Email",
-              controller: emailController,
-              fieldKey: emailFieldKey,
-              link: emailLink,
-              options: emails,
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              keyboardType: TextInputType.number,
-              maxLength: 10,
-              decoration: const InputDecoration(
-                labelText: 'Contact Number',
-                border: OutlineInputBorder(),
-                counterText: "",
-              ),
-              onChanged: (value) {
-                if (value.length <= 10 && RegExp(r'^\d*$').hasMatch(value)) {
-                  setState(() => contactNumber = value);
-                }
-              },
-            ),
-            const SizedBox(height: 20),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text("Status", style: TextStyle(fontWeight: FontWeight.w600)),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Wrap(
-                  spacing: 10,
-                  children: statusOptions.map((status) {
-                    final selected = selectedStatus == status;
-                    return ChoiceChip(
-                      label: Text(status),
-                      selected: selected,
-                      showCheckmark: true,
-                      checkmarkColor: Colors.white,
-                      selectedColor: AppColors.secondary,
-                      labelStyle: mediumTextStyle(
-                        color: selected ? Colors.white : AppColors.secondary  ,
-                        fontSize: 14.0,
-                      ),
-                      backgroundColor: AppColors.primary.withOpacity(0.1),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          side: BorderSide(color: Colors.transparent)
-                      ),
-                      onSelected: (_) => setState(() => selectedStatus = status),
-                    );
-                  }).toList(),
                 ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text("Apply Filters"),
-            )
-          ],
-        ),
+              if (filteredAgents.isEmpty)
+                const Expanded(
+                  child: Center(child: Text("No products found")),
+                )
+              else
+                Expanded(
+                  child: ListView.builder(
+                    padding: const EdgeInsets.all(16),
+                    itemCount: filteredAgents.length,
+                    itemBuilder: (context, index) {
+                      final agent = filteredAgents[index];
+                      return AgentCard(
+                          agent: agent,
+                          isExpanded: expandedIndex == index,
+                          onExpandToggle: () {
+                            toggleExpanded(index);
+                          },
+                      );
+                    },
+                  ),
+                ),
+              const SizedBox(height: 10),
+            ],
+          );
+        },
       ),
     );
   }

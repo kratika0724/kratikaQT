@@ -35,7 +35,7 @@ Widget buildTextField(
   final _controller = controller ?? TextEditingController();
 
   return Padding(
-    padding: const EdgeInsets.only(bottom: 16),
+    padding: const EdgeInsets.only(bottom: 12),
     child: TextField(
       controller: _controller,
       inputFormatters: inputFormatters,
