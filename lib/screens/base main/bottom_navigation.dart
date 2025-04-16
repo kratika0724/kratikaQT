@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:qt_distributer/constants/app_colors.dart';
 import 'package:qt_distributer/screens/base%20main/payments_screen.dart';
 import 'dashboard_screen.dart';
-import 'customer_screen.dart';
 import 'agents_screen.dart';
 import 'profile_screen.dart';
 

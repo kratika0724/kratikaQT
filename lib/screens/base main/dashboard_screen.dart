@@ -16,22 +16,6 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
 
-  LineChartBarData _buildLineBarData(List<double> values, Color color) {
-    return LineChartBarData(
-      isCurved: false,
-      color: color,
-      barWidth: 3,
-      isStrokeCapRound: true,
-      dotData: FlDotData(show: false),
-      belowBarData: BarAreaData(show: false),
-      spots: values
-          .asMap()
-          .entries
-          .map((e) => FlSpot(e.key.toDouble(), e.value))
-          .toList(),
-    );
-  }
-
   @override
   void initState() {
     super.initState();
@@ -113,12 +97,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
         child: dashboardProvider.isLoading
             ? const Center(child: CircularProgressIndicator())
             : dashboardProvider.error != null
-            ? Center(child: Text(dashboardProvider.error!))
+            ? Center(child: Text("Oops! Something went wrong"))
             : SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 10.0),
                 child: Column(
                   children: [
+                    //PAYMENTS
                     Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8.0),
@@ -169,6 +154,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           ),
                         ),
                     ),
+                    //OVERVIEW
                     const SizedBox(height: 10,),
                     Container(
                       decoration: BoxDecoration(
@@ -234,6 +220,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         ),
                       ),
                     ),
+
+                    //GRAPH
                     const SizedBox(height: 10,),
                     Container(
                       decoration: BoxDecoration(
@@ -245,12 +233,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              "KPI Trends",
-                              style: boldTextStyle(
-                                fontSize: dimen18,
-                                color: Colors.black,
-                                latterSpace: 1.0,
+                            Padding(
+                              padding: const EdgeInsets.only(left: 8),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Overview",
+                                    style: boldTextStyle(fontSize: dimen18, color: Colors.black, latterSpace: 1.0),
+                                  ),
+                                ],
                               ),
                             ),
                             const SizedBox(height: 10),
@@ -267,16 +259,25 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     bottomTitles: AxisTitles(
                                       sideTitles: SideTitles(
                                         showTitles: true,
-                                        reservedSize: 22,
+                                        reservedSize: 30,
                                         interval: 1,
                                         getTitlesWidget: (value, meta) {
+                                          // Generate last 7 dates from today
+                                          final now = DateTime.now();
+                                          final List<String> last7Days = List.generate(7, (index) {
+                                            final date = now.subtract(Duration(days: 6 - index));
+                                            return "${date.day.toString().padLeft(2, '0')} ${_monthShort(date.month)}";
+                                          });
+
+                                          int index = value.toInt();
                                           return Text(
-                                            'Day ${value.toInt()}',
-                                            style: TextStyle(fontSize: 10,color: AppColors.secondary),
+                                            index >= 0 && index < last7Days.length ? last7Days[index] : '',
+                                            style: const TextStyle(fontSize: 10, color: Colors.black),
                                           );
                                         },
                                       ),
                                     ),
+
                                     leftTitles: AxisTitles(
                                       sideTitles: SideTitles(
                                         showTitles: true,
@@ -284,7 +285,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                         getTitlesWidget: (value, meta) {
                                           return Text(
                                             '${value.toInt()}',
-                                            style: TextStyle(fontSize: 10,color: AppColors.secondary),
+                                            style: TextStyle(fontSize: 10,color: Colors.black),
                                           );
                                         },
                                       ),
@@ -386,6 +387,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
             ),
       ),
+    );
+  }
+
+  LineChartBarData _buildLineBarData(List<double> values, Color color) {
+    return LineChartBarData(
+      isCurved: false,
+      color: color,
+      barWidth: 3,
+      isStrokeCapRound: true,
+      dotData: FlDotData(show: false),
+      belowBarData: BarAreaData(show: false),
+      spots: values
+          .asMap()
+          .entries
+          .map((e) => FlSpot(e.key.toDouble(), e.value))
+          .toList(),
     );
   }
 
@@ -590,4 +607,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ));
   }
 }
+
+String _monthShort(int month) {
+  const monthNames = [
+    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+  ];
+  return monthNames[month - 1];
+}
+
 

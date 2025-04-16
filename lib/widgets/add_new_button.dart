@@ -2,49 +2,65 @@ import 'package:flutter/material.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_textstyles.dart';
 
-class AddNewButton extends StatelessWidget {
-  final String label;
-  final VoidCallback onPressed;
-  final double fontSize;
-  final EdgeInsetsGeometry padding;
-  final Color backgroundColor;
+import 'package:flutter/material.dart';
+import '../../constants/app_colors.dart';
 
-  const AddNewButton({
+import 'package:flutter/material.dart';
+import '../../constants/app_colors.dart';
+
+class FloatingCircularAddButton extends StatelessWidget {
+  final VoidCallback onPressed;
+  final double size;
+  final Color iconColor;
+
+  const FloatingCircularAddButton({
     Key? key,
-    required this.label,
     required this.onPressed,
-    this.fontSize = 14,
-    this.padding = const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-    this.backgroundColor = AppColors.secondary,
+    this.size = 56,
+    this.iconColor = Colors.white,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
+      height: size,
+      width: size,
       decoration: BoxDecoration(
-        gradient:  LinearGradient(
-          colors: [AppColors.primary, AppColors.primary.withOpacity(0.6),],
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
+        gradient: LinearGradient(
+          colors: [
+            AppColors.primary,
+            AppColors.primary.withOpacity(0.8),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(10),
+        shape: BoxShape.circle,
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.primary.withOpacity(0.4),
+            offset: Offset(0, 4),
+            blurRadius: 10,
+          ),
+        ],
       ),
-      child: ElevatedButton(
-        onPressed: onPressed,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.transparent,
-          shadowColor: Colors.transparent,
-          padding: padding,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        ),
-        child: Text(
-          label,
-          overflow: TextOverflow.ellipsis,
-          maxLines: 1,
-          style: boldTextStyle(fontSize: fontSize, color: Colors.white),
+      child: Material(
+        color: Colors.transparent,
+        shape: const CircleBorder(),
+        child: InkWell(
+          customBorder: const CircleBorder(),
+          onTap: onPressed,
+          child: Center(
+            child: Icon(
+              Icons.add,
+              color: iconColor,
+              size: size * 0.5,
+            ),
+          ),
         ),
       ),
     );
   }
 }
+
+
+

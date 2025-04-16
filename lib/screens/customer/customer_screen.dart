@@ -3,8 +3,9 @@ import 'package:qt_distributer/constants/app_colors.dart';
 import 'package:qt_distributer/widgets/common_text_widgets.dart';
 import '../../constants/app_textstyles.dart';
 import '../../widgets/add_new_button.dart';
-import '../customer/add_customer_screen.dart';
-import '../customer/customer_card_list.dart';
+import '../../widgets/app_theme_button.dart';
+import 'add_customer_screen.dart';
+import 'customer_card_list.dart';
 
 class CustomerScreen extends StatelessWidget {
   const CustomerScreen({super.key});
@@ -47,25 +48,26 @@ class CustomerScreen extends StatelessWidget {
         // elevation: 3,
       ),
       body: SafeArea(
-        child: Column(
+        child: Stack(
           children: [
-            Expanded(child: CustomerList()),
-            // Divider(thickness: 1, color: Colors.grey.shade200),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0,horizontal: 30),
-              child: AddNewButton(
-                label: 'Add New Customer',
+            Column(
+              children: [
+                Expanded(child: CustomerList()),
+              ],
+            ),
+            Positioned(
+              bottom: 20,
+              right: 20,
+              child: FloatingCircularAddButton(
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (_) => const AddCustomerScreen()),
-                  );
+                    MaterialPageRoute(builder: (_) => const AddCustomerScreen()));
                 },
               ),
-            ),
-            const SizedBox(height: 10,),
+            )
           ],
-        ),
+        )
       ),
     );
   }

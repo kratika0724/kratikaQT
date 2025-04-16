@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:qt_distributer/widgets/add_new_button.dart';
 import 'package:qt_distributer/widgets/common_text_widgets.dart';
 import 'package:qt_distributer/constants/app_colors.dart';
 import '../../constants/app_textstyles.dart';
-import '../../widgets/add_new_button.dart';
+import '../../widgets/app_theme_button.dart';
 import 'add_allocation_screen.dart';
 import 'allocation_card_list.dart';
 
@@ -51,30 +52,26 @@ class _AllocationsScreenState extends State<AllocationsScreen> {
         foregroundColor: AppColors.secondary,
         elevation: 3,
       ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            const Expanded(child: AllocationCardList()),
-            Container(
-              color: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  AddNewButton(
-                    label: 'Add New Allocation',
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) => const AddAllocationScreen()),
-                      );
-                    },
-                  ),
-                ],
-              ),
+      body: Stack(
+        children: [
+          Column(
+              children: [
+                const Expanded(child: AllocationCardList()),
+              ]
+          ),
+          Positioned(
+            bottom: 40,
+            right: 20,
+            child: FloatingCircularAddButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const AddAllocationScreen()),
+                );
+              },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

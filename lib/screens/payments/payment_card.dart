@@ -1,13 +1,19 @@
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:qt_distributer/models/payment_model.dart';
-import '../../constants/app_colors.dart';
 import '../../constants/app_textstyles.dart';
 
 class PaymentCard extends StatelessWidget {
   final PaymentModel payment;
+  final bool isExpanded;
+  final VoidCallback onExpandToggle;
 
-  const PaymentCard({Key? key, required this.payment}) : super(key: key);
+  const PaymentCard({
+    Key? key,
+    required this.payment,
+    required this.isExpanded,
+    required this.onExpandToggle,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,25 +21,76 @@ class PaymentCard extends StatelessWidget {
     final bgColor = _getStatusColor(status).withOpacity(0.2);
     final textColor = _getStatusColor(status);
 
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(6.0),
-        color: Colors.white,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-           _buildAmountAndStatus(payment.amount, payment.createdAt, payment.status, bgColor, textColor),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 6),
-              child: DottedLine(dashLength: 4.0, dashColor: Colors.grey.shade400,lineThickness: 1,),
-            ),
-            _buildTransactionRow(payment.transactionId),
-           ],
+    return GestureDetector(
+      onTap: onExpandToggle,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(6.0),
+          color: isExpanded ? bgColor.withOpacity(0.1) : Colors.white,
+        ),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: isExpanded ? 8: 4),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+             _buildAmountAndStatus(payment.amount, payment.createdAt, payment.status, bgColor, textColor),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 6),
+                child: DottedLine(dashLength: 4.0, dashColor: Colors.grey.shade400,lineThickness: 1,),
+              ),
+              _buildTransactionRow(payment.transactionId),
+              if (isExpanded)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildBaseInfoRow('Contact', payment.name),
+                      _buildBaseInfoRow('Email Id', payment.email),
+                      // Text("Bank: ", style: regularTextStyle(fontSize: 13.0, color: Colors.black)),
+                      // Text("UPI Ref: ", style: regularTextStyle(fontSize: 13.0, color: Colors.black)),
+                      // Text("Notes: ", style: regularTextStyle(fontSize: 13.0, color: Colors.black)),
+                    ],
+                  ),
+                ),
+             ],
+          ),
         ),
       ),
+    );
+  }
+
+  Widget _buildBaseInfoRow(String label, String value) {
+    return Row(
+      children: [
+        Expanded(
+          flex: 2,
+          child: Text(
+            label,
+            style: mediumTextStyle(fontSize: dimen13, color: Colors.black),
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+          ),
+        ),
+        Expanded(
+          flex: 1,
+          child: Text(
+            ": ",
+            style: mediumTextStyle(fontSize: dimen13, color: Colors.black),
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+          ),
+        ),
+        Expanded(
+          flex: 6,
+          child: Text(
+            value,
+            style: mediumTextStyle(fontSize: dimen13, color: Colors.black),
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+          ),
+        ),
+      ],
     );
   }
 

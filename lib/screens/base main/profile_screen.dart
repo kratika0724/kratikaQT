@@ -9,6 +9,7 @@ import '../../providers/dashboard_provider.dart';
 import '../../services/user_preferences.dart';
 import '../../utils/ui_utils.dart';
 import '../../constants/app_textstyles.dart';
+import '../../widgets/app_theme_button.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -72,34 +73,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
     return Consumer<DashboardProvider>(builder: (context, provider, child) {
       return Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.ghostWhite.withOpacity(0.7),
         appBar: AppBar(
           automaticallyImplyLeading: false,
-          title: HeaderTextThemeSecondary("User Profile"),
+          title: HeaderTextBlack("User Profile"),
           // centerTitle: true,
           backgroundColor: Colors.white,
           foregroundColor: AppColors.primary,
-          elevation: 3,
+          // elevation: 3,
         ),
         body: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15.0),
+            padding: const EdgeInsets.symmetric(horizontal: 13.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 10),
-
+                const SizedBox(height: 6),
                 // User Card
                 Card(
                   color: Colors.white,
-                  elevation: 3,
+                  elevation: 0,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Container(
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
-                        colors: [Colors.indigo.shade900, AppColors.primary],
+                        colors: [Colors.indigo.shade700, AppColors.primary.withOpacity(0.5)],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
@@ -107,230 +107,115 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 15),
+                          vertical: 10.0, horizontal: 12),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          ShaderMask(
-                            shaderCallback: (Rect bounds) {
-                              return const LinearGradient(
-                                colors: [Colors.amber, Colors.white],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                              ).createShader(bounds);
-                            },
-                            child: const Icon(
-                              Icons.person,
-                              size: 90,
-                              color: Colors
-                                  .white, // This color becomes the base for the gradient
-                            ),
+                          const Icon(
+                            Icons.account_circle_sharp,
+                            size: 90,
+                            color: Colors.white, // This color becomes the base for the gradient
                           ),
 
                           Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Text(provider.fullName,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left:8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(provider.fullName,
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                      style: semiBoldTextStyle(
+                                          fontSize: dimen15,
+                                          color: Colors.white)),
+                                  const SizedBox(height: 5,),
+                                  Text(provider.user_mobile_no ?? "",
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 1,
-                                    style: semiBoldTextStyle(
+                                    style: regularTextStyle(
                                         fontSize: dimen15,
-                                        color: Colors.white)),
-                                const SizedBox(height: 5,),
-                                Text(provider.user_mobile_no ?? "",
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                  style: regularTextStyle(
-                                      fontSize: dimen13,
-                                      color: Colors.white),
-                                ),
-                              ],
+                                        color: Colors.white),
+                                  ),
+                                ],
+                              ),
                             ),
-                          )
+                          ),
+
+                          IconButton(
+                              onPressed: (){},
+                              icon: Icon(Icons.arrow_forward_ios,color: Colors.white),
+                          ),
                         ],
                       ),
                     ),
                   ),
                 ),
                 const SizedBox(height: 10),
-
                 // Menu Options
                 Expanded(
                   child: ListView(
                     children: [
                       // Custom Menu
-                      UiUtils().menuItem(
-                          context, "My Profile", Icons.person_outline),
-                      UiUtils().menuItem(
-                          context, "Products", Icons.payment_outlined),
-                      UiUtils().menuItem(
-                          context, "Customers", Icons.people_alt_outlined),
-                      UiUtils().menuItem(
-                          context, "Allocations", Icons.assignment_outlined),
-                      // UiUtils().menuItem(
-                      //     context, "Payments", Icons.payment_outlined),
-
-                      // Base Menu
-                      const SizedBox(height: 15,),
-                      // Card(
-                      //   color: Colors.white,
-                      //   elevation: 3,
-                      //   margin: const EdgeInsets.only(
-                      //       bottom: 12, left: 3, right: 3),
-                      //   shape: RoundedRectangleBorder(
-                      //     borderRadius: BorderRadius.circular(12),
-                      //   ),
-                      //   child: Padding(
-                      //     padding: const EdgeInsets.symmetric(
-                      //         horizontal: 12.0, vertical: 10),
-                      //     child: Column(
-                      //       children: [
-                      //         UiUtils().menuItemBase(context, "Contact Us",
-                      //             Icons.headset_mic_outlined),
-                      //         Divider(
-                      //           thickness: 0.4, color: Colors.grey.shade300,),
-                      //         UiUtils().menuItemBase(
-                      //             context, "Terms & Conditions",
-                      //             Icons.description_outlined),
-                      //         Divider(
-                      //           thickness: 0.4, color: Colors.grey.shade300,),
-                      //         UiUtils().menuItemBase(
-                      //             context, "Privacy Policies",
-                      //             Icons.privacy_tip_outlined),
-                      //         Divider(
-                      //           thickness: 0.4, color: Colors.grey.shade300,),
-                      //         UiUtils().menuItemBase(
-                      //             context, "About Us", Icons.info_outline),
-                      //       ],
-                      //     ),
-                      //   ),
-                      // ),
-                      // ... Inside ListView
-                      Card(
-                        color: Colors.white,
-                        elevation: 3,
-                        margin: const EdgeInsets.only(bottom: 12, left: 3, right: 3),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 12),
-                          child: Column(
-                            children: [
-                              GestureDetector(
-                                onTap: (){
-                                  _showContactBottomSheet(context);
-                                },
-                                child: Row(
-                                  children: [
-                                    Icon(Icons.connect_without_contact_outlined,size: 20,color: Colors.black,),
-                                    const SizedBox(width: 10),
-                                    Expanded(
-                                      child: Text("Contact Us",
-                                          style: regularTextStyle(fontSize: dimen15, color: Colors.black)),
-                                    ),
-                                    const Icon(Icons.arrow_forward_ios, color: Colors.black,size: 16,),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(height: 5,),
-                              Divider(thickness: 0.4, color: Colors.grey.shade300),
-
-                              UiUtils().menuItemBase(context, "Terms & Conditions", Icons.description_outlined),
-                              Divider(thickness: 0.4, color: Colors.grey.shade300),
-                              UiUtils().menuItemBase(context, "Privacy Policies", Icons.privacy_tip_outlined),
-                              Divider(thickness: 0.4, color: Colors.grey.shade300),
-                              UiUtils().menuItemBase(context, "About Us", Icons.info_outline),
-                            ],
-                          ),
-                        ),
-                      ),
-
-
-                      //LogOut Button
-                      const SizedBox(height: 10),
+                      UiUtils().menuItem(context, "My Profile", Icons.person_outline),
+                      UiUtils().menuItem(context, "Products", Icons.payment_outlined),
+                      UiUtils().menuItem(context, "Customers", Icons.people_alt_outlined),
+                      UiUtils().menuItem(context, "Allocations", Icons.assignment_outlined),
+                      UiUtils().menuItem(context, "Contact Us", Icons.connect_without_contact),
+                      UiUtils().menuItem(context, "Terms & Conditions", Icons.description_outlined),
+                      UiUtils().menuItem(context, "Privacy Policies", Icons.privacy_tip_outlined),
+                      UiUtils().menuItem(context, "About Us", Icons.info_outline),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 2.0),
-                        child: Center(
-                          child: SizedBox(
-                            width: double.infinity,
-                            child: ElevatedButton.icon(
-                              onPressed: () {
-                                showDialog(
-                                    context: context,
-                                    // Ensure you pass the correct BuildContext here
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        // backgroundColor: white,
-                                        title: const Text(
-                                          "Logging Out!",
+                        padding: const EdgeInsets.symmetric(horizontal: 26.0,vertical: 30),
+                        child: AppThemeButton(label: 'Log Out', onPressed: () {
+                          showDialog(
+                              context: context,
+                              // Ensure you pass the correct BuildContext here
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  // backgroundColor: white,
+                                  title: const Text(
+                                    "Logging Out!",
+                                  ),
+                                  content: const Text(
+                                    "Are you sure you want to logout?",
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.pop(context),
+                                      child: const Text(
+                                        'NO',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16,
                                         ),
-                                        content: const Text(
-                                          "Are you sure you want to logout?",
-                                        ),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: () =>
-                                                Navigator.pop(context),
-                                            child: const Text(
-                                              'NO',
-                                              style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 16,
-                                              ),
-                                            ),
-                                          ),
-                                          TextButton(
-                                            onPressed: () async {
-                                              await Provider.of<AuthProvider>(context, listen: false).logout();
-                                              await PreferencesServices.clearData();
+                                      ),
+                                    ),
+                                    TextButton(
+                                      onPressed: () async {
+                                        await Provider.of<AuthProvider>(context, listen: false).logout();
+                                        await PreferencesServices.clearData();
 
-                                              Navigator.pushAndRemoveUntil(
-                                                context,
-                                                MaterialPageRoute(builder: (context) => const LoginScreen()),
-                                                    (route) => false,
-                                              );
-                                            },
-                                            child: const Text(
-                                              'YES',
-                                              style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 16,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      );
-                                    });
-                              },
-                              style: ElevatedButton.styleFrom(
-                                elevation: 3,
-                                backgroundColor: Theme
-                                    .of(context)
-                                    .colorScheme
-                                    .primary,
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 8),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                  BorderRadius.circular(10), // Corner radius
-                                ),
-                              ),
-                              icon: const Icon(
-                                  Icons.logout, color: Colors.white),
-                              label: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 8.0),
-                                child: Text("Logout",
-                                    style: boldTextStyle(fontSize: dimen14,
-                                        color: Colors.white)),
-                              ),
-                            ),
-                          ),
-                        ),
+                                        Navigator.pushAndRemoveUntil(
+                                          context,
+                                          MaterialPageRoute(builder: (context) => const LoginScreen()),
+                                              (route) => false,
+                                        );
+                                      },
+                                      child: const Text(
+                                        'YES',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              });
+                        },),
                       ),
-                      const SizedBox(height: 80),
                     ],
                   ),
                 ),
@@ -341,90 +226,4 @@ class _ProfileScreenState extends State<ProfileScreen> {
       );
     });
   }
-
-  void _showContactBottomSheet(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (BuildContext context) {
-        return Stack(
-          clipBehavior: Clip.none,
-          children: [
-            Container(
-              margin: const EdgeInsets.only(top: 40),
-              padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 20),
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // const SizedBox(height: 10),
-                  Text("Contact Us", style: semiBoldTextStyle(fontSize: dimen18,color: Colors.black)),
-                  const SizedBox(height: 20),
-                  ListTile(
-                    leading: const Icon(Icons.call, color: Colors.black),
-                    title: Text(
-                        "Call us",
-                      style: semiBoldTextStyle(fontSize: dimen15,color: Colors.black),
-                    ),
-                    subtitle: Text(
-                        "To speak with a representative, start an instant call with our support team.",
-                      style: regularTextStyle(fontSize: dimen13,color: Colors.black54),
-                    ),
-                    onTap: () {
-                      Navigator.pop(context);
-                      _makePhoneCall(context, '+919876543210');
-                    },
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    child: Divider(thickness: 0.4, color: Colors.grey.shade300),
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.email, color: Colors.black),
-                    title:Text(
-                      "Email us",
-                      style: semiBoldTextStyle(fontSize: dimen15,color: Colors.black),
-                    ),
-                    subtitle: Text(
-                      "Send a query to our customer support team via email.",
-                      style: regularTextStyle(fontSize: dimen13,color: Colors.black54),
-                    ),
-                    onTap: () {
-                      Navigator.pop(context);
-                      _launchEmail(context, "vososhop@gmail.com");
-                    },
-                  ),
-                  const SizedBox(height: 10),
-                ],
-              ),
-            ),
-
-            // Centered Floating Close Button
-            Positioned(
-              top: -20,
-              left: 0,
-              right: 0,
-              child: Center(
-                child: GestureDetector(
-                  onTap: () => Navigator.pop(context),
-                  child: CircleAvatar(
-                    backgroundColor: Colors.white,
-                    radius: 22,
-                    child: Icon(Icons.close, color: Colors.black87),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-
-
 }

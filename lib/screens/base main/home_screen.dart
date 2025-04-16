@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:qt_distributer/constants/app_assets.dart';
 import 'package:qt_distributer/constants/app_colors.dart';
 import 'package:qt_distributer/screens/base%20main/agents_screen.dart';
 import 'package:qt_distributer/screens/base%20main/dashboard_screen.dart';
@@ -44,46 +43,29 @@ class _HomeScreenState extends State<HomeScreen> {
         },
       ),
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.white,
         currentIndex: _selectedIndex,
         selectedItemColor: AppColors.primary,
-        unselectedItemColor: AppColors.secondary,
+        unselectedItemColor: Colors.grey,
+        selectedFontSize: 13,
+        unselectedFontSize: 13,
         onTap: _onItemTapped,
-        items: <BottomNavigationBarItem>[
+        items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Image.asset(
-              AppAssets.dashboardIcon, // Adjust path if needed
-              width: 16,
-              height: 16,
-              color: _selectedIndex == 0 ? AppColors.primary : AppColors.secondary,
-            ),
+            icon: Icon(Icons.dashboard),
             label: 'Dashboard',
           ),
-           BottomNavigationBarItem(
-            icon: Image.asset(
-              AppAssets.paymentIcon, // Adjust path if needed
-              width: 24,
-              height: 24,
-              color: _selectedIndex == 1 ? AppColors.primary : AppColors.secondary,
-            ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.assignment),
             label: 'Payments',
           ),
           BottomNavigationBarItem(
-            icon: Image.asset(
-              AppAssets.customerIcon, // Adjust path if needed
-              width: 24,
-              height: 24,
-              color: _selectedIndex == 2 ? AppColors.primary : AppColors.secondary,
-            ),
+            icon: Icon(Icons.person),
             label: 'Agents',
           ),
           BottomNavigationBarItem(
-            icon: Image.asset(
-              AppAssets.userIcon, // Adjust path if needed
-              width: 24,
-              height: 24,
-              color:_selectedIndex == 3 ? AppColors.primary : AppColors.secondary,
-            ),
+            icon: Icon(Icons.account_circle),
             label: 'Profile',
           ),
         ],

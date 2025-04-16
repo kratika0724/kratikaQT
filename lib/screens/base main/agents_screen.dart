@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_textstyles.dart';
 import '../../widgets/add_new_button.dart';
+import '../../widgets/app_theme_button.dart';
 import '../../widgets/common_text_widgets.dart';
 import '../agent/add_agent_screen.dart';
 import '../agent/agent_card_list.dart';
@@ -53,25 +54,27 @@ class AgentsScreenState extends State<AgentsScreen> {
         // elevation: 3,
       ),
       body: SafeArea(
-        child: Column(
+        child: Stack(
           children: [
-            //List
-            Expanded(child: AgentList()),
-            // Divider(thickness: 1, color: Colors.grey.shade200),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0,horizontal: 30),
-              child: AddNewButton(
-                label: 'Add New Agent',
+            Column(
+              children: [
+                //List
+                Expanded(child: AgentList()),
+              ],
+            ),
+            Positioned(
+              bottom: 20,
+              right: 20,
+              child: FloatingCircularAddButton(
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (_) => AddAgentScreen()),
+                    MaterialPageRoute(builder: (_) => const AddAgentScreen()),
                   );
                 },
               ),
             ),
-            const SizedBox(height: 10,),
-          ],
+          ]
         ),
       ),
     );
