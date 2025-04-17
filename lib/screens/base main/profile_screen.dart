@@ -10,7 +10,7 @@ import '../../services/user_preferences.dart';
 import '../../utils/ui_utils.dart';
 import '../../constants/app_textstyles.dart';
 import '../../widgets/app_theme_button.dart';
-import '../user profile/edit_profile_screen.dart';
+import '../user profile/show_userprofile_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -92,7 +92,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 const SizedBox(height: 6),
                 // User Card
                 GestureDetector(
-                  onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (_) => EditUserProfileScreen())),
+                  onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (_) => ShowUserProfileScreen())),
                   child: Card(
                     color: Colors.white,
                     elevation: 0,

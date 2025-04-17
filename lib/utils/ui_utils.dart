@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:qt_distributer/constants/app_colors.dart';
 import 'package:qt_distributer/screens/allocations/allocations_screen.dart';
 import 'package:qt_distributer/screens/products/add_product_screen.dart';
-import 'package:qt_distributer/screens/user%20profile/edit_profile_screen.dart';
+import 'package:qt_distributer/screens/user%20profile/show_userprofile_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../constants/app_textstyles.dart';
 import '../screens/customer/customer_screen.dart';
@@ -22,7 +22,7 @@ class UiUtils {
           Navigator.push(context, MaterialPageRoute(builder: (_) => AllocationsScreen()));
         }
         if(title.toLowerCase() == 'my profile'){
-          Navigator.push(context, MaterialPageRoute(builder: (_) => EditUserProfileScreen()));
+          Navigator.push(context, MaterialPageRoute(builder: (_) => ShowUserProfileScreen()));
         }
         if(title.toLowerCase() == 'products'){
           Navigator.push(context, MaterialPageRoute(builder: (_) => ProductScreen()));

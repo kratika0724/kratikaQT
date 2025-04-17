@@ -106,10 +106,6 @@ class ApiService {
           PreferencesServices.apiToken,
           verifyResponse.accessToken ?? '',
         );
-        PreferencesServices.setPreferencesData(
-          PreferencesServices.userId,
-          verifyResponse.user.id ?? '',
-        );
         setUserData(verifyResponse.user);
         return verifyResponse;
       } else if (response.statusCode == 404) {

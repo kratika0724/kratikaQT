@@ -12,6 +12,10 @@ class PreferencesServices{
   static String lastName = "lastName";
   static String emailId = "emailId";
   static String mobileNo = "mobileNo";
+  static String role = "role";
+  static String profileImg = "profileImg";
+  static String roleName = "roleName";
+  static String customerId = "customerId";
 
 
   ///..... SharePrefences save data ........

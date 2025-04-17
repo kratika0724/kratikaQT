@@ -1,13 +1,13 @@
+import '../../constants/app_textstyles.dart';
+import '../../models/response models/product_response.dart';
 import 'package:flutter/material.dart';
-import 'package:qt_distributer/constants/app_textstyles.dart';
-import '../../models/response models/allocation_response.dart';
 
-class AllocationCard extends StatelessWidget {
-  final AllocationModel allocation;
+class ProductCard extends StatelessWidget {
+  final ProductModel product;
 
-  const AllocationCard({
+  const ProductCard({
     Key? key,
-    required this.allocation,
+    required this.product,
   }) : super(key: key);
 
   @override
@@ -29,20 +29,10 @@ class AllocationCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildInfoRow("Pincode", allocation.allocationPincode ?? "N/A"),
-          _buildInfoRow("Area", allocation.allocationArea ?? "N/A"),
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.end,
-          //   children: [
-          //     Text(
-          //       "Created At " +_formatDate(allocation.createdAt),
-          //       style: mediumTextStyle(fontSize: dimen13, color: Colors.black54),
-          //       overflow: TextOverflow.ellipsis,
-          //     ),
-          //   ],
-          // ),
-          _buildInfoRow("Created At", _formatDate(allocation.createdAt)),
-          // _buildInfoRow("Created By", allocation.createdBy ?? "N/A"),
+          _buildInfoRow("Name", product.productName ?? "N/A"),
+          _buildInfoRow("Code", product.productCode ?? "N/A"),
+          _buildInfoRow("Created At", _formatDate(product.createdAt)),
+          _buildInfoRow("Amount", product.productName ?? "N/A"),
         ],
       ),
     );
@@ -60,6 +50,7 @@ class AllocationCard extends StatelessWidget {
               label,
               style: mediumTextStyle(fontSize: dimen13, color: Colors.black),
               overflow: TextOverflow.ellipsis,
+              maxLines: 1,
             ),
           ),
           const Text(': '),
@@ -67,7 +58,7 @@ class AllocationCard extends StatelessWidget {
             child: Text(
               value,
               style: mediumTextStyle(fontSize: dimen13, color: Colors.black54),
-              maxLines: 2,
+              maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
           ),

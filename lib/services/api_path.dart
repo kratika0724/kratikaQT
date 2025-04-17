@@ -5,6 +5,8 @@ class ApiPath{
   static const String verifyOtp = '/qt/agents/verifyOtp';
   static const String sendOtp = '/qt/agents/sendOtp';
 
+  // static const String imageURL = 'https://api.qtcollector.com/uploads/images/';
+
 
   static const String getUSerCountDashboardData = '/qt/ds/dashboard';
 

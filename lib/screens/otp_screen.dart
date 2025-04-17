@@ -38,11 +38,22 @@ class _OTPScreenState extends State<OTPScreen> {
     super.dispose();
   }
 
+  // void _onChanged(String value, int index) {
+  //   if (value.isNotEmpty && index < 4) {
+  //     _focusNodes[index + 1].requestFocus();
+  //   } else if (value.isEmpty && index > 0) {
+  //     _focusNodes[index - 1].requestFocus();
+  //   }
+  // }
   void _onChanged(String value, int index) {
     if (value.isNotEmpty && index < 4) {
-      _focusNodes[index + 1].requestFocus();
+      setState(() {
+        _focusNodes[index + 1].requestFocus();
+      });
     } else if (value.isEmpty && index > 0) {
-      _focusNodes[index - 1].requestFocus();
+      setState(() {
+        _focusNodes[index - 1].requestFocus();
+      });
     }
   }
 

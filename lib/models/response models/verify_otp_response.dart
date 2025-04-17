@@ -1,3 +1,5 @@
+import 'package:qt_distributer/services/api_path.dart';
+
 class VerifyOtpResponse {
   final bool success;
   final int status;
@@ -64,6 +66,8 @@ class User {
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
+    // const String baseUrl = ApiPath.imageURL;
+
     return User(
       id: json['id'] ?? '',
       firstName: json['first_name'] ?? '',
@@ -73,6 +77,9 @@ class User {
       mobile: json['mobile'] ?? '',
       role: json['role'] ?? '',
       profileImg: json['profile_img'] ?? '',
+      // profileImg: json['profile_img'] != null
+          // ? baseUrl + json['profile_img']
+          // : '',
       roleName: json['roleName'] ?? '',
       customerId: json['customerId'] ?? '',
     );
@@ -92,4 +99,18 @@ class User {
       'customerId': customerId,
     };
   }
-} 
+}
+
+
+// "user":{
+// "id":"67a5994be99375d3b9bb16c7",
+// "first_name":"Anuj",
+// "middle_name":"",
+// "last_name":"Singh",
+// "email":"anuj@voso.store",
+// "mobile":"9109854123",
+// "role":"67a1c0b1d12daf2082ba4e21",
+// "profile_img":"",
+// "roleName":"Distributor",
+// "customerId":"QT-100003"
+// }}}
