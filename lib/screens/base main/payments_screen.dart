@@ -54,6 +54,7 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
           final transactions = provider.transactions;
           return Column(
               children: [
+
                 if(isWide)
                   Expanded(child: GridView.builder(
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
