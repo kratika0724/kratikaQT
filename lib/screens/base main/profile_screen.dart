@@ -23,49 +23,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   bool showContactOptions = false;
 
-  // Function to launch email
-  Future<void> _launchEmail(BuildContext context, String email) async {
-    final Uri emailUri = Uri(
-      scheme: 'mailto',
-      path: email,
-      query: 'subject=Support Request&body=Hello,', // Optional pre-filled subject & body
-    );
-
-    if (await canLaunchUrl(emailUri)) {
-      await launchUrl(emailUri);
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Could not open email app")),
-      );
-    }
-  }
-
-  // Function to launch call
-  Future<void> _makePhoneCall(BuildContext context, String phoneNumber) async {
-    final Uri phoneUri = Uri(scheme: 'tel', path: phoneNumber);
-    _launchUrl(context, phoneUri);
-  }
-
-  Future<void> _launchUrl(BuildContext context, Uri uri) async {
-    if (await canLaunchUrl(uri)) {
-      try {
-        await launchUrl(uri);
-      } catch (e) {
-        debugPrint("Could not launch $uri");
-        _showSnackBar(context, "Could not make call.");
-      }
-    } else {
-      _showSnackBar(context, "Could not open the link.");
-    }
-  }
-
-  void _showSnackBar(BuildContext context, String message) {
-    if (context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
-    }
-  }
-
-
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -109,12 +66,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 10.0, horizontal: 12),
+                        padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 12),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Icon(
+                            Icon(
                               Icons.account_circle_sharp,
                               size: 90,
                               color: Colors.white, // This color becomes the base for the gradient

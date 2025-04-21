@@ -63,46 +63,142 @@ class TransactionCard extends StatelessWidget {
     );
   }
 
-  Widget _buildAmountAndStatus(double amount, String createdAt, String status, String transactionType, Color bgColorStatus, Color textColorStatus,Color bgColorTransactionType, Color textColorTransactionType) {
+  // Widget _buildAmountAndStatus(double amount, String createdAt, String status, String transactionType, Color bgColorStatus, Color textColorStatus,Color bgColorTransactionType, Color textColorTransactionType) {
+  //   return Row(
+  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //     children: [
+  //       Column(
+  //         crossAxisAlignment: CrossAxisAlignment.start,
+  //         children: [
+  //           Text(
+  //             "₹${amount.toStringAsFixed(2)}",
+  //             overflow: TextOverflow.ellipsis,
+  //             maxLines: 1,
+  //             style: semiBoldTextStyle(fontSize: dimen16, color: textColorStatus),
+  //           ),
+  //           Text(
+  //             createdAt,
+  //             overflow: TextOverflow.ellipsis,
+  //             maxLines: 1,
+  //             style: thinTextStyle(fontSize: dimen13, color: Colors.black),
+  //           ),
+  //         ],
+  //       ),
+  //       Row(
+  //         mainAxisAlignment: MainAxisAlignment.end,
+  //         children: [
+  //           Padding(
+  //             padding: const EdgeInsets.only(right: 8.0),
+  //             child: Container(
+  //               padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+  //               decoration: BoxDecoration(
+  //                 color: bgColorTransactionType,
+  //                 borderRadius: BorderRadius.circular(4),
+  //               ),
+  //               child: Text(
+  //                 transactionType,
+  //                 overflow: TextOverflow.ellipsis,
+  //                 maxLines: 1,
+  //                 style: boldTextStyle(fontSize: dimen12, color: textColorTransactionType),
+  //               ),
+  //             ),
+  //           ),
+  //
+  //           Container(
+  //             padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+  //             decoration: BoxDecoration(
+  //               color: bgColorStatus,
+  //               borderRadius: BorderRadius.circular(4),
+  //             ),
+  //             child: FittedBox(
+  //               fit: BoxFit.scaleDown,
+  //               child: Text(
+  //                 status,
+  //                 overflow: TextOverflow.ellipsis,
+  //                 maxLines: 1,
+  //                 style: boldTextStyle(fontSize: dimen12, color: textColorStatus),
+  //               ),
+  //             ),
+  //           ),
+  //         ],
+  //       ),
+  //     ],
+  //   );
+  // }
+  Widget _buildAmountAndStatus(
+      double amount,
+      String createdAt,
+      String status,
+      String transactionType,
+      Color bgColorStatus,
+      Color textColorStatus,
+      Color bgColorTransactionType,
+      Color textColorTransactionType,
+      ) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        // Amount & Date Column
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "₹${amount.toStringAsFixed(2)}",
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+                style: semiBoldTextStyle(fontSize: dimen16, color: textColorStatus),
+              ),
+              Text(
+                createdAt,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+                style: thinTextStyle(fontSize: dimen13, color: Colors.black),
+              ),
+            ],
+          ),
+        ),
+
+        const SizedBox(width: 8),
+
+        // Status and Type Tags
+        Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              "₹${amount.toStringAsFixed(2)}",
-              style: semiBoldTextStyle(fontSize: dimen16, color: textColorStatus),
+            // Transaction Type Badge
+            Container(
+              constraints: const BoxConstraints(maxWidth: 100),
+              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+              decoration: BoxDecoration(
+                color: bgColorTransactionType,
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Text(
+                transactionType,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+                style: boldTextStyle(fontSize: dimen12, color: textColorTransactionType),
+              ),
             ),
-            Text(
-              createdAt,
-              style: thinTextStyle(fontSize: dimen13, color: Colors.black),
+            const SizedBox(width: 8),
+
+            // Status Badge
+            Container(
+              constraints: const BoxConstraints(maxWidth: 120),
+              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+              decoration: BoxDecoration(
+                color: bgColorStatus,
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Text(
+                status,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+                style: boldTextStyle(fontSize: dimen12, color: textColorStatus),
+              ),
             ),
           ],
-        ),
-        Spacer(),
-        Container(
-          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-          decoration: BoxDecoration(
-            color: bgColorTransactionType,
-            borderRadius: BorderRadius.circular(4),
-          ),
-          child: Text(
-            transactionType,
-            style: boldTextStyle(fontSize: dimen12, color: textColorTransactionType),
-          ),
-        ),
-        SizedBox(width: 6),
-        Container(
-          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-          decoration: BoxDecoration(
-            color: bgColorStatus,
-            borderRadius: BorderRadius.circular(4),
-          ),
-          child: Text(
-            status,
-            style: boldTextStyle(fontSize: dimen12, color: textColorStatus),
-          ),
         ),
       ],
     );

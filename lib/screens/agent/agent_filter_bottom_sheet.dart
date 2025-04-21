@@ -8,8 +8,8 @@ import '../../providers/product_provider.dart';
 class AgentFilterBottomSheet extends StatefulWidget {
   final String? initialName;
   final String? initialEmail;
-  // final String? initialStatus;
-  final Function(String?, String?) onApply;
+  final bool? initialIsActive;
+  final Function(String?, String?, bool?) onApply;
   final VoidCallback onClear;
 
 
@@ -18,8 +18,7 @@ class AgentFilterBottomSheet extends StatefulWidget {
     required this.initialName,
     required this.initialEmail,
     required this.onApply,
-    required this.onClear,
-    // required this.initialStatus,
+    required this.onClear, this.initialIsActive,
   });
 
   @override
@@ -29,6 +28,9 @@ class AgentFilterBottomSheet extends StatefulWidget {
 class _AgentFilterBottomSheetState extends State<AgentFilterBottomSheet> {
   late TextEditingController _nameController;
   late TextEditingController _emailController;
+  late bool? _isActive;
+
+
 
   List<String> _nameSuggestions = [];
   List<String> _emailSuggestions = [];
@@ -38,6 +40,9 @@ class _AgentFilterBottomSheetState extends State<AgentFilterBottomSheet> {
     super.initState();
     _nameController = TextEditingController(text: widget.initialName ?? '');
     _emailController = TextEditingController(text: widget.initialEmail ?? '');
+    _isActive = widget.initialIsActive ?? true; // default to active
+
+
   }
 
   void _updateSuggestions(String query, bool isEmail) {
@@ -122,6 +127,34 @@ class _AgentFilterBottomSheetState extends State<AgentFilterBottomSheet> {
               onChanged: (val) => _updateSuggestions(val, true),
             ),
             ..._emailSuggestions.map((e) => _buildSuggestion(e, _emailController, true)),
+            const SizedBox(height: 16),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text("Status", style: mediumTextStyle(fontSize: dimen14,color: Colors.black)),
+            ),
+            const SizedBox(height: 8),
+            Wrap(
+              spacing: 8,
+              children: [
+                {'label': 'Active', 'value': true},
+                {'label': 'Inactive', 'value': false},
+              ].map((item) {
+                return ChoiceChip(
+                  label: Text(item['label'] as String),
+                  labelStyle: mediumTextStyle(fontSize: dimen13, color: Colors.black),
+                  selected: _isActive == item['value'],
+                  onSelected: (_) {
+                    setState(() {
+                      _isActive = item['value'] as bool;
+                    });
+                  },
+                  side: BorderSide(
+                    color: _isActive == item['value'] ? Colors.transparent : Colors.white,
+                  ),
+                );
+
+              }).toList(),
+            ),
             const SizedBox(height: 24),
             Row(
               children: [
@@ -131,6 +164,7 @@ class _AgentFilterBottomSheetState extends State<AgentFilterBottomSheet> {
                       widget.onApply(
                         _nameController.text.trim().isNotEmpty ? _nameController.text.trim() : null,
                         _emailController.text.trim().isNotEmpty ? _emailController.text.trim() : null,
+                        _isActive,
                       );
                       Navigator.pop(context);
                     },

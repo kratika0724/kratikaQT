@@ -272,6 +272,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text('Sign in to your Account',
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
                             style: boldTextStyle(
                                 fontSize: dimen24,
                                 color: Colors.black,
@@ -283,6 +285,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text('Enter your phone number',
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
                             style: mediumTextStyle(
                                 fontSize: dimen15, color: Colors.grey)),
                       ],

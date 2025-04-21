@@ -32,7 +32,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     final dashboardProvider = Provider.of<DashboardProvider>(context, listen: false);
-    final userCount = dashboardProvider.userCountData;
 
     return Scaffold(
       backgroundColor: AppColors.ghostWhite.withOpacity(0.7),
@@ -103,7 +102,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 10.0),
                 child: Column(
                   children: [
-                    //PAYMENTS
+                    // PAYMENTS
                     Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8.0),
@@ -113,16 +112,24 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 10),
                           child: Column(
                             children: [
-                              Padding(
-                                padding: const EdgeInsets.only(left: 8),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                        "Payments",
-                                      style: boldTextStyle(fontSize: dimen18, color: Colors.black, latterSpace: 1.0),
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 8),
+                                  child: FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Text(
+                                      "Payments",
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style:  boldTextStyle(
+                                        fontSize: dimen18,
+                                        color: Colors.black,
+                                        latterSpace: 1.0,
+                                      ),
                                     ),
-                                  ],
+
+                                  ),
                                 ),
                               ),
                               Padding(
@@ -133,7 +140,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     color: Colors.transparent,
                                     borderRadius: BorderRadius.circular(25),
                                   ),
-                                    child: _buildCardSuccessPayments('Successful', '₹ 5009', Colors.green, Icons.check_circle_rounded, 1.0)),
+                                    child: _buildCardSuccessPayments('Successful', '₹ 5009', Colors.green, Icons.check_circle_rounded, 1.0)
+                                ),
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(left: 8.0,right: 8.0,top:6),
@@ -154,7 +162,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           ),
                         ),
                     ),
-                    //OVERVIEW
+                    // OVERVIEW
                     const SizedBox(height: 10,),
                     Container(
                       decoration: BoxDecoration(
@@ -165,16 +173,24 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 10),
                         child: Column(
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.only(left: 8),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 8),
+                                child: FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: Text(
                                     "Overview",
-                                    style: boldTextStyle(fontSize: dimen18, color: Colors.black, latterSpace: 1.0),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style:  boldTextStyle(
+                                      fontSize: dimen18,
+                                      color: Colors.black,
+                                      latterSpace: 1.0,
+                                    ),
                                   ),
-                                ],
+
+                                ),
                               ),
                             ),
                             Padding(
@@ -233,16 +249,24 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.only(left: 8),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
+                            Align(
+                              alignment: Alignment.topLeft,
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 8),
+                                child: FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: Text(
                                     "Overview",
-                                    style: boldTextStyle(fontSize: dimen18, color: Colors.black, latterSpace: 1.0),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style:  boldTextStyle(
+                                      fontSize: dimen18,
+                                      color: Colors.black,
+                                      latterSpace: 1.0,
+                                    ),
                                   ),
-                                ],
+
+                                ),
                               ),
                             ),
                             const SizedBox(height: 10),
@@ -302,15 +326,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               ),
                             ),
                             const SizedBox(height: 10),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                _buildLegend(Colors.green, "Users"),
-                                SizedBox(width: 10),
-                                _buildLegend(Colors.amberAccent, "Products"),
-                                SizedBox(width: 10),
-                                _buildLegend(Colors.red, "Payments"),
-                              ],
+                            Center(
+                              child: FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    _buildLegend(Colors.green, "Users"),
+                                    SizedBox(width: 10),
+                                    _buildLegend(Colors.amberAccent, "Products"),
+                                    SizedBox(width: 10),
+                                    _buildLegend(Colors.red, "Payments"),
+                                  ],
+                                ),
+                              ),
                             ),
                           ],
                         ),
@@ -418,9 +447,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ),
         SizedBox(width: 4),
-        Text(
-          title,
-          style: TextStyle(fontSize: 12),
+        FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            title,
+            style: regularTextStyle(fontSize: dimen12, color: Colors.black),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
         ),
       ],
     );
@@ -499,46 +533,52 @@ class _DashboardScreenState extends State<DashboardScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Stack(
-              alignment: Alignment.center,
-              children: [
-                Container(
-                  height: 40,
-                  width: 40,
-                  decoration: BoxDecoration(
-                    color: color.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(6), // Rounded corners
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Container(
+                    height: 40,
+                    width: 40,
+                    decoration: BoxDecoration(
+                      color: color.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(6), // Rounded corners
+                    ),
                   ),
-                ),
-                Icon(
-                  checkCircle,
-                  color: color,
-                  size: 23,
-                ),
-              ],
+                  Icon(
+                    checkCircle,
+                    color: color,
+                    size: 23,
+                  ),
+                ],
+              ),
             ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  amount,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 2,
-                  style: semiBoldTextStyle(
-                    fontSize: dimen18,
-                    color: AppColors.secondary,
-                  ),
-                ),
-                Text(
-                    title,
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    amount,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 2,
                     style: semiBoldTextStyle(
-                        fontSize: dimen16,
-                        color: AppColors.secondary,
-                        // latterSpace: 1.5
-                    )),
-              ],
+                      fontSize: dimen18,
+                      color: AppColors.secondary,
+                    ),
+                  ),
+                  Text(
+                      title,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
+                      style: semiBoldTextStyle(
+                          fontSize: dimen16,
+                          color: AppColors.secondary,
+                          // latterSpace: 1.5
+                      )),
+                ],
+              ),
             ),
             // SizedBox(height: 10,),
           ],
@@ -555,51 +595,64 @@ class _DashboardScreenState extends State<DashboardScreen> {
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // SizedBox(width: 50,),
-                  Text(
-                      title,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 2,
-                      style: boldTextStyle(
-                        fontSize: dimen16,
-                        color: Colors.green.shade900,
-                          latterSpace: 1.5
-                      )),
-                  Text(
-                    amount,
-                    style: semiBoldTextStyle(
-                      fontSize: dimen18,
-                      color: Colors.green.shade900,
-                    ),
+              Flexible(
+                flex: 3,
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // SizedBox(width: 50,),
+                      Text(
+                          title,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          style: boldTextStyle(
+                            fontSize: dimen16,
+                            color: Colors.green.shade900,
+                              latterSpace: 1.5
+                          )),
+                      Text(
+                        amount,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: semiBoldTextStyle(
+                          fontSize: dimen18,
+                          color: Colors.green.shade900,
+                        ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
-              Spacer(),
-              Stack(
-                alignment: Alignment.center,
-                children: [
-                  Container(
-                    height: 56,
-                    width: 56,
-                    decoration: BoxDecoration(
-                      color: color.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(6), // Rounded corners
-                    ),
+              Flexible(
+                flex: 1,
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Container(
+                        height: 56,
+                        width: 56,
+                        decoration: BoxDecoration(
+                          color: color.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(6), // Rounded corners
+                        ),
+                      ),
+                      Icon(
+                        checkCircle,
+                        color: Color(0xff1c5e20),
+                        size: 34,
+                      ),
+                    ],
                   ),
-                  Icon(
-                    checkCircle,
-                    color: Color(0xff1c5e20),
-                    size: 34,
-                  ),
-                ],
+                ),
               ),
-
-
               // SizedBox(height: 10,),
 
             ],
