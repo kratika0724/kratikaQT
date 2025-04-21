@@ -242,50 +242,78 @@ class FormActionButtons extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [AppColors.primary, AppColors.primary.withOpacity(0.3)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Material(
-              color: Colors.transparent,
-              borderRadius: BorderRadius.circular(8),
-              child: InkWell(
-                onTap: onSubmit,
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.topRight,
+                  colors: [
+                    AppColors.primary,
+                    Colors.indigo.withOpacity(0.8),
+                  ],
+                ),
+                border: Border.all(color: Colors.transparent),
                 borderRadius: BorderRadius.circular(8),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 14.0,horizontal: 50.0),
-                  child: Center(
-                    child: Text(
-                      submitText,
-                      style: semiBoldTextStyle(fontSize: dimen16, color: Colors.white),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
+              ),
+              child: Material(
+                color: Colors.transparent,
+                borderRadius: BorderRadius.circular(8),
+                child: InkWell(
+                  onTap: onSubmit,
+                  borderRadius: BorderRadius.circular(8),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10.0,horizontal: 20.0),
+                    child: Center(
+                      child: Text(
+                        submitText,
+                        style: semiBoldTextStyle(fontSize: dimen16, color: Colors.white),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
           ),
-
-          ElevatedButton(
-            onPressed: onCancel,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.white,
-              shape: RoundedRectangleBorder(side: BorderSide(color: AppColors.primary),borderRadius: BorderRadius.circular(8)),
-              padding: const EdgeInsets.symmetric(vertical: 14.0,horizontal: 50.0),
-            ),
-            child: Text(
-              cancelText,
-              style: semiBoldTextStyle(fontSize: dimen16, color: AppColors.primary),
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Container(
+              decoration: BoxDecoration(
+                // gradient: LinearGradient(
+                //   colors: [AppColors.primary, AppColors.primary.withOpacity(0.3)],
+                //   begin: Alignment.topLeft,
+                //   end: Alignment.bottomRight,
+                // ),
+                color: Colors.white,
+                border: Border.all(color: AppColors.primary),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Material(
+                // elevation: 3,
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+                child: InkWell(
+                  onTap: onCancel,
+                  borderRadius: BorderRadius.circular(8),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10.0,horizontal: 20.0),
+                    child: Center(
+                      child: Text(
+                        cancelText,
+                        style: semiBoldTextStyle(fontSize: dimen16, color: AppColors.primary),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ),
           ),
         ],

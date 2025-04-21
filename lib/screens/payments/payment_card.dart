@@ -35,7 +35,7 @@ class TransactionCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildAmountAndStatus(transaction.walletHistory.amount, formattedDate, transaction.status, transaction.walletHistory.transactionType, bgColorStatus, statusColor, bgColorTransactionType, transactionTypeColor),
+            _buildAmountAndStatus(transaction.transactionAmount, formattedDate, transaction.status, transaction.walletHistory.transactionType, bgColorStatus, statusColor, bgColorTransactionType, transactionTypeColor),
             const Padding(
               padding: EdgeInsets.symmetric(vertical: 6),
               child: DottedLine(dashLength: 4.0, dashColor: Colors.grey, lineThickness: 1),
@@ -50,10 +50,7 @@ class TransactionCard extends StatelessWidget {
                     _buildInfoRow("Email", transaction.user.email),
                     _buildInfoRow("Mobile", transaction.user.mobile),
                     _buildInfoRow("Ref ID", "${transaction.referenceNo}"),
-                    // _buildInfoRow("Service Charge", transaction.serviceCharge.toStringAsFixed(2)),
-                    // _buildInfoRow("Commission", transaction.customerCommission.toStringAsFixed(2)),
-                    // _buildInfoRow("Wallet Type", transaction.walletHistory.walletType),
-                    // _buildInfoRow("Transaction Type", transaction.walletHistory.transactionType),
+                    _buildInfoRow("Quintus ID", "${transaction.quintusTransactionId}"),
                   ],
                 ),
               ),
@@ -63,68 +60,6 @@ class TransactionCard extends StatelessWidget {
     );
   }
 
-  // Widget _buildAmountAndStatus(double amount, String createdAt, String status, String transactionType, Color bgColorStatus, Color textColorStatus,Color bgColorTransactionType, Color textColorTransactionType) {
-  //   return Row(
-  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //     children: [
-  //       Column(
-  //         crossAxisAlignment: CrossAxisAlignment.start,
-  //         children: [
-  //           Text(
-  //             "₹${amount.toStringAsFixed(2)}",
-  //             overflow: TextOverflow.ellipsis,
-  //             maxLines: 1,
-  //             style: semiBoldTextStyle(fontSize: dimen16, color: textColorStatus),
-  //           ),
-  //           Text(
-  //             createdAt,
-  //             overflow: TextOverflow.ellipsis,
-  //             maxLines: 1,
-  //             style: thinTextStyle(fontSize: dimen13, color: Colors.black),
-  //           ),
-  //         ],
-  //       ),
-  //       Row(
-  //         mainAxisAlignment: MainAxisAlignment.end,
-  //         children: [
-  //           Padding(
-  //             padding: const EdgeInsets.only(right: 8.0),
-  //             child: Container(
-  //               padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-  //               decoration: BoxDecoration(
-  //                 color: bgColorTransactionType,
-  //                 borderRadius: BorderRadius.circular(4),
-  //               ),
-  //               child: Text(
-  //                 transactionType,
-  //                 overflow: TextOverflow.ellipsis,
-  //                 maxLines: 1,
-  //                 style: boldTextStyle(fontSize: dimen12, color: textColorTransactionType),
-  //               ),
-  //             ),
-  //           ),
-  //
-  //           Container(
-  //             padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-  //             decoration: BoxDecoration(
-  //               color: bgColorStatus,
-  //               borderRadius: BorderRadius.circular(4),
-  //             ),
-  //             child: FittedBox(
-  //               fit: BoxFit.scaleDown,
-  //               child: Text(
-  //                 status,
-  //                 overflow: TextOverflow.ellipsis,
-  //                 maxLines: 1,
-  //                 style: boldTextStyle(fontSize: dimen12, color: textColorStatus),
-  //               ),
-  //             ),
-  //           ),
-  //         ],
-  //       ),
-  //     ],
-  //   );
-  // }
   Widget _buildAmountAndStatus(
       double amount,
       String createdAt,

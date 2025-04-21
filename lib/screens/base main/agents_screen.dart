@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qt_distributer/screens/agent/agent_card.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_textstyles.dart';
-import '../../models/response models/agent_response.dart';
 import '../../providers/agent_provider.dart';
 import '../../widgets/common_text_widgets.dart';
 import '../../widgets/filter_chips_widget.dart';
 import '../agent/add_agent_screen.dart';
 import '../agent/agent_filter_bottom_sheet.dart';
 import '../agent/agent_list.dart';
-import '../products/product_filter_bottom_sheet.dart';
 
 class AgentsScreen extends StatefulWidget {
   const AgentsScreen({super.key});
@@ -23,7 +20,6 @@ class AgentsScreenState extends State<AgentsScreen> {
   String? filterName;
   String? filterEmail;
   bool? filterIsActive = true;
-
 
   @override
   void initState() {
@@ -59,8 +55,6 @@ class AgentsScreenState extends State<AgentsScreen> {
           });
         },
       ),
-
-
     );
   }
 
@@ -143,10 +137,8 @@ class AgentsScreenState extends State<AgentsScreen> {
             ),
           ),
         ],
-
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
-        // elevation: 3,
       ),
       body: Consumer<AgentProvider>(
         builder: (context, provider, _) {
@@ -160,6 +152,7 @@ class AgentsScreenState extends State<AgentsScreen> {
                   filters: {
                     'Name': filterName,
                     'Email': filterEmail,
+
                   },
                   onClear: () => setState(() {
                     filterEmail = null;
@@ -174,7 +167,6 @@ class AgentsScreenState extends State<AgentsScreen> {
                   filterEmail: filterEmail,
                   filterIsActive: filterIsActive,
                 ),
-
               ),
               const SizedBox(height: 10),
             ],

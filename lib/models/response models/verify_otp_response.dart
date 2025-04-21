@@ -1,5 +1,3 @@
-import 'package:qt_distributer/services/api_path.dart';
-
 class VerifyOtpResponse {
   final bool success;
   final int status;
@@ -77,9 +75,6 @@ class User {
       mobile: json['mobile'] ?? '',
       role: json['role'] ?? '',
       profileImg: json['profile_img'] ?? '',
-      // profileImg: json['profile_img'] != null
-          // ? baseUrl + json['profile_img']
-          // : '',
       roleName: json['roleName'] ?? '',
       customerId: json['customerId'] ?? '',
     );

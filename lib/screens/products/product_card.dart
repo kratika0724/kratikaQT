@@ -32,7 +32,7 @@ class ProductCard extends StatelessWidget {
           _buildInfoRow("Name", product.productName ?? "N/A"),
           _buildInfoRow("Code", product.productCode ?? "N/A"),
           _buildInfoRow("Created At", _formatDate(product.createdAt)),
-          _buildInfoRow("Amount", product.productName ?? "N/A"),
+          _buildInfoRow("Amount", "₹${product.productAmount}" ?? "N/A"),
         ],
       ),
     );

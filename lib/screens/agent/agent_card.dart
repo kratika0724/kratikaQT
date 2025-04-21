@@ -108,14 +108,14 @@ class AgentCard extends StatelessWidget {
     );
   }
 
-  Widget _buildBaseInfoRow(String refId) {
+  Widget _buildBaseInfoRow(String emailId) {
     return Padding(
       padding: const EdgeInsets.only(left: 6.0),
       child: Row(
         children: [
           Expanded(
             child: Text(
-              refId,
+              emailId,
               style: regularTextStyle(fontSize: dimen15, color: Colors.black),
               overflow: TextOverflow.ellipsis,
             ),

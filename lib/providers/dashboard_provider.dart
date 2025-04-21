@@ -15,6 +15,7 @@ class DashboardProvider extends ChangeNotifier {
 
   int get userCount => _userCountData?.total.userCount ?? 0;
   int get productCount => _userCountData?.total.productCount ?? 0;
+  int get customerCount =>  0;
 
   String? user_firstname = "";
   String? user_middlename = "";

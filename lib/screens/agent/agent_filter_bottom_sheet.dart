@@ -30,8 +30,6 @@ class _AgentFilterBottomSheetState extends State<AgentFilterBottomSheet> {
   late TextEditingController _emailController;
   late bool? _isActive;
 
-
-
   List<String> _nameSuggestions = [];
   List<String> _emailSuggestions = [];
 
@@ -41,10 +39,9 @@ class _AgentFilterBottomSheetState extends State<AgentFilterBottomSheet> {
     _nameController = TextEditingController(text: widget.initialName ?? '');
     _emailController = TextEditingController(text: widget.initialEmail ?? '');
     _isActive = widget.initialIsActive ?? true; // default to active
-
-
   }
 
+  //suggestions logic
   void _updateSuggestions(String query, bool isEmail) {
     if (query.length < 3) {
       setState(() {
@@ -73,6 +70,7 @@ class _AgentFilterBottomSheetState extends State<AgentFilterBottomSheet> {
     });
   }
 
+  //suggestions list
   Widget _buildSuggestion(String value, TextEditingController controller, bool isEmail) {
     return Container(
       decoration: BoxDecoration(
@@ -100,6 +98,8 @@ class _AgentFilterBottomSheetState extends State<AgentFilterBottomSheet> {
   }
 
 
+
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -111,9 +111,18 @@ class _AgentFilterBottomSheetState extends State<AgentFilterBottomSheet> {
       ),
       child: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text("Filter Agents", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            //heading
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text("Filter Agents", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              ],
+            ),
             const SizedBox(height: 20),
+
+            //Name text field
             TextField(
               controller: _nameController,
               decoration: const InputDecoration(labelText: 'Name', border: OutlineInputBorder()),
@@ -121,6 +130,8 @@ class _AgentFilterBottomSheetState extends State<AgentFilterBottomSheet> {
             ),
             ..._nameSuggestions.map((e) => _buildSuggestion(e, _nameController, false)),
             const SizedBox(height: 16),
+
+            //Email text field
             TextField(
               controller: _emailController,
               decoration: const InputDecoration(labelText: 'Email', border: OutlineInputBorder()),
@@ -128,11 +139,8 @@ class _AgentFilterBottomSheetState extends State<AgentFilterBottomSheet> {
             ),
             ..._emailSuggestions.map((e) => _buildSuggestion(e, _emailController, true)),
             const SizedBox(height: 16),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text("Status", style: mediumTextStyle(fontSize: dimen14,color: Colors.black)),
-            ),
-            const SizedBox(height: 8),
+
+            //Status chips
             Wrap(
               spacing: 8,
               children: [
@@ -140,8 +148,11 @@ class _AgentFilterBottomSheetState extends State<AgentFilterBottomSheet> {
                 {'label': 'Inactive', 'value': false},
               ].map((item) {
                 return ChoiceChip(
+                  backgroundColor: Colors.grey.shade100, // grey background when not selected
+                  selectedColor: AppColors.primary,
+                  checkmarkColor: Colors.white,
                   label: Text(item['label'] as String),
-                  labelStyle: mediumTextStyle(fontSize: dimen13, color: Colors.black),
+                  labelStyle: mediumTextStyle(fontSize: dimen13, color: _isActive == item['value'] ? Colors.white : Colors.black),
                   selected: _isActive == item['value'],
                   onSelected: (_) {
                     setState(() {
@@ -156,6 +167,8 @@ class _AgentFilterBottomSheetState extends State<AgentFilterBottomSheet> {
               }).toList(),
             ),
             const SizedBox(height: 24),
+
+            //Filter buttons
             Row(
               children: [
                 Expanded(
