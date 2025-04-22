@@ -42,8 +42,8 @@ class _AddAllocationScreenState extends State<AddAllocationScreen> {
                       padding: const EdgeInsets.symmetric(vertical: 10, horizontal:12),
                       child: Column(
                         children: [
-                          buildTextField('Allocation Pincode'),
-                          buildTextField('Allocation Area'),
+                          buildTextField('Allocation Pincode', controller: pincodeController),
+                          buildTextField('Allocation Area',controller: areaController),
                         ],
                       ),
                     ),
@@ -58,7 +58,6 @@ class _AddAllocationScreenState extends State<AddAllocationScreen> {
                             pincodeController,
                             areaController
                         );
-                        provider.getAllocationData();
                       },
                       onCancel: () {
                         Navigator.pop(context);

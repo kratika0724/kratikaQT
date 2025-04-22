@@ -8,11 +8,13 @@ class ProductAddModel{
     required this.message,
     this.data = const [],
   });
+
   Map<String, dynamic> toJson() => {
     'success': success,
     'message': message,
     'data': data.map((address) => address.toJson()).toList(),
   };
+
   factory ProductAddModel.fromJson(Map<String, dynamic> json) {
     return ProductAddModel(
       success: json['success'] ?? false,

@@ -7,13 +7,15 @@ import '../services/api_service.dart';
 import '../utils/ui_utils.dart';
 
 class ProductProvider with ChangeNotifier {
-
   bool isLoading = false;
+  bool isFetchingMore = false;
+  bool hasMoreData = true;
   String? errorMessage;
   ProductAddModel? responseModel;
   List<ProductModel> products = [];
 
-
+  int currentPage_product = 1;
+  final int limit = 10;
   final ApiService apiService = ApiService();
 
   void createProduct(
@@ -42,13 +44,13 @@ class ProductProvider with ChangeNotifier {
       final response = await apiService.post_auth(ApiPath.createProduct, body);
       final mResponse = ProductAddModel.fromJson(response);
       if (mResponse.success) {
-        UiUtils().showSuccessSnackBar(context,"Product added successfully!");
-        getProductData();
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (context.mounted) {
-              Navigator.pop(context);
-            }
-          });
+        UiUtils().showSuccessSnackBar(context, "Product added successfully!");
+        refreshProductData(); // Reset and reload all data
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (context.mounted) {
+            Navigator.pop(context);
+          }
+        });
       } else {
         Fluttertoast.showToast(msg: "Failed to add product: ${mResponse.message}");
         debugPrint("Failed to add product: ${mResponse.message}");
@@ -56,23 +58,60 @@ class ProductProvider with ChangeNotifier {
     } catch (error) {
       Fluttertoast.showToast(msg: "Error adding product: $error");
       debugPrint("Error adding product: $error");
-    }finally {
+    } finally {
       isLoading = false;
       notifyListeners();
     }
   }
 
-  Future<void> getProductData() async {
-    isLoading = true;
+  Future<void> refreshProductData() async {
+    currentPage_product = 1;
+    hasMoreData = true;
+    products.clear();
+    await getProductData();
+  }
+
+  Future<void> getProductData({bool loadMore = false}) async {
+    if (loadMore) {
+      if (isFetchingMore || !hasMoreData) return;
+      isFetchingMore = true;
+    } else {
+      isLoading = true;
+      currentPage_product = 1; // reset on fresh fetch
+      hasMoreData = true;      // reset hasMoreData on fresh fetch
+    }
+
     errorMessage = null;
     notifyListeners();
 
     try {
-      final response = await apiService.getAuth(ApiPath.getProduct, {});
+      final response = await apiService.getAuth(
+        ApiPath.getProduct,
+        {
+          "page": currentPage_product.toString(),
+          "limit": limit.toString(),
+        },
+      );
+
       final productResponse = ProductResponseModel.fromJson(response);
 
       if (productResponse.success) {
-        products = productResponse.data;
+        final newProducts = productResponse.data;
+
+        debugPrint("Fetched Page: $currentPage_product | Items: ${newProducts.length}");
+
+        if (loadMore) {
+          products.addAll(newProducts);
+          currentPage_product++;
+        } else {
+          products = newProducts;
+          currentPage_product = 2;
+        }
+
+        if (newProducts.length < limit) {
+          hasMoreData = false;
+          debugPrint("No more data to load.");
+        }
       } else {
         errorMessage = productResponse.message;
         Fluttertoast.showToast(msg: errorMessage!);
@@ -84,9 +123,12 @@ class ProductProvider with ChangeNotifier {
       debugPrint(errorMessage);
     } finally {
       isLoading = false;
+      isFetchingMore = false;
       notifyListeners();
     }
   }
+
+
 }
 
 

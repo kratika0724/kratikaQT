@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qt_distributer/providers/agent_provider.dart';
 import 'package:qt_distributer/providers/allocation_provider.dart';
+import 'package:qt_distributer/providers/customer_provider.dart';
 import 'package:qt_distributer/providers/dashboard_provider.dart';
 import 'package:qt_distributer/providers/product_provider.dart';
 import 'package:qt_distributer/providers/transaction_provider.dart';
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AgentProvider()),
         ChangeNotifierProvider(create: (_) => AllocationProvider()),
         ChangeNotifierProvider(create: (_) => TransactionProvider()),
+        ChangeNotifierProvider(create: (_) => CustomerProvider()),
       ],
       child: MaterialApp(
         title: 'Mobile Login Demo',

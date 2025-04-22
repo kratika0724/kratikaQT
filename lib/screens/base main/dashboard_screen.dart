@@ -32,7 +32,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final dashboardProvider = Provider.of<DashboardProvider>(context, listen: false);
+    final dashboardProvider = Provider.of<DashboardProvider>(context, listen: true);
 
     return Scaffold(
       backgroundColor: AppColors.ghostWhite.withOpacity(0.7),

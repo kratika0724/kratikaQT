@@ -8,6 +8,7 @@ import '../../providers/transaction_provider.dart';
 import '../payments/payment_filter_bottom_sheet.dart';
 import '../payments/payment_list.dart';
 
+
 class PaymentsScreen extends StatefulWidget {
   const PaymentsScreen({super.key});
 
@@ -112,7 +113,7 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
           if (provider.isLoading) return const Center(child: CircularProgressIndicator());
           if (provider.errorMessage != null) return const Center(child: Text("Oops! Something went wrong"));
 
-          if (filterStartDate != null && filterEndDate != null) 
+          if (filterStartDate != null && filterEndDate != null)
             formatted = "${DateFormat('dd MMM yyyy').format(filterStartDate!)} - ${DateFormat('dd MMM yyyy').format(filterEndDate!)}";
 
           return Column(
@@ -123,7 +124,7 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
                     'Transaction ID': filterQuintusId,
                     'Email': filterEmail,
                     'Transaction Type': filterTransactionType,
-                    'Transaction Status': filterStatus, 
+                    'Transaction Status': filterStatus,
                     'Date Range': formatted,
                   },
                   onClear: () {
