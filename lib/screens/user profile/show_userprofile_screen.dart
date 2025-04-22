@@ -22,58 +22,37 @@ class _ShowUserProfileScreenState extends State<ShowUserProfileScreen> {
     return Consumer<DashboardProvider>(builder: (context, provider, child) {
       return Scaffold(
         backgroundColor: Colors.white,
+        appBar: AppBar(
+          automaticallyImplyLeading: true,
+          // title: const Text("Profile"),
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.black,
+        ),
         body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Container(
-                height: 275,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      AppColors.primary.withOpacity(0.65),
-                      Colors.indigo.withOpacity(0.95),
-                    ],
-                  ),
-                  borderRadius: const BorderRadius.vertical(bottom: Radius.circular(24)),
-                ),
-                padding: const EdgeInsets.only(top: 35),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12.0),
+            child: Card(
+              color: AppColors.primary.withOpacity(0.02),
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(6),
+                side:BorderSide(color: AppColors.primary, width: 0.5),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.only(top: 20.0, bottom: 10.0),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          IconButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            icon: const Icon(
-                              Icons.arrow_back_ios,
-                              color: Colors.white,
-                              size: 24,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const Spacer(), // Pushes content towards center vertically
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [ // Pushes content towards center vertically
                     Container(
                       width: 100,
                       height: 100,
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(100),
                       ),
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(100),
                         child: provider.user_profile_img != null && provider.user_profile_img!.isNotEmpty
                             ? Image.network(
                           provider.user_profile_img!,
@@ -92,8 +71,8 @@ class _ShowUserProfileScreenState extends State<ShowUserProfileScreen> {
                         child: Text(
                           provider.fullName,
                           style: boldTextStyle(
-                            fontSize: dimen24,
-                            color: Colors.white,
+                            fontSize: dimen22,
+                            color: Colors.black,
                             latterSpace: 1.0,
                           ),
                           maxLines: 1,
@@ -101,18 +80,18 @@ class _ShowUserProfileScreenState extends State<ShowUserProfileScreen> {
                         ),
                       ),
                     ),
-                    const Spacer(),
+
+                    const SizedBox(height: 40),
+                    _buildProfileTile(Icons.person_outline, "Role", provider.user_role_name ?? ''),
+                    // _buildProfileTile(Icons.work_outline, "Role ID", provider.user_role ?? ''),
+                    _buildProfileTile(Icons.document_scanner_outlined, "Customer ID", provider.user_customer_id ?? ''),
+                    // _buildProfileTile(Icons.document_scanner_outlined, "User ID", provider.user_id ?? ''),
+                    _buildProfileTile(Icons.wifi_calling_3_outlined, "Mobile No.", provider.user_mobile_no ?? ''),
+                    _buildProfileTile(Icons.email_outlined, "Email ", provider.user_email_id ?? ''),
                   ],
                 ),
               ),
-              const SizedBox(height: 20),
-              _buildProfileTile(Icons.account_circle, "Role", provider.user_role_name ?? ''),
-              // _buildProfileTile(Icons.work_outline, "Role ID", provider.user_role ?? ''),
-              _buildProfileTile(Icons.document_scanner_outlined, "Customer ID", provider.user_customer_id ?? ''),
-              // _buildProfileTile(Icons.document_scanner_outlined, "User ID", provider.user_id ?? ''),
-              _buildProfileTile(Icons.wifi_calling_3, "Mobile No.", provider.user_mobile_no ?? ''),
-              _buildProfileTile(Icons.email_outlined, "Email ", provider.user_email_id ?? ''),
-            ],
+            ),
           ),
         ),
       );
@@ -122,24 +101,19 @@ class _ShowUserProfileScreenState extends State<ShowUserProfileScreen> {
   Widget _buildProfileTile(IconData icon, String label, String value) {
     return Card(
       elevation: 0,
-      color: AppColors.primary.withOpacity(0.06),
+      color: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Container(
-              decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Icon(icon, color: AppColors.primary),
-                )),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Icon(icon, color: AppColors.primary),
+            ),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(left: 12.0),
@@ -153,7 +127,7 @@ class _ShowUserProfileScreenState extends State<ShowUserProfileScreen> {
                         child: Text("$label - ",
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
-                            style: mediumTextStyle(fontSize: dimen15, color: Colors.black)),
+                            style: semiBoldTextStyle(fontSize: dimen14, color: Colors.black)),
                       ),
                     ),
                     Flexible(
@@ -163,7 +137,7 @@ class _ShowUserProfileScreenState extends State<ShowUserProfileScreen> {
                           value,
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
-                          style: mediumTextStyle(fontSize: dimen15, color: Colors.black),
+                          style: semiBoldTextStyle(fontSize: dimen14, color: Colors.black),
                         ),
                       ),
                     ),
