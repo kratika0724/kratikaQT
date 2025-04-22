@@ -182,7 +182,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             shadowColor: Colors.transparent,
                             padding:
                             const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 0),
+                                horizontal: 16),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10)),
                           ),
@@ -191,17 +191,17 @@ class _LoginScreenState extends State<LoginScreen> {
                               : _handleLogin,
                           child: authProvider.isLoading
                               ? const SizedBox(
-                            height: 20,
+                            // height: 20,
                             width: 15,
                             child: CircularProgressIndicator(
-                              strokeWidth: 2,
+                              strokeWidth: 1,
                               valueColor: AlwaysStoppedAnimation<Color>(
                                   AppColors.buttonText),
                             ),
                           )
                               : Text('Get OTP',
                               style: boldTextStyle(
-                                  fontSize: dimen20, color: Colors.white)),
+                                  fontSize: dimen18, color: Colors.white)),
                         ),
                       ),
                       const SizedBox(height: 400),
