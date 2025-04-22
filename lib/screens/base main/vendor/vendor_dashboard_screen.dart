@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:qt_distributer/screens/base%20main/vendor/wallet_screen.dart';
 import 'package:qt_distributer/widgets/common_text_widgets.dart';
-import '../../constants/app_colors.dart';
-import '../../providers/auth_provider.dart';
-import '../../providers/dashboard_provider.dart';
-import '../dashboard/widgets/graph_section.dart';
-import '../dashboard/widgets/overview_section.dart';
-import '../dashboard/widgets/payments_section.dart';
 
-class DisDashboardScreen extends StatefulWidget {
-  const DisDashboardScreen({super.key});
+import '../../../constants/app_colors.dart';
+import '../../../providers/auth_provider.dart';
+import '../../../providers/dashboard_provider.dart';
+import '../../dashboard/widgets/graph_section.dart';
+import '../../dashboard/widgets/overview_section.dart';
+import '../../dashboard/widgets/payments_section.dart';
+
+class VendorDashboardScreen extends StatefulWidget {
+  const VendorDashboardScreen({super.key});
 
   @override
-  State<DisDashboardScreen> createState() => _DashboardScreenState();
+  State<VendorDashboardScreen> createState() => _DashboardScreenState();
 }
 
-class _DashboardScreenState extends State<DisDashboardScreen> {
+class _DashboardScreenState extends State<VendorDashboardScreen> {
   @override
   void initState() {
     super.initState();
@@ -73,26 +75,31 @@ class _DashboardScreenState extends State<DisDashboardScreen> {
 
   Widget _buildWalletIcon() {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (_) => WalletScreen()));
+      },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10.0),
         child: Container(
-          height: 30,
-          width: 30,
+          height: 35,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(9),
             color: AppColors.primary.withOpacity(0.1),
             border: Border.all(color: AppColors.secondary),
           ),
-          child: Row(
-            children: [
-              const Icon(
-                Icons.wallet,
-                color: AppColors.secondary,
-                size: 18,
-              ),
-              Text("₹ 100")
-            ],
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+            child: Row(
+              children: [
+                const Icon(
+                  Icons.wallet,
+                  color: AppColors.secondary,
+                  size: 18,
+                ),
+                Text("₹ 100")
+              ],
+            ),
           ),
         ),
       ),

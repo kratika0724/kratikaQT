@@ -5,8 +5,10 @@ import 'package:qt_distributer/screens/base%20main/agents_screen.dart';
 import 'package:qt_distributer/screens/base%20main/dashboard_screen.dart';
 import 'package:qt_distributer/screens/base%20main/payments_screen.dart';
 import 'package:qt_distributer/screens/base%20main/profile_screen.dart';
-
-import 'dis_dashboard_screen.dart';
+import 'package:qt_distributer/screens/base%20main/vendor/distributer_screen.dart';
+import 'package:qt_distributer/screens/base%20main/vendor/vendor_dashboard_screen.dart';
+import 'package:qt_distributer/screens/base%20main/vendor/vendor_payments_screen.dart';
+import 'package:qt_distributer/screens/base%20main/vendor/vendor_profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -25,10 +27,10 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
 
   List<Widget> non_distributer_pages = [
-    DisDashboardScreen(),
-    PaymentsScreen(),
-    AgentsScreen(),
-    ProfileScreen(),
+    VendorDashboardScreen(),
+    VendorPaymentsScreen(),
+    DistributerScreen(),
+    VendorProfileScreen(),
   ];
 
   void _onItemTapped(int index) {
