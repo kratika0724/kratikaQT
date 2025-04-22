@@ -37,7 +37,7 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   _checkAuthState() async {
-    await Future.delayed(const Duration(seconds: 3));
+    await Future.delayed(const Duration(seconds: 0));
     if (!mounted) return;
 
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
@@ -59,7 +59,6 @@ class _SplashScreenState extends State<SplashScreen>
       );
     }
   }
-
 
   @override
   Widget build(BuildContext context) {

@@ -15,7 +15,7 @@ class DashboardProvider extends ChangeNotifier {
 
   int get userCount => _userCountData?.total.userCount ?? 0;
   int get productCount => _userCountData?.total.productCount ?? 0;
-  int get customerCount =>  0;
+  int get customerCount => 0;
 
   String? user_firstname = "";
   String? user_middlename = "";
@@ -43,7 +43,8 @@ class DashboardProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final response = await apiService.getAuth(ApiPath.getUSerCountDashboardData, {});
+      final response =
+          await apiService.getAuth(ApiPath.getUSerCountDashboardData, {});
       final mResponse = DashboardResponse.fromJson(response);
       if (mResponse.success) {
         _userCountData = mResponse;
@@ -59,55 +60,67 @@ class DashboardProvider extends ChangeNotifier {
   }
 
   void getCustomerDatafromLocal() {
-    PreferencesServices.getPreferencesData(PreferencesServices.userId).then((userid) {
+    PreferencesServices.getPreferencesData(PreferencesServices.userId)
+        .then((userid) {
       user_id = (userid?.toString() ?? "").isEmpty || userid == ""
           ? "UserId"
           : userid.toString();
     });
-    PreferencesServices.getPreferencesData(PreferencesServices.firstName).then((firstname) {
+    PreferencesServices.getPreferencesData(PreferencesServices.firstName)
+        .then((firstname) {
       user_firstname = (firstname?.toString() ?? "").isEmpty || firstname == ""
           ? "Username"
           : firstname.toString();
     });
-    PreferencesServices.getPreferencesData(PreferencesServices.middleName).then((middlename) {
-      user_middlename = (middlename?.toString() ?? "") == ""
-          ? ""
-          : middlename.toString();
+    PreferencesServices.getPreferencesData(PreferencesServices.middleName)
+        .then((middlename) {
+      user_middlename =
+          (middlename?.toString() ?? "") == "" ? "" : middlename.toString();
     });
-    PreferencesServices.getPreferencesData(PreferencesServices.lastName).then((lastname) {
+    PreferencesServices.getPreferencesData(PreferencesServices.lastName)
+        .then((lastname) {
       user_lastname = (lastname?.toString() ?? "").isEmpty || lastname == ""
           ? ""
           : lastname.toString();
     });
-    PreferencesServices.getPreferencesData(PreferencesServices.mobileNo).then((mobile) {
+    PreferencesServices.getPreferencesData(PreferencesServices.mobileNo)
+        .then((mobile) {
       user_mobile_no = (mobile?.toString() ?? "") == ""
           ? "Mobile number"
           : mobile.toString();
     });
-    PreferencesServices.getPreferencesData(PreferencesServices.emailId).then((email) {
+    PreferencesServices.getPreferencesData(PreferencesServices.emailId)
+        .then((email) {
       user_email_id = (email?.toString() ?? "").isEmpty || email == ""
           ? "Email ID"
           : email.toString();
     });
-    PreferencesServices.getPreferencesData(PreferencesServices.role).then((role) {
+    PreferencesServices.getPreferencesData(PreferencesServices.role)
+        .then((role) {
       user_role = (role?.toString() ?? "").isEmpty || role == ""
           ? "Role"
           : role.toString();
     });
-    PreferencesServices.getPreferencesData(PreferencesServices.profileImg).then((profileImg) {
-      user_profile_img = (profileImg?.toString() ?? "").isEmpty || profileImg == ""
+    PreferencesServices.getPreferencesData(PreferencesServices.profileImg)
+        .then((profileImg) {
+      user_profile_img = (profileImg?.toString() ?? "").isEmpty ||
+              profileImg == ""
           ? "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png"
           : profileImg.toString();
     });
-    PreferencesServices.getPreferencesData(PreferencesServices.roleName).then((roleName) {
+    PreferencesServices.getPreferencesData(PreferencesServices.roleName)
+        .then((roleName) {
       user_role_name = (roleName?.toString() ?? "").isEmpty || roleName == ""
           ? ""
           : roleName.toString();
-      });
-    PreferencesServices.getPreferencesData(PreferencesServices.customerId).then((customerId) {
-      user_customer_id = (customerId?.toString() ?? "").isEmpty || customerId == ""
-          ? ""
-          : customerId.toString();
+    });
+
+    PreferencesServices.getPreferencesData(PreferencesServices.customerId)
+        .then((customerId) {
+      user_customer_id =
+          (customerId?.toString() ?? "").isEmpty || customerId == ""
+              ? ""
+              : customerId.toString();
     });
 
     notifyListeners();

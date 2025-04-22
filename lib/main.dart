@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:qt_distributer/constants/commonString.dart';
 import 'package:qt_distributer/providers/agent_provider.dart';
 import 'package:qt_distributer/providers/allocation_provider.dart';
 import 'package:qt_distributer/providers/customer_provider.dart';
@@ -7,7 +8,6 @@ import 'package:qt_distributer/providers/dashboard_provider.dart';
 import 'package:qt_distributer/providers/product_provider.dart';
 import 'package:qt_distributer/providers/transaction_provider.dart';
 import 'screens/splash_screen.dart';
-import 'screens/base main/bottom_navigation.dart';
 import 'constants/app_colors.dart';
 import 'constants/app_theme.dart';
 import 'providers/auth_provider.dart';
@@ -70,9 +70,6 @@ class MyApp extends StatelessWidget {
           ),
         ),
         home: const SplashScreen(),
-        routes: {
-          '/home': (context) => const BottomNavigationScreen(),
-        },
       ),
     );
   }

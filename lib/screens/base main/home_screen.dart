@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:qt_distributer/constants/app_colors.dart';
+import 'package:qt_distributer/constants/commonString.dart';
 import 'package:qt_distributer/screens/base%20main/agents_screen.dart';
 import 'package:qt_distributer/screens/base%20main/dashboard_screen.dart';
 import 'package:qt_distributer/screens/base%20main/payments_screen.dart';
 import 'package:qt_distributer/screens/base%20main/profile_screen.dart';
+
+import 'dis_dashboard_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -14,8 +17,15 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   PageController _pageController = PageController();
 
-   List<Widget> _pages = [
+  List<Widget> distributer_pages = [
     DashboardScreen(),
+    PaymentsScreen(),
+    AgentsScreen(),
+    ProfileScreen(),
+  ];
+
+  List<Widget> non_distributer_pages = [
+    DisDashboardScreen(),
     PaymentsScreen(),
     AgentsScreen(),
     ProfileScreen(),
@@ -35,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: Colors.white,
       body: PageView(
         controller: _pageController,
-        children: _pages,
+        children: is_distributer ? distributer_pages : non_distributer_pages,
         onPageChanged: (index) {
           setState(() {
             _selectedIndex = index;
@@ -51,24 +61,43 @@ class _HomeScreenState extends State<HomeScreen> {
         selectedFontSize: 13,
         unselectedFontSize: 13,
         onTap: _onItemTapped,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.dashboard),
-            label: 'Dashboard',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.assignment),
-            label: 'Payments',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Agents',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle),
-            label: 'Profile',
-          ),
-        ],
+        items: is_distributer
+            ? const <BottomNavigationBarItem>[
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.dashboard),
+                  label: 'Dashboard',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.assignment),
+                  label: 'Payments',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.person),
+                  label: 'Agents',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.account_circle),
+                  label: 'Profile',
+                ),
+              ]
+            : const <BottomNavigationBarItem>[
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.dashboard),
+                  label: 'Dashboard',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.assignment),
+                  label: 'Payments',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.person),
+                  label: 'Distributer',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.account_circle),
+                  label: 'Profile',
+                ),
+              ],
       ),
     );
   }
