@@ -24,7 +24,7 @@ class AppThemeButton extends StatelessWidget {
       width: double.infinity,
       decoration: BoxDecoration(
         gradient:  LinearGradient(
-          colors: [AppColors.primary, AppColors.primary.withOpacity(0.6),],
+          colors: [AppColors.primary, Colors.indigo.withOpacity(0.8)],
           begin: Alignment.centerLeft,
           end: Alignment.centerRight,
         ),

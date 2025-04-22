@@ -35,6 +35,7 @@ class AllocationProvider with ChangeNotifier {
       final mResponse = AllocationAddModel.fromJson(response);
       if (mResponse.success) {
         UiUtils().showSuccessSnackBar(context,"Allocation added successfully!");
+        getAllocationData();
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (context.mounted) {
             Navigator.pop(context);

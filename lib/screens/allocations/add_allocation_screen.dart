@@ -58,6 +58,7 @@ class _AddAllocationScreenState extends State<AddAllocationScreen> {
                             pincodeController,
                             areaController
                         );
+                        provider.getAllocationData();
                       },
                       onCancel: () {
                         Navigator.pop(context);

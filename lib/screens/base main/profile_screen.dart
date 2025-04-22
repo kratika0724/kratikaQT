@@ -125,12 +125,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       UiUtils().menuItem(context, "About Us", Icons.info_outline),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 26.0,vertical: 30),
-                        child: AppThemeButton(label: 'Log Out', onPressed: () {
-                          showDialog(
-                              context: context,
-                              // Ensure you pass the correct BuildContext here
-                              builder: (BuildContext context) {
-                                return AlertDialog(
+                        child: AppThemeButton(
+                          label: 'Log Out',
+                          onPressed: () {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
                                   // backgroundColor: white,
                                   title: const Text(
                                     "Logging Out!",

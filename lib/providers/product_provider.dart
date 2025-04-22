@@ -43,6 +43,7 @@ class ProductProvider with ChangeNotifier {
       final mResponse = ProductAddModel.fromJson(response);
       if (mResponse.success) {
         UiUtils().showSuccessSnackBar(context,"Product added successfully!");
+        getProductData();
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (context.mounted) {
               Navigator.pop(context);

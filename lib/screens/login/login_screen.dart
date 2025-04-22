@@ -169,7 +169,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           gradient: LinearGradient(
                             colors: [
                               AppColors.primary,
-                              AppColors.primary.withOpacity(0.6),
+                              Colors.indigo.withOpacity(0.8),
                             ],
                             begin: Alignment.centerLeft,
                             end: Alignment.centerRight,
@@ -182,7 +182,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             shadowColor: Colors.transparent,
                             padding:
                             const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 13),
+                                horizontal: 16, vertical: 0),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10)),
                           ),
@@ -192,7 +192,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: authProvider.isLoading
                               ? const SizedBox(
                             height: 20,
-                            width: 10,
+                            width: 15,
                             child: CircularProgressIndicator(
                               strokeWidth: 2,
                               valueColor: AlwaysStoppedAnimation<Color>(

@@ -47,7 +47,7 @@ class PaymentsSection extends StatelessWidget {
                     borderRadius: BorderRadius.circular(25),
                   ),
                   child: SuccessPaymentCardWidget(
-                    title: "Payment Successful",
+                    title: "Successful",
                     amount: "₹5009.00",
                     color: Colors.green,
                     icon: Icons.check_circle,

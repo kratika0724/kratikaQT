@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:qt_distributer/widgets/app_theme_button.dart';
 import '../../constants/app_colors.dart';
 import '../../providers/auth_provider.dart';
 import '../constants/app_assets.dart';
@@ -271,28 +272,82 @@ class _OTPScreenState extends State<OTPScreen> {
                           ),
                         ),
                       const SizedBox(height: 30),
-                      ElevatedButton(
-                        onPressed:
-                        authProvider.isLoading ? null : _handleOTPVerification,
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 50,
-                            vertical: 15,
-                          ),
+                      // Container(
+                      //   width: double.infinity,
+                      //   decoration: BoxDecoration(
+                      //     gradient: LinearGradient(
+                      //       colors: [
+                      //         AppColors.primary,
+                      //         Colors.indigo.withOpacity(0.8),
+                      //       ],
+                      //       begin: Alignment.centerLeft,
+                      //       end: Alignment.centerRight,
+                      //     ),
+                      //     borderRadius: BorderRadius.circular(10),
+                      //   ),
+                      //   child: ElevatedButton(
+                      //     style: ElevatedButton.styleFrom(
+                      //       backgroundColor: Colors.transparent,
+                      //       shadowColor: Colors.transparent,
+                      //       padding:
+                      //       const EdgeInsets.symmetric(
+                      //           horizontal: 16, vertical: 6),
+                      //       shape: RoundedRectangleBorder(
+                      //           borderRadius: BorderRadius.circular(10)),
+                      //     ),
+                      //     onPressed: authProvider.isLoading
+                      //         ? null
+                      //         : _handleLogin,
+                      //     child: authProvider.isLoading
+                      //         ? const SizedBox(
+                      //       height: 20,
+                      //       width: 10,
+                      //       child: CircularProgressIndicator(
+                      //         strokeWidth: 2,
+                      //         valueColor: AlwaysStoppedAnimation<Color>(
+                      //             AppColors.buttonText),
+                      //       ),
+                      //     )
+                      //         : Text('Get OTP',
+                      //         style: boldTextStyle(
+                      //             fontSize: dimen20, color: Colors.white)),
+                      //   ),
+                      // ),
+                      Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              AppColors.primary,
+                              Colors.indigo.withOpacity(0.8),
+                            ],),
+                          borderRadius: BorderRadius.circular(10),
                         ),
-                        child: authProvider.isLoading
-                            ? const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                                AppColors.buttonText),
+                        child: ElevatedButton(
+                          onPressed:
+                          authProvider.isLoading ? null : _handleOTPVerification,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.transparent,
+                            shadowColor: Colors.transparent,
+                            padding:
+                            const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 4),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
                           ),
-                        )
-                            : const Text(
-                          'Verify OTP',
-                          style: TextStyle(fontSize: 18),
+                          child: authProvider.isLoading
+                              ? const SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                  AppColors.buttonText),
+                            ),
+                          )
+                              : const Text(
+                            'Verify OTP',
+                            style: TextStyle(fontSize: 18),
+                          ),
                         ),
                       ),
                       SizedBox(height: 250,),
