@@ -17,6 +17,11 @@ class _AddAllocationScreenState extends State<AddAllocationScreen> {
   final areaController = TextEditingController();
 
   @override
+  void dispose() {
+    pincodeController.dispose();
+    areaController.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<AllocationProvider>(context);

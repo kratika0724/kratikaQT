@@ -18,6 +18,17 @@ class ProductProvider with ChangeNotifier {
   final int limit = 10;
   final ApiService apiService = ApiService();
 
+
+
+  List<String> getProductNames(){
+    return products
+        .map((p) => p.productName ?? '')
+        .where((name) => name.isNotEmpty)
+        .toSet()
+        .toList();
+  }
+
+  
   void createProduct(
       BuildContext context,
       TextEditingController nameController,

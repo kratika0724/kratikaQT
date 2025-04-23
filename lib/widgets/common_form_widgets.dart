@@ -28,7 +28,7 @@ Widget buildTextField(
   if (label.toLowerCase().contains('pincode')) {
     inputFormatters.add(LengthLimitingTextInputFormatter(6));
   }
-  if (label.toLowerCase().contains('mobile no') ) {
+  if (label.toLowerCase().contains('mobile') ) {
     inputFormatters.add(LengthLimitingTextInputFormatter(10));
   }
 
@@ -100,51 +100,45 @@ Widget buildProductTextField(
 }
 
 
-Widget buildCalenderTextField(
+Widget buildCalendarTextField(
     BuildContext context,
     String label, {
-      String? hint,
-      TextEditingController? controller,
+      required String hint,
+      required Function(DateTime) onDateSelected,
+      DateTime? selectedDate,
     }) {
+  return GestureDetector(
+    onTap: () async {
+      final picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate ?? DateTime.now(),
+        firstDate: DateTime(1900),
+        lastDate: DateTime.now(),
+      );
 
-  bool isDateField = label.toLowerCase().contains('date');
-  final _controller = controller ?? TextEditingController();
-
-  return Padding(
-    padding: const EdgeInsets.only(bottom: 16),
-    child: TextField(
-      controller: _controller,
-      keyboardType: TextInputType.none,
-      readOnly: isDateField,
-      onTap: isDateField
-          ? () async {
-        final pickedDate = await showDatePicker(
-          context: context, // Use passed-in context here
-          initialDate: DateTime.now(),
-          firstDate: DateTime(1900),
-          lastDate: DateTime.now(),
-        );
-        if (pickedDate != null) {
-          _controller.text = DateFormat('dd/MM/yyyy').format(pickedDate);
-        }
+      if (picked != null) {
+        onDateSelected(picked);
       }
-          : null,
-      style: regularTextStyle(fontSize: dimen14, color: Colors.black),
-      decoration: InputDecoration(
-        labelText: label,
-        hintText: hint,
-        labelStyle: regularTextStyle(fontSize: dimen13, color: Colors.black54),
-        floatingLabelStyle: regularTextStyle(fontSize: dimen16, color: AppColors.textSecondary),
-        filled: true,
-        fillColor: AppColors.ghostWhite,
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-        suffixIcon: isDateField
-            ? const Icon(Icons.calendar_today_rounded, size: 20, color: Colors.black54)
-            : null,
+    },
+    child: AbsorbPointer(
+      child: TextField(
+        controller: TextEditingController(
+          text: selectedDate != null ? "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}" : "",
+        ),
+        decoration: InputDecoration(
+          labelText: label,
+          labelStyle: regularTextStyle(fontSize: dimen14, color: Colors.black54),
+          hintText: hint,
+          filled: true,
+          fillColor: AppColors.ghostWhite,
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+        ),
+        style: regularTextStyle(fontSize: dimen14, color: Colors.black),
       ),
     ),
   );
 }
+
 
 Widget buildDropdown(
     String label,

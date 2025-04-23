@@ -1,11 +1,11 @@
-class CustomerResponseModel {
+class CustomerResponse {
   final bool success;
   final String message;
   final int status;
-  final List<CustomerModel> data;
-  final Meta meta;
+  final List<CustomerData> data;
+  final CustomerMeta meta;
 
-  CustomerResponseModel({
+  CustomerResponse({
     required this.success,
     required this.message,
     required this.status,
@@ -13,98 +13,70 @@ class CustomerResponseModel {
     required this.meta,
   });
 
-  factory CustomerResponseModel.fromJson(Map<String, dynamic> json) {
-    return CustomerResponseModel(
+  factory CustomerResponse.fromJson(Map<String, dynamic> json) {
+    return CustomerResponse(
       success: json['success'],
       message: json['message'],
       status: json['status'],
-      data: (json['data'] as List)
-          .map((item) => CustomerModel.fromJson(item))
-          .toList(),
-      meta: Meta.fromJson(json['meta']),
+      data: List<CustomerData>.from(
+        json['data'].map((x) => CustomerData.fromJson(x)),
+      ),
+      meta: CustomerMeta.fromJson(json['meta']),
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'success': success,
-      'message': message,
-      'status': status,
-      'data': data.map((item) => item.toJson()).toList(),
-      'meta': meta.toJson(),
-    };
   }
 }
 
-class CustomerModel {
+class CustomerData {
   final String id;
-  final String name;
+  final String? firstName;
+  final String? middleName;
+  final String? lastName;
   final String mobile;
   final String email;
-  final String city;
-  final String pincode;
-  final String state;
-  final String country;
-  final bool isActive;
-  final DateTime createdAt;
+  final String address;
+  final String createdAt;
   final String createdBy;
-  final DateTime updatedAt;
+  final String updatedAt;
   final String updatedBy;
+  final String agentName;
+  final String topVendorName;
 
-  CustomerModel({
+  CustomerData({
     required this.id,
-    required this.name,
+    this.firstName,
+    this.middleName,
+    this.lastName,
     required this.mobile,
     required this.email,
-    required this.city,
-    required this.pincode,
-    required this.state,
-    required this.country,
-    required this.isActive,
+    required this.address,
     required this.createdAt,
     required this.createdBy,
     required this.updatedAt,
     required this.updatedBy,
+    required this.agentName,
+    required this.topVendorName,
   });
 
-  factory CustomerModel.fromJson(Map<String, dynamic> json) {
-    return CustomerModel(
+  factory CustomerData.fromJson(Map<String, dynamic> json) {
+    return CustomerData(
       id: json['_id'],
-      name: json['name'],
+      firstName: json['first_name'],
+      middleName: json['middle_name'],
+      lastName: json['last_name'],
       mobile: json['mobile'],
       email: json['email'],
-      city: json['city'],
-      pincode: json['pincode'],
-      state: json['state'],
-      country: json['country'],
-      isActive: json['is_active'],
-      createdAt: DateTime.parse(json['created_at']),
+      address: json['address'] ?? "",
+      createdAt: json['created_at'],
       createdBy: json['created_by'],
-      updatedAt: DateTime.parse(json['updated_at']),
+      updatedAt: json['updated_at'],
       updatedBy: json['updated_by'],
+      agentName: json['agentName'],
+      topVendorName: json['topVendorName'],
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      '_id': id,
-      'name': name,
-      'mobile': mobile,
-      'email': email,
-      'city': city,
-      'pincode': pincode,
-      'state': state,
-      'country': country,
-      'is_active': isActive,
-      'created_at': createdAt.toIso8601String(),
-      'created_by': createdBy,
-      'updated_at': updatedAt.toIso8601String(),
-      'updated_by': updatedBy,
-    };
   }
 }
 
-class Meta {
+class CustomerMeta {
   final int currentPage;
   final int from;
   final int lastPage;
@@ -112,7 +84,7 @@ class Meta {
   final int to;
   final int total;
 
-  Meta({
+  CustomerMeta({
     required this.currentPage,
     required this.from,
     required this.lastPage,
@@ -121,8 +93,8 @@ class Meta {
     required this.total,
   });
 
-  factory Meta.fromJson(Map<String, dynamic> json) {
-    return Meta(
+  factory CustomerMeta.fromJson(Map<String, dynamic> json) {
+    return CustomerMeta(
       currentPage: json['current_page'],
       from: json['from'],
       lastPage: json['last_page'],
@@ -130,16 +102,5 @@ class Meta {
       to: json['to'],
       total: json['total'],
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'current_page': currentPage,
-      'from': from,
-      'last_page': lastPage,
-      'per_page': perPage,
-      'to': to,
-      'total': total,
-    };
   }
 }

@@ -54,6 +54,13 @@ class _PaymentFilterBottomSheetState extends State<PaymentFilterBottomSheet> {
     EndDate = widget.filterEndDate;
   }
 
+  @override
+  void dispose() {
+    _quintusIdController.dispose();
+    _emailController.dispose();
+    super.dispose();
+  }
+
   void _updateSuggestions(String query, bool isEmail) {
     if (query.length < 3) {
       setState(() {

@@ -18,6 +18,28 @@ class AllocationProvider with ChangeNotifier {
   final int limit = 10;
   final ApiService apiService = ApiService();
 
+
+  List<String> getPincodeList() {
+    return allocations
+        .map((a) => a.allocationPincode ?? '')
+        .where((pincode) => pincode.isNotEmpty)
+        .toSet()
+        .toList();
+  }
+
+  List<String> getAreaList(String selectedPincode) {
+    return allocations
+        .where((a) => a.allocationPincode == selectedPincode)
+        .map((a) => a.allocationArea ?? '')
+        .where((area) => area.isNotEmpty)
+        .toSet()
+        .toList();
+  }
+
+
+
+
+
   // Method to create a new allocation
   void createAllocation(
       BuildContext context,

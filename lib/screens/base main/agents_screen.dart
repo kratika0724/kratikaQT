@@ -24,7 +24,7 @@ class AgentsScreenState extends State<AgentsScreen> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<AgentProvider>(context, listen: false).getAgentData();
     });
   }

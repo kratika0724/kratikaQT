@@ -37,6 +37,13 @@ class _ProductFilterBottomSheetState extends State<ProductFilterBottomSheet> {
     _codeController = TextEditingController(text: widget.initialCode ?? '');
   }
 
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _codeController.dispose();
+    super.dispose();
+  }
+
   void _updateSuggestions(String query, bool isCode) {
     if (query.length < 3) {
       setState(() {
@@ -128,8 +135,10 @@ class _ProductFilterBottomSheetState extends State<ProductFilterBottomSheet> {
                       widget.onApply(
                         _nameController.text.trim().isNotEmpty ? _nameController.text.trim() : null,
                         _codeController.text.trim().isNotEmpty ? _codeController.text.trim() : null,
-
                       );
+                      final provider = Provider.of<ProductProvider>(context, listen: false);
+                      provider.refreshProductData();
+
                       Navigator.pop(context);
                     },
                     child: const Text("Apply Filters"),
