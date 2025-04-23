@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../models/response models/transaction_response.dart';
+import '../../providers/transaction_provider.dart';
 import '../../utils/device_utils.dart';
 import 'payment_card.dart';
 
@@ -41,42 +43,19 @@ class _PaymentCardListState extends State<PaymentCardList> {
     });
   }
 
-  List<TransactionData> _getFilteredTransactions() {
-    return widget.transactions.where((txn) {
-      final matchesId = widget.filterTransactionId == null ||
-          (txn.quintusTransactionId?? '').toLowerCase().contains(widget.filterTransactionId!.toLowerCase());
-
-      final matchesEmail = widget.filterEmail == null ||
-          (txn.user.email?? '').toLowerCase().contains(widget.filterEmail!.toLowerCase());
-
-      final matchesStatus = widget.filterStatus == null ||
-          (txn.status?? '').toLowerCase().contains(widget.filterStatus!.toLowerCase());
-
-      final matchesTransactionType = widget.filterTransactionType == null ||
-          (txn.walletHistory.transactionType?? '').toLowerCase().contains(widget.filterTransactionType!.toLowerCase());
-
-      final matchesDateRange = widget.filterStartDate == null || widget.filterEndDate == null
-          ? true
-          : (txn.createdAt.isAfter(widget.filterStartDate!.subtract(const Duration(days: 1))) &&
-          txn.createdAt.isBefore(widget.filterEndDate!.add(const Duration(days: 1))));
-
-
-      return matchesId && matchesStatus && matchesTransactionType && matchesEmail && matchesDateRange;
-    }).toList();
-  }
-
   @override
   Widget build(BuildContext context) {
     final isWide = DeviceUtils.getDeviceWidth(context);
-    final filteredTransactions = _getFilteredTransactions();
+    final transactionProvider = Provider.of<TransactionProvider>(context);
+    final filteredTransactions = transactionProvider.filteredTransactions;
 
     if (filteredTransactions.isEmpty) {
       return const Center(child: Text("No payments found."));
     }
+
     return isWide
         ? _buildGridView(filteredTransactions)
         : _buildListView(filteredTransactions);
-
   }
 
   Widget _buildGridView(List<TransactionData> transactions) {

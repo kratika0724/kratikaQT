@@ -28,9 +28,14 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<TransactionProvider>(context, listen: false).getTransactions();
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   void _openFilterBottomSheet() async {
@@ -111,6 +116,12 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
       body: Consumer<TransactionProvider>(
         builder: (context, provider, _) {
           if (provider.isLoading) return const Center(child: CircularProgressIndicator());
+
+          // Check if transactions list is empty and show "No Data Found"
+          if (provider.transactions.isEmpty) {
+            return const Center(child: Text("No Data Found!"));
+          }
+
           if (provider.errorMessage != null) return const Center(child: Text("Oops! Something went wrong"));
 
           if (filterStartDate != null && filterEndDate != null)

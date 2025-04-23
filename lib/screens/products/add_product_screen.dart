@@ -22,6 +22,16 @@ class _AddProductScreenState extends State<AddProductScreen> {
   final halfYearDiscountController = TextEditingController();
   final yearlyDiscountController = TextEditingController();
 
+  @override
+  void dispose() {
+    nameController.dispose();
+    codeController.dispose();
+    amountController.dispose();
+    quarterDiscountController.dispose();
+    halfYearDiscountController.dispose();
+    yearlyDiscountController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

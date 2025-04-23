@@ -36,6 +36,13 @@ class _AllocationFilterBottomSheetState extends State<AllocationFilterBottomShee
     _areaController = TextEditingController(text: widget.initialArea ?? '');
   }
 
+  @override
+  void dispose() {
+    _pincodeController.dispose();
+    _areaController.dispose();
+    super.dispose();
+  }
+
   void _updateSuggestions(String query, bool isPincode) {
     if (query.length < 3) {
       setState(() {

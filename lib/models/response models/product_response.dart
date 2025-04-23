@@ -15,15 +15,20 @@ class ProductResponseModel {
 
   factory ProductResponseModel.fromJson(Map<String, dynamic> json) {
     return ProductResponseModel(
-      success: json['success'],
-      message: json['message'],
-      status: json['status'],
-      data: (json['data'] as List)
+      success: json['success'] ?? false,
+      message: json['message'] ?? '',
+      status: json['status'] ?? 0,
+      data: (json['data'] != null && json['data'] is List)
+          ? (json['data'] as List)
           .map((item) => ProductModel.fromJson(item))
-          .toList(),
-      meta: Meta.fromJson(json['meta']),
+          .toList()
+          : [],
+      meta: json['meta'] != null
+          ? Meta.fromJson(json['meta'])
+          : Meta(currentPage: 1, from: 0, lastPage: 1, perPage: 10, to: 0, total: 0),
     );
   }
+
 
   Map<String, dynamic> toJson() {
     return {
@@ -69,21 +74,22 @@ class ProductModel {
 
   factory ProductModel.fromJson(Map<String, dynamic> json) {
     return ProductModel(
-      id: json['_id'],
-      topUser: json['topUser'],
-      productName: json['product_name'],
-      productCode: json['product_code'],
-      productAmount: json['product_amount'],
-      quaterDiscount: json['quater_discount'],
-      halfyearDiscount: json['halfyear_discount'],
-      yearlyDiscount: json['yearly_discount'],
-      isActive: json['is_active'],
-      createdAt: DateTime.parse(json['created_at']),
-      createdBy: json['created_by'],
-      updatedAt: DateTime.parse(json['updated_at']),
-      updatedBy: json['updated_by'],
+      id: json['_id'] ?? '',
+      topUser: json['topUser'] ?? '',
+      productName: json['product_name'] ?? '',
+      productCode: json['product_code'] ?? '',
+      productAmount: (json['product_amount'] ?? 0).toInt(),
+      quaterDiscount: (json['quater_discount'] ?? 0).toInt(),
+      halfyearDiscount: (json['halfyear_discount'] ?? 0).toInt(),
+      yearlyDiscount: (json['yearly_discount'] ?? 0).toInt(),
+      isActive: json['is_active'] ?? false,
+      createdAt: DateTime.tryParse(json['created_at'] ?? '') ?? DateTime.now(),
+      createdBy: json['created_by'] ?? '',
+      updatedAt: DateTime.tryParse(json['updated_at'] ?? '') ?? DateTime.now(),
+      updatedBy: json['updated_by'] ?? '',
     );
   }
+
 
   Map<String, dynamic> toJson() {
     return {
@@ -123,14 +129,15 @@ class Meta {
 
   factory Meta.fromJson(Map<String, dynamic> json) {
     return Meta(
-      currentPage: json['current_page'],
-      from: json['from'],
-      lastPage: json['last_page'],
-      perPage: json['per_page'],
-      to: json['to'],
-      total: json['total'],
+      currentPage: json['current_page'] ?? 1,
+      from: json['from'] ?? 0,
+      lastPage: json['last_page'] ?? 1,
+      perPage: json['per_page'] ?? 10,
+      to: json['to'] ?? 0,
+      total: json['total'] ?? 0,
     );
   }
+
 
   Map<String, dynamic> toJson() {
     return {

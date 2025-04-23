@@ -24,16 +24,19 @@ class DashboardResponse {
 class TotalCount {
   final int userCount;
   final int productCount;
+  final int customerCount;
 
   TotalCount({
     required this.userCount,
     required this.productCount,
+    required this.customerCount,
   });
 
   factory TotalCount.fromJson(Map<String, dynamic> json) {
     return TotalCount(
       userCount: json['userCount'] ?? 0,
       productCount: json['productCount'] ?? 0,
+      customerCount: json['customerCount'] ?? 0,
     );
   }
 }

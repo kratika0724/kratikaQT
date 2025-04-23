@@ -1,67 +1,96 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import '../models/sample models/agent_model.dart';
+import '../models/add models/add_agent_model.dart';
+import '../models/response models/get_agent_by_area_response.dart';
 import '../models/response models/agent_response.dart';
-import '../models/add models/add_product_model.dart';
-import '../models/response models/product_response.dart';
 import '../services/api_path.dart';
 import '../services/api_service.dart';
 import '../utils/ui_utils.dart';
 
 class AgentProvider with ChangeNotifier {
-
   bool isLoading = false;
+  bool isFetchingMore = false;
+  bool hasMoreData = true;
   String? errorMessage;
-  // AgentAddModel? responseModel;
   List<AgentModel> agents = [];
 
+  int currentPage_agent = 1;
+  final int limit = 10;
+
+  List<CustomerAgentByAreaData> agentsbyArea = []; // Use CustomerAgentByAreaData directly now
 
   final ApiService apiService = ApiService();
 
-  // void createAgent(
-  //     BuildContext context,
-  //     TextEditingController nameController,
-  //     TextEditingController codeController,
-  //     TextEditingController amountController,
-  //     TextEditingController quarterDiscountController,
-  //     TextEditingController halfYearDiscountController,
-  //     TextEditingController yearlyDiscountController,
-  //     ) async {
-  //   isLoading = true;
-  //   errorMessage = null;
-  //   notifyListeners();
-  //
-  //   try {
-  //     Map<String, dynamic> body = {
-  //       "product_name": nameController.text.trim(),
-  //       "product_code": codeController.text.trim(),
-  //       "product_amount": int.tryParse(amountController.text.trim()) ?? 0,
-  //       "quater_discount": quarterDiscountController.text.trim(),
-  //       "halfyear_discount": halfYearDiscountController.text.trim(),
-  //       "yearly_discount": yearlyDiscountController.text.trim(),
-  //     };
-  //
-  //     final response = await apiService.post_auth(ApiPath.createProduct, body);
-  //     final mResponse = AgentAddModel.fromJson(response);
-  //     if (mResponse.success) {
-  //       UiUtils().showSuccessSnackBar(context,"Product added successfully!");
-  //       WidgetsBinding.instance.addPostFrameCallback((_) {
-  //         if (context.mounted) {
-  //           Navigator.pop(context);
-  //         }
-  //       });
-  //     } else {
-  //       Fluttertoast.showToast(msg: "Failed to add product: ${mResponse.message}");
-  //       debugPrint("Failed to add product: ${mResponse.message}");
-  //     }
-  //   } catch (error) {
-  //     Fluttertoast.showToast(msg: "Error adding product: $error");
-  //     debugPrint("Error adding product: $error");
-  //   }finally {
-  //     isLoading = false;
-  //     notifyListeners();
-  //   }
-  // }
+  void createAgent(
+      BuildContext context,
+      TextEditingController firstnameController,
+      TextEditingController middleNameController,
+      TextEditingController lastnameController,
+      TextEditingController emailController,
+      TextEditingController mobileController,
+      TextEditingController cityController,
+      TextEditingController stateController,
+      TextEditingController countryController,
+      TextEditingController pinCodeController,
+      TextEditingController assignedPinCodeController,
+      TextEditingController assignedAreaController,
+      {
+        required String? gender,
+        required DateTime? dob,
+      }
+      ) async {
+    isLoading = true;
+    errorMessage = null;
+    notifyListeners();
+
+    try {
+      Map<String, dynamic> body = {
+        "first_name": firstnameController.text.trim(),
+        "middle_name": middleNameController.text.trim(),
+        "last_name": lastnameController.text.trim(),
+        "email": emailController.text.trim(),
+        "mobile": mobileController.text.trim(),
+        "city": cityController.text.trim(),
+        "state": stateController.text.trim(),
+        "country": countryController.text.trim(),
+        "pin": pinCodeController.text.trim(),
+        "selectedPincode": assignedPinCodeController.text.trim(),
+        "selectedArea": assignedAreaController.text.trim(),
+        "gender": gender?.toLowerCase(),
+        "dob": dob?.toIso8601String(),
+      };
+
+      final response = await apiService.post_auth(ApiPath.createAgent, body);
+      final mResponse = AgentAddModel.fromJson(response); // reuse or make AgentAddModel
+
+      if (mResponse.success) {
+        UiUtils().showSuccessSnackBar(context, "Agent added successfully!");
+        refreshAgentData();
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (context.mounted) {
+            Navigator.pop(context);
+          }
+        });
+      } else {
+        Fluttertoast.showToast(msg: "Failed to add agent: ${mResponse.message}");
+        debugPrint("Failed to add agent: ${mResponse.message}");
+      }
+    } catch (error) {
+      Fluttertoast.showToast(msg: "Error adding agent: $error");
+      debugPrint("Error adding agent: $error");
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> refreshAgentData() async {
+    currentPage_agent = 1;
+    hasMoreData = true;
+    agents.clear();
+    await getAgentData();
+  }
+
 
   Future<void> getAgentData() async {
     isLoading = true;
@@ -76,10 +105,12 @@ class AgentProvider with ChangeNotifier {
         agents = agentResponse.data;
       } else {
         errorMessage = agentResponse.message;
+        agents = [];
         Fluttertoast.showToast(msg: errorMessage!);
         debugPrint("Get agent failed: ${agentResponse.message}");
       }
     } catch (error) {
+      agents = [];
       errorMessage = "Error fetching agents: $error";
       Fluttertoast.showToast(msg: errorMessage!);
       debugPrint(errorMessage);
@@ -88,7 +119,48 @@ class AgentProvider with ChangeNotifier {
       notifyListeners();
     }
   }
+
+  List<String> getAgentNamesByArea() {
+    return agentsbyArea
+        .map((agent) => agent.firstName ?? '')
+        .where((name) => name.isNotEmpty)
+        .toSet()
+        .toList();
+  }
+
+  Future<void> getAgentDataByArea(String area) async {
+    isLoading = true;
+    errorMessage = null;
+    agentsbyArea = []; // Clear previous agent list
+    notifyListeners();
+
+    try {
+      final response = await apiService.getAuth(ApiPath.getAgentByArea, {
+        'area': area,
+      });
+
+      final areaResponse = GetAgentListByAreaResponse.fromJson(response);
+
+      if (areaResponse.success && areaResponse.data.isNotEmpty) {
+        agentsbyArea = areaResponse.data;
+      } else {
+        agentsbyArea = []; // Clear the list if no agents found
+        errorMessage = areaResponse.message.isNotEmpty
+            ? areaResponse.message
+            : 'No Agent Found';
+        Fluttertoast.showToast(msg: errorMessage!);
+        debugPrint("Get agent failed: $errorMessage");
+      }
+    } catch (error) {
+      agentsbyArea = []; // Clear the list in case of error
+      errorMessage = "Error fetching agents: $error";
+      Fluttertoast.showToast(msg: errorMessage!);
+      debugPrint(errorMessage);
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
 }
-
-
 

@@ -27,18 +27,22 @@ class _ProductScreenState extends State<ProductScreen> {
   @override
   void initState() {
     super.initState();
-    final provider = Provider.of<ProductProvider>(context, listen: false);
-    provider.currentPage_product = 1;
-    provider.getProductData();
+    // Use WidgetsBinding to ensure the context is available after the widget is built
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final provider = Provider.of<ProductProvider>(context, listen: false);
+      provider.currentPage_product = 1;
+      provider.getProductData();
 
-    _scrollController.addListener(() {
-      if (_scrollController.position.extentAfter < 300 &&
-          !provider.isFetchingMore &&
-          provider.hasMoreData) {
-        provider.getProductData(loadMore: true);
-      }
+      _scrollController.addListener(() {
+        if (_scrollController.position.extentAfter < 300 &&
+            !provider.isFetchingMore &&
+            provider.hasMoreData) {
+          provider.getProductData(loadMore: true);
+        }
+      });
     });
   }
+
 
   void _openFilterBottomSheet() {
     showModalBottomSheet(
@@ -184,9 +188,12 @@ class _ProductScreenState extends State<ProductScreen> {
             ),
             itemBuilder: (context, index) {
               if (index == filteredProducts.length) {
-                return provider.hasMoreData
-                    ? const Center(child: CircularProgressIndicator())
-                    : const SizedBox.shrink();
+                final isFiltering = filterName != null || filterCode != null;
+                if (!isFiltering && provider.hasMoreData) {
+                  return const Center(child: CircularProgressIndicator());
+                } else {
+                  return const SizedBox.shrink();
+                }
               }
               return ProductCard(product: filteredProducts[index]);
             },
@@ -197,10 +204,14 @@ class _ProductScreenState extends State<ProductScreen> {
             itemCount: filteredProducts.length + 1,
             itemBuilder: (context, index) {
               if (index == filteredProducts.length) {
-                return provider.hasMoreData
-                    ? const Center(child: CircularProgressIndicator())
-                    : const SizedBox.shrink();
+                final isFiltering = filterName != null || filterCode != null;
+                if (!isFiltering && provider.hasMoreData) {
+                  return const Center(child: CircularProgressIndicator());
+                } else {
+                  return const SizedBox.shrink();
+                }
               }
+
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                 child: ProductCard(product: filteredProducts[index]),

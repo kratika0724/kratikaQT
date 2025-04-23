@@ -17,12 +17,17 @@ class TransactionResponseModel {
 
   factory TransactionResponseModel.fromJson(Map<String, dynamic> json) {
     return TransactionResponseModel(
-      success: json['success'],
-      fromCache: json['fromCache'],
-      message: json['message'],
-      status: json['status'],
-      data: List<TransactionData>.from(json['data'].map((x) => TransactionData.fromJson(x))),
-      meta: Meta.fromJson(json['meta']),
+      success: json['success'] ?? false,
+      fromCache: json['fromCache'] ?? false,
+      message: json['message'] ?? '',
+      status: json['status'] ?? 0,
+      data: (json['data'] != null && json['data'] is List)
+          ? List<TransactionData>.from(
+          json['data'].map((x) => TransactionData.fromJson(x)))
+          : [],
+      meta: json['meta'] != null
+          ? Meta.fromJson(json['meta'])
+          : Meta(currentPage: 1, from: 0, lastPage: 1, perPage: 10, to: 0, total: 0),
     );
   }
 }
@@ -55,17 +60,21 @@ class TransactionData {
 
   factory TransactionData.fromJson(Map<String, dynamic> json) {
     return TransactionData(
-      id: json['_id'],
+      id: json['_id'] ?? '',
       customerCommission: (json['customerCommission'] ?? 0).toDouble(),
       serviceCharge: (json['serviceCharge'] ?? 0).toDouble(),
       transactionAmount: (json['transactionAmount'] ?? 0).toDouble(),
-      referenceNo: json['referenceNo'],
-      quintusTransactionId: json['quintus_transaction_id'],
-      status: json['status'],
-      createdAt: DateTime.parse(json['created_at']),
-      updatedAt: DateTime.parse(json['updated_at']),
-      user: TransactionUser.fromJson(json['user']),
-      walletHistory: WalletHistory.fromJson(json['walletHistory']),
+      referenceNo: json['referenceNo'] ?? '',
+      quintusTransactionId: json['quintus_transaction_id'] ?? '',
+      status: json['status'] ?? '',
+      createdAt: DateTime.tryParse(json['created_at'] ?? '') ?? DateTime.now(),
+      updatedAt: DateTime.tryParse(json['updated_at'] ?? '') ?? DateTime.now(),
+      user: json['user'] != null
+          ? TransactionUser.fromJson(json['user'])
+          : TransactionUser.empty(),
+      walletHistory: json['walletHistory'] != null
+          ? WalletHistory.fromJson(json['walletHistory'])
+          : WalletHistory.empty(),
     );
   }
 }
@@ -86,6 +95,16 @@ class TransactionUser {
     required this.topUser,
   });
 
+  factory TransactionUser.empty() {
+    return TransactionUser(
+      firstName: '',
+      middleName: '',
+      lastName: '',
+      email: '',
+      mobile: '',
+      topUser: '',
+    );
+  }
   factory TransactionUser.fromJson(Map<String, dynamic> json) {
     return TransactionUser(
       firstName: json['first_name'],
@@ -118,14 +137,30 @@ class WalletHistory {
     required this.transactionType,
   });
 
+  // Empty constructor for fallback
+  factory WalletHistory.empty() {
+    return WalletHistory(
+      serviceDetails: [],
+      previousBalance: 0.0,
+      previousPayoutBalance: 0.0,
+      amount: 0.0,
+      updatedBalance: 0.0,
+      updatedPayoutBalance: 0.0,
+      walletType: '',
+      transactionType: '',
+    );
+  }
+
   factory WalletHistory.fromJson(Map<String, dynamic> json) {
     return WalletHistory(
-      serviceDetails: List<Map<String, dynamic>>.from(json['serviceDetails'].map((x) => Map<String, dynamic>.from(x))),
-      previousBalance: (json['previous_balance'] ?? 0).toDouble(),
-      previousPayoutBalance: (json['previous_payout_balance'] ?? 0).toDouble(),
-      amount: (json['amount'] ?? 0).toDouble(),
-      updatedBalance: (json['updated_balance'] ?? 0).toDouble(),
-      updatedPayoutBalance: (json['updated_payout_balance'] ?? 0).toDouble(),
+      serviceDetails: (json['serviceDetails'] != null && json['serviceDetails'] is List)
+          ? List<Map<String, dynamic>>.from(json['serviceDetails'].map((x) => Map<String, dynamic>.from(x)))
+          : [],
+      previousBalance: (json['previous_balance'] ?? 0.0).toDouble(),
+      previousPayoutBalance: (json['previous_payout_balance'] ?? 0.0).toDouble(),
+      amount: (json['amount'] ?? 0.0).toDouble(),
+      updatedBalance: (json['updated_balance'] ?? 0.0).toDouble(),
+      updatedPayoutBalance: (json['updated_payout_balance'] ?? 0.0).toDouble(),
       walletType: json['walletType'] ?? '',
       transactionType: json['transactionType'] ?? '',
     );
@@ -159,4 +194,3 @@ class Meta {
     );
   }
 }
-

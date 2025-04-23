@@ -28,17 +28,26 @@ class _AllocationsScreenState extends State<AllocationsScreen> {
   @override
   void initState() {
     super.initState();
-    final provider = Provider.of<AllocationProvider>(context, listen: false);
-    provider.currentPage_allocation = 1;
-    provider.getAllocationData();
+    // Use WidgetsBinding to ensure the context is available after the widget is built
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final provider = Provider.of<AllocationProvider>(context, listen: false);
+      provider.currentPage_allocation = 1;
+      provider.getAllocationData();
 
-    _scrollController.addListener(() {
-      if (_scrollController.position.extentAfter < 300 &&
-          !provider.isFetchingMore &&
-          provider.hasMoreData) {
-        provider.getAllocationData(loadMore: true);
-      }
+      _scrollController.addListener(() {
+        if (_scrollController.position.extentAfter < 300 &&
+            !provider.isFetchingMore &&
+            provider.hasMoreData) {
+          provider.getAllocationData(loadMore: true);
+        }
+      });
     });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   void _openFilterBottomSheet() {
@@ -174,7 +183,7 @@ class _AllocationsScreenState extends State<AllocationsScreen> {
           }).toList();
 
           if (filteredAllocations.isEmpty) {
-            return const Center(child: Text("No matching allocations found."));
+            return const Center(child: Text("No allocations found."));
           }
 
           final isWide = DeviceUtils.getDeviceWidth(context);

@@ -2,33 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_textstyles.dart';
-import '../../providers/agent_provider.dart';
-import '../../providers/product_provider.dart';
+import '../../providers/customer_provider.dart';
 
-class AgentFilterBottomSheet extends StatefulWidget {
+class CustomerFilterBottomSheet extends StatefulWidget {
   final String? initialName;
   final String? initialEmail;
-  final bool? initialIsActive;
-  final Function(String?, String?, bool?) onApply;
+  final Function(String?, String?) onApply;
   final VoidCallback onClear;
 
-
-  const AgentFilterBottomSheet({
+  const CustomerFilterBottomSheet({
     super.key,
     required this.initialName,
     required this.initialEmail,
     required this.onApply,
-    required this.onClear, this.initialIsActive,
+    required this.onClear,
   });
 
   @override
-  State<AgentFilterBottomSheet> createState() => _AgentFilterBottomSheetState();
+  State<CustomerFilterBottomSheet> createState() => _CustomerFilterBottomSheetState();
 }
 
-class _AgentFilterBottomSheetState extends State<AgentFilterBottomSheet> {
+class _CustomerFilterBottomSheetState extends State<CustomerFilterBottomSheet> {
   late TextEditingController _nameController;
   late TextEditingController _emailController;
-  late bool? _isActive;
 
   List<String> _nameSuggestions = [];
   List<String> _emailSuggestions = [];
@@ -38,7 +34,6 @@ class _AgentFilterBottomSheetState extends State<AgentFilterBottomSheet> {
     super.initState();
     _nameController = TextEditingController(text: widget.initialName ?? '');
     _emailController = TextEditingController(text: widget.initialEmail ?? '');
-    _isActive = widget.initialIsActive ?? true; // default to active
   }
 
   @override
@@ -48,7 +43,6 @@ class _AgentFilterBottomSheetState extends State<AgentFilterBottomSheet> {
     super.dispose();
   }
 
-  //suggestions logic
   void _updateSuggestions(String query, bool isEmail) {
     if (query.length < 3) {
       setState(() {
@@ -61,8 +55,8 @@ class _AgentFilterBottomSheetState extends State<AgentFilterBottomSheet> {
       return;
     }
 
-    final provider = Provider.of<AgentProvider>(context, listen: false);
-    final suggestions = provider.agents
+    final provider = Provider.of<CustomerProvider>(context, listen: false);
+    final suggestions = provider.customers
         .map((e) => isEmail ? (e.email ?? '') : (e.firstName ?? ''))
         .where((val) => val.toLowerCase().contains(query.toLowerCase()))
         .toSet()
@@ -77,7 +71,6 @@ class _AgentFilterBottomSheetState extends State<AgentFilterBottomSheet> {
     });
   }
 
-  //suggestions list
   Widget _buildSuggestion(String value, TextEditingController controller, bool isEmail) {
     return Container(
       decoration: BoxDecoration(
@@ -104,9 +97,6 @@ class _AgentFilterBottomSheetState extends State<AgentFilterBottomSheet> {
     );
   }
 
-
-
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -120,16 +110,15 @@ class _AgentFilterBottomSheetState extends State<AgentFilterBottomSheet> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            //heading
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text("Filter Agents", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              children: const [
+                Text("Filter Customers", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               ],
             ),
             const SizedBox(height: 20),
 
-            //Name text field
+            // Name Field
             TextField(
               controller: _nameController,
               decoration: const InputDecoration(labelText: 'Name', border: OutlineInputBorder()),
@@ -138,44 +127,16 @@ class _AgentFilterBottomSheetState extends State<AgentFilterBottomSheet> {
             ..._nameSuggestions.map((e) => _buildSuggestion(e, _nameController, false)),
             const SizedBox(height: 16),
 
-            //Email text field
+            // Email Field
             TextField(
               controller: _emailController,
               decoration: const InputDecoration(labelText: 'Email', border: OutlineInputBorder()),
               onChanged: (val) => _updateSuggestions(val, true),
             ),
             ..._emailSuggestions.map((e) => _buildSuggestion(e, _emailController, true)),
-            const SizedBox(height: 16),
-
-            //Status chips
-            Wrap(
-              spacing: 8,
-              children: [
-                {'label': 'Active', 'value': true},
-                {'label': 'Inactive', 'value': false},
-              ].map((item) {
-                return ChoiceChip(
-                  backgroundColor: Colors.grey.shade100, // grey background when not selected
-                  selectedColor: AppColors.primary,
-                  checkmarkColor: Colors.white,
-                  label: Text(item['label'] as String),
-                  labelStyle: mediumTextStyle(fontSize: dimen13, color: _isActive == item['value'] ? Colors.white : Colors.black),
-                  selected: _isActive == item['value'],
-                  onSelected: (_) {
-                    setState(() {
-                      _isActive = item['value'] as bool;
-                    });
-                  },
-                  side: BorderSide(
-                    color: _isActive == item['value'] ? Colors.transparent : Colors.white,
-                  ),
-                );
-
-              }).toList(),
-            ),
             const SizedBox(height: 24),
 
-            //Filter buttons
+            // Buttons
             Row(
               children: [
                 Expanded(
@@ -184,7 +145,6 @@ class _AgentFilterBottomSheetState extends State<AgentFilterBottomSheet> {
                       widget.onApply(
                         _nameController.text.trim().isNotEmpty ? _nameController.text.trim() : null,
                         _emailController.text.trim().isNotEmpty ? _emailController.text.trim() : null,
-                        _isActive,
                       );
                       Navigator.pop(context);
                     },
