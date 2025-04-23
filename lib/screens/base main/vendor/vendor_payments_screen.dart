@@ -6,8 +6,8 @@ import '../../../constants/app_colors.dart';
 import '../../../providers/transaction_provider.dart';
 import '../../../widgets/common_text_widgets.dart';
 import '../../../widgets/filter_chips_widget.dart';
-import '../../payments/payment_filter_bottom_sheet.dart';
-import '../../payments/payment_list.dart';
+import '../../settlement/payment_filter_bottom_sheet.dart';
+import '../../settlement/payment_list.dart';
 
 class VendorPaymentsScreen extends StatefulWidget {
   const VendorPaymentsScreen({super.key});
@@ -78,7 +78,7 @@ class _PaymentsScreenState extends State<VendorPaymentsScreen> {
       backgroundColor: AppColors.ghostWhite.withOpacity(0.7),
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: HeaderTextBlack("Payment Request"),
+        title: HeaderTextBlack("Settlement Request"),
         backgroundColor: Colors.white,
         foregroundColor: AppColors.primary,
         actions: [
