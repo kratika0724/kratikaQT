@@ -66,23 +66,30 @@ class AgentsScreenState extends State<AgentsScreen> {
         automaticallyImplyLeading: false,
         title: HeaderTextBlack("Agents"),
         actions: [
-          // Add Agent Button
+          // Filter or Clear Filter Button
           GestureDetector(
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const AddAgentScreen()),
-              );
+              if (filterName != null || filterEmail != null || filterIsActive != true) {
+                setState(() {
+                  filterName = null;
+                  filterEmail = null;
+                  filterIsActive = true;
+                });
+              } else {
+                _openFilterBottomSheet();
+              }
             },
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
+              padding: const EdgeInsets.only(right: 12),
               child: Container(
-                height: 30,
-                constraints: const BoxConstraints(maxWidth: 110),
+                height: 33,
+                constraints: const BoxConstraints(maxWidth: 120),
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(9),
-                  color: AppColors.primary.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(8),
+                  color: (filterName != null || filterEmail != null || filterIsActive != true)
+                      ? AppColors.secondary
+                      : AppColors.primary.withOpacity(0.1),
                   border: Border.all(color: AppColors.secondary),
                 ),
                 child: Row(
@@ -90,52 +97,229 @@ class AgentsScreenState extends State<AgentsScreen> {
                   children: [
                     Flexible(
                       child: Text(
-                        "Add Agent",
+                        (filterName != null || filterEmail != null || filterIsActive != true)
+                            ? "Clear Filters"
+                            : "Filter Agents",
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
-                        style: mediumTextStyle(fontSize: dimen13, color: Colors.black),
+                        style: mediumTextStyle(
+                          fontSize: dimen13,
+                          color: (filterName != null || filterEmail != null || filterIsActive != true)
+                              ? Colors.white
+                              : Colors.black,
+                        ),
                       ),
                     ),
                     const SizedBox(width: 4),
-                    const Icon(Icons.add, size: 16, color: Colors.black),
+                    Icon(
+                      (filterName != null || filterEmail != null || filterIsActive != true)
+                          ? Icons.clear
+                          : Icons.filter_list,
+                      size: 16,
+                      color: (filterName != null || filterEmail != null || filterIsActive != true)
+                          ? Colors.white
+                          : Colors.black,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+      ),
+      body: Consumer<AgentProvider>(
+        builder: (context, provider, _) {
+          if (provider.isLoading) return const Center(child: CircularProgressIndicator());
+          if (provider.errorMessage != null) return const Center(child: Text("Oops! Something went wrong"));
+
+          return Column(
+            children: [
+              if (filterName != null || filterEmail != null)
+                FilterChipsWidget(
+                  filters: {
+                    'Name': filterName,
+                    'Email': filterEmail,
+                  },
+                  onClear: () => setState(() {
+                    filterEmail = null;
+                    filterName = null;
+                  }),
+                ),
+              Expanded(
+                child: AgentList(
+                  agents: provider.agents,
+                  filterName: filterName,
+                  filterEmail: filterEmail,
+                  filterIsActive: filterIsActive,
+                ),
+              ),
+              const SizedBox(height: 10),
+            ],
+          );
+        },
+      ),
+      bottomNavigationBar: Container(
+        color: Colors.white,
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 8),
+            child: SizedBox(
+              height: 45,
+              child: ElevatedButton.icon(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.secondary,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(9)),
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const AddAgentScreen()),
+                  );
+                },
+                icon: const Icon(Icons.add, size: 18, color: Colors.white),
+                label: Text(
+                  'Add Agent',
+                  style: mediumTextStyle(fontSize: dimen15, color: Colors.white),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    return Scaffold(
+      backgroundColor: AppColors.ghostWhite.withOpacity(0.7),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: HeaderTextBlack("Agents"),
+        actions: [
+          // // Add Agent Button
+          // GestureDetector(
+          //   onTap: () {
+          //     Navigator.push(
+          //       context,
+          //       MaterialPageRoute(builder: (_) => const AddAgentScreen()),
+          //     );
+          //   },
+          //   child: Padding(
+          //     padding: const EdgeInsets.symmetric(horizontal: 8),
+          //     child: Container(
+          //       height: 30,
+          //       constraints: const BoxConstraints(maxWidth: 110),
+          //       padding: const EdgeInsets.symmetric(horizontal: 8),
+          //       decoration: BoxDecoration(
+          //         borderRadius: BorderRadius.circular(9),
+          //         color: AppColors.primary.withOpacity(0.1),
+          //         border: Border.all(color: AppColors.secondary),
+          //       ),
+          //       child: Row(
+          //         mainAxisAlignment: MainAxisAlignment.center,
+          //         children: [
+          //           Flexible(
+          //             child: Text(
+          //               "Add Agent",
+          //               overflow: TextOverflow.ellipsis,
+          //               maxLines: 1,
+          //               style: mediumTextStyle(fontSize: dimen13, color: Colors.black),
+          //             ),
+          //           ),
+          //           const SizedBox(width: 4),
+          //           const Icon(Icons.add, size: 16, color: Colors.black),
+          //         ],
+          //       ),
+          //     ),
+          //   ),
+          // ),
+
+          // Filter or Clear Filter Button
+          GestureDetector(
+            onTap: () {
+              if (filterName != null || filterEmail != null || filterIsActive != true) {
+                // Clear filters
+                setState(() {
+                  filterName = null;
+                  filterEmail = null;
+                  filterIsActive = true;
+                });
+              } else {
+                // Open filter bottom sheet
+                _openFilterBottomSheet();
+              }
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(right: 12),
+              child: Container(
+                height: 30,
+                constraints: const BoxConstraints(maxWidth: 120),
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(9),
+                  color: (filterName != null || filterEmail != null || filterIsActive != true) ? AppColors.secondary : AppColors.primary.withOpacity(0.1),
+                  border: Border.all(color: AppColors.secondary),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Flexible(
+                      child: Text(
+                        (filterName != null || filterEmail != null || filterIsActive != true)
+                            ? "Clear Filters"
+                            : "Filter Agents",
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: mediumTextStyle(fontSize: dimen13, color: (filterName != null || filterEmail != null || filterIsActive != true) ? Colors.white : Colors.black,),
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    Icon(
+                      (filterName != null || filterEmail != null || filterIsActive != true)
+                          ? Icons.clear
+                          : Icons.filter_list,
+                      size: 16,
+                      color: (filterName != null || filterEmail != null || filterIsActive != true) ? Colors.white : Colors.black,
+                    ),
                   ],
                 ),
               ),
             ),
           ),
 
+
           // Filter Button
-          GestureDetector(
-            onTap: () => _openFilterBottomSheet(),
-            child: Padding(
-              padding: const EdgeInsets.only(right: 12),
-              child: Container(
-                height: 30,
-                constraints: const BoxConstraints(maxWidth: 80),
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(9),
-                  color: AppColors.primary.withOpacity(0.1),
-                  border: Border.all(color: AppColors.secondary),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Flexible(
-                      child: Text(
-                        "Filter",
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        style: mediumTextStyle(fontSize: dimen13, color: Colors.black),
-                      ),
-                    ),
-                    const SizedBox(width: 4),
-                    const Icon(Icons.filter_list, size: 16, color: Colors.black),
-                  ],
-                ),
-              ),
-            ),
-          ),
+          // GestureDetector(
+          //   onTap: () => _openFilterBottomSheet(),
+          //   child: Padding(
+          //     padding: const EdgeInsets.only(right: 12),
+          //     child: Container(
+          //       height: 30,
+          //       constraints: const BoxConstraints(maxWidth: 80),
+          //       padding: const EdgeInsets.symmetric(horizontal: 8),
+          //       decoration: BoxDecoration(
+          //         borderRadius: BorderRadius.circular(9),
+          //         color: AppColors.primary.withOpacity(0.1),
+          //         border: Border.all(color: AppColors.secondary),
+          //       ),
+          //       child: Row(
+          //         mainAxisAlignment: MainAxisAlignment.center,
+          //         children: [
+          //           Flexible(
+          //             child: Text(
+          //               "Filter",
+          //               overflow: TextOverflow.ellipsis,
+          //               maxLines: 1,
+          //               style: mediumTextStyle(fontSize: dimen13, color: Colors.black),
+          //             ),
+          //           ),
+          //           const SizedBox(width: 4),
+          //           const Icon(Icons.filter_list, size: 16, color: Colors.black),
+          //         ],
+          //       ),
+          //     ),
+          //   ),
+          // ),
         ],
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
@@ -169,6 +353,7 @@ class AgentsScreenState extends State<AgentsScreen> {
                 ),
               ),
               const SizedBox(height: 10),
+
             ],
           );
         },

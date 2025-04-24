@@ -1,7 +1,7 @@
 class ApiPath{
 
-  static const String baseUrlint = 'https://api.qtcollector.com/api';
-  static const String baseUrl = 'http://192.168.1.13:3005/api';
+  static const String baseUrl = 'https://api.qtcollector.com/api';
+  static const String baseUrlint = 'http://192.168.1.13:3005/api';
   static const String verifyOtp = '/qt/agents/verifyOtp';
   static const String sendOtp = '/qt/agents/sendOtp';
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../constants/app_colors.dart';
+import '../../constants/app_textstyles.dart';
 import '../../widgets/common_text_widgets.dart';
 import '../../widgets/filter_chips_widget.dart';
 import '../../providers/transaction_provider.dart';
@@ -53,24 +54,36 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
         filterStartDate: filterStartDate,
         filterEndDate: filterEndDate,
         onApply: (quintusId, email, status, type, startDate, endDate) {
-          setState(() {
-            filterQuintusId = quintusId;
-            filterEmail = email;
-            filterStatus = status;
-            filterTransactionType = type;
-            filterStartDate = startDate;
-            filterEndDate = endDate;
-          });
+            setState(() {
+              filterQuintusId = quintusId;
+              filterEmail = email;
+              filterStatus = status;
+              filterTransactionType = type;
+              filterStartDate = startDate;
+              filterEndDate = endDate;
+            });
+
+            // ✅ Tell the provider about the filters!
+            Provider.of<TransactionProvider>(context, listen: false).setFilters(
+              transactionId: quintusId,
+              email: email,
+              status: status,
+              transactionType: type,
+              startDate: startDate,
+              endDate: endDate,
+            );
           },
         onClear: () {
           setState(() {
             filterQuintusId = null;
             filterEmail = null;
+            filterTransactionType = null;
             filterStatus = null;
-            filterTransactionType= null;
             filterStartDate = null;
             filterEndDate = null;
           });
+
+          Provider.of<TransactionProvider>(context, listen: false).setFilters();
         },
       ),
     );
@@ -85,27 +98,65 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
         automaticallyImplyLeading: false,
         title: HeaderTextBlack("Payments"),
         backgroundColor: Colors.white,
-        foregroundColor: AppColors.primary,
+        foregroundColor: Colors.black,
         actions: [
           GestureDetector(
-            onTap: () => _openFilterBottomSheet(),
+            onTap: (){
+              if (filterQuintusId != null || filterTransactionType != null || filterStatus != null || filterEmail != null || filterStartDate != null && filterEndDate != null ){
+                setState(() {
+                  filterQuintusId = null;
+                  filterEmail = null;
+                  filterTransactionType = null;
+                  filterStatus = null;
+                  filterStartDate = null;
+                  filterEndDate = null;
+                });
+              }
+              else{
+                _openFilterBottomSheet();
+              }
+            },
+            // onTap: () => _openFilterBottomSheet(),
             child: Padding(
               padding: const EdgeInsets.only(right: 12),
               child: Container(
-                height: 30,
-                constraints: const BoxConstraints(maxWidth: 80),
+                height: 33,
+                constraints: const BoxConstraints(maxWidth: 140),
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(9),
-                  color: AppColors.primary.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(8),
+                  color: (filterQuintusId != null || filterTransactionType != null || filterStatus != null || filterEmail != null || filterStartDate != null && filterEndDate != null )
+                      ? AppColors.secondary
+                      : AppColors.primary.withOpacity(0.1),
                   border: Border.all(color: AppColors.secondary),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Flexible(child: Text("Filter", overflow: TextOverflow.ellipsis, maxLines: 1)),
+                  children: [
+                    Flexible(
+                        child: Text(
+                            (filterQuintusId != null || filterTransactionType != null || filterStatus != null || filterEmail != null || filterStartDate != null && filterEndDate != null )
+                                ? "Clear Filters"
+                                : "Filter Payments",
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            style: mediumTextStyle(
+                                fontSize: dimen14,
+                                color: (filterQuintusId != null || filterTransactionType != null || filterStatus != null || filterEmail != null || filterStartDate != null && filterEndDate != null )
+                                    ? Colors.white
+                                    : Colors.black,
+                            )
+                        )),
                     SizedBox(width: 4),
-                    Icon(Icons.filter_list, size: 16, color: Colors.black),
+                    Icon(
+                        (filterQuintusId != null || filterTransactionType != null || filterStatus != null || filterEmail != null || filterStartDate != null && filterEndDate != null )
+                        ? Icons.clear
+                        : Icons.filter_list,
+                        size: 16,
+                        color: (filterQuintusId != null || filterTransactionType != null || filterStatus != null || filterEmail != null || filterStartDate != null && filterEndDate != null )
+                            ? Colors.white
+                            : Colors.black,
+                    ),
                   ],
                 ),
               ),

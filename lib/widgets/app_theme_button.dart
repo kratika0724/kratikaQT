@@ -14,7 +14,7 @@ class AppThemeButton extends StatelessWidget {
     required this.label,
     required this.onPressed,
     this.fontSize = 14,
-    this.padding = const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+    this.padding = const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
     this.backgroundColor = AppColors.secondary,
   }) : super(key: key);
 
