@@ -31,18 +31,20 @@ class FilterChipsWidget extends StatelessWidget {
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
-                children: chips.map((chip) => Padding(
-                  padding: const EdgeInsets.only(right: 8),
-                  child: chip,
-                )).toList(),
+                children: chips
+                    .map((chip) => Padding(
+                          padding: const EdgeInsets.only(right: 8),
+                          child: chip,
+                        ))
+                    .toList(),
               ),
             ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              _buildClearButton(),
-            ],
-          ), // always in separate row
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.end,
+          //   children: [
+          //     _buildClearButton(),
+          //   ],
+          // ), // always in separate row
         ],
       ),
     );
@@ -77,7 +79,8 @@ class FilterChipsWidget extends StatelessWidget {
 
   Widget _buildChip(String label) {
     return Chip(
-      label: Text(label, style: regularTextStyle(fontSize: dimen13, color: Colors.black)),
+      label: Text(label,
+          style: regularTextStyle(fontSize: dimen13, color: Colors.black)),
       backgroundColor: Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(6),
