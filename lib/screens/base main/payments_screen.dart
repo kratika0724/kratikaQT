@@ -23,23 +23,49 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
   String? filterTransactionType;
   DateTime? filterStartDate;
   DateTime? filterEndDate;
-  var formatted;
+  String? formatted;
+
+  bool get _hasFilters =>
+      filterQuintusId != null ||
+      filterEmail != null ||
+      filterStatus != null ||
+      filterTransactionType != null ||
+      (filterStartDate != null && filterEndDate != null);
 
   @override
   void initState() {
     super.initState();
+    _applyFilters();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<TransactionProvider>(context, listen: false)
           .getTransactions(context);
     });
   }
 
-  @override
-  void dispose() {
-    super.dispose();
+  void _applyFilters() {
+    Provider.of<TransactionProvider>(context, listen: false).setFilters(
+      transactionId: filterQuintusId,
+      email: filterEmail,
+      status: filterStatus,
+      transactionType: filterTransactionType,
+      startDate: filterStartDate,
+      endDate: filterEndDate,
+    );
   }
 
-  void _openFilterBottomSheet() async {
+  void _clearFilters() {
+    setState(() {
+      filterQuintusId = null;
+      filterEmail = null;
+      filterStatus = null;
+      filterTransactionType = null;
+      filterStartDate = null;
+      filterEndDate = null;
+      _applyFilters();
+    });
+  }
+
+  void _openFilterBottomSheet() {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -61,30 +87,53 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
             filterTransactionType = type;
             filterStartDate = startDate;
             filterEndDate = endDate;
+            _applyFilters();
           });
-
-          // ✅ Tell the provider about the filters!
-          Provider.of<TransactionProvider>(context, listen: false).setFilters(
-            transactionId: quintusId,
-            email: email,
-            status: status,
-            transactionType: type,
-            startDate: startDate,
-            endDate: endDate,
-          );
         },
-        onClear: () {
-          setState(() {
-            filterQuintusId = null;
-            filterEmail = null;
-            filterTransactionType = null;
-            filterStatus = null;
-            filterStartDate = null;
-            filterEndDate = null;
-          });
+        onClear: _clearFilters,
+      ),
+    );
+  }
 
-          Provider.of<TransactionProvider>(context, listen: false).setFilters();
-        },
+  Widget _buildFilterButton() {
+    return GestureDetector(
+      onTap: () => _hasFilters ? _clearFilters() : _openFilterBottomSheet(),
+      child: Padding(
+        padding: const EdgeInsets.only(right: 12),
+        child: Container(
+          height: 33,
+          constraints: const BoxConstraints(maxWidth: 140),
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            color: _hasFilters
+                ? AppColors.secondary
+                : AppColors.primary.withOpacity(0.1),
+            border: Border.all(color: AppColors.secondary),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Flexible(
+                child: Text(
+                  _hasFilters ? "Clear Filters" : "Filter Payments",
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  style: mediumTextStyle(
+                    fontSize: dimen14,
+                    color: _hasFilters ? Colors.white : Colors.black,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 4),
+              Icon(
+                _hasFilters ? Icons.clear : Icons.filter_list,
+                size: 16,
+                color: _hasFilters ? Colors.white : Colors.black,
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -98,119 +147,28 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
         title: HeaderTextBlack("Payments"),
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
-        actions: [
-          GestureDetector(
-            onTap: () {
-              if (filterQuintusId != null ||
-                  filterTransactionType != null ||
-                  filterStatus != null ||
-                  filterEmail != null ||
-                  filterStartDate != null && filterEndDate != null) {
-                setState(() {
-                  filterQuintusId = null;
-                  filterEmail = null;
-                  filterTransactionType = null;
-                  filterStatus = null;
-                  filterStartDate = null;
-                  filterEndDate = null;
-                });
-              } else {
-                _openFilterBottomSheet();
-              }
-            },
-            // onTap: () => _openFilterBottomSheet(),
-            child: Padding(
-              padding: const EdgeInsets.only(right: 12),
-              child: Container(
-                height: 33,
-                constraints: const BoxConstraints(maxWidth: 140),
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  color: (filterQuintusId != null ||
-                          filterTransactionType != null ||
-                          filterStatus != null ||
-                          filterEmail != null ||
-                          filterStartDate != null && filterEndDate != null)
-                      ? AppColors.secondary
-                      : AppColors.primary.withOpacity(0.1),
-                  border: Border.all(color: AppColors.secondary),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Flexible(
-                        child: Text(
-                            (filterQuintusId != null ||
-                                    filterTransactionType != null ||
-                                    filterStatus != null ||
-                                    filterEmail != null ||
-                                    filterStartDate != null &&
-                                        filterEndDate != null)
-                                ? "Clear Filters"
-                                : "Filter Payments",
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            style: mediumTextStyle(
-                              fontSize: dimen14,
-                              color: (filterQuintusId != null ||
-                                      filterTransactionType != null ||
-                                      filterStatus != null ||
-                                      filterEmail != null ||
-                                      filterStartDate != null &&
-                                          filterEndDate != null)
-                                  ? Colors.white
-                                  : Colors.black,
-                            ))),
-                    SizedBox(width: 4),
-                    Icon(
-                      (filterQuintusId != null ||
-                              filterTransactionType != null ||
-                              filterStatus != null ||
-                              filterEmail != null ||
-                              filterStartDate != null && filterEndDate != null)
-                          ? Icons.clear
-                          : Icons.filter_list,
-                      size: 16,
-                      color: (filterQuintusId != null ||
-                              filterTransactionType != null ||
-                              filterStatus != null ||
-                              filterEmail != null ||
-                              filterStartDate != null && filterEndDate != null)
-                          ? Colors.white
-                          : Colors.black,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          )
-        ],
+        actions: [_buildFilterButton()],
       ),
       body: Consumer<TransactionProvider>(
         builder: (context, provider, _) {
-          if (provider.isLoading)
+          if (provider.isLoading) {
             return const Center(child: CircularProgressIndicator());
-
-          // Check if transactions list is empty and show "No Data Found"
+          }
+          if (provider.errorMessage != null) {
+            return const Center(child: Text("Oops! Something went wrong"));
+          }
           if (provider.transactions.isEmpty) {
             return const Center(child: Text("No Data Found!"));
           }
 
-          if (provider.errorMessage != null)
-            return const Center(child: Text("Oops! Something went wrong"));
-
-          if (filterStartDate != null && filterEndDate != null)
+          if (filterStartDate != null && filterEndDate != null) {
             formatted =
                 "${DateFormat('dd MMM yyyy').format(filterStartDate!)} - ${DateFormat('dd MMM yyyy').format(filterEndDate!)}";
+          }
 
           return Column(
             children: [
-              if (filterQuintusId != null ||
-                  filterTransactionType != null ||
-                  filterStatus != null ||
-                  filterEmail != null ||
-                  filterStartDate != null && filterEndDate != null)
+              if (_hasFilters)
                 FilterChipsWidget(
                   filters: {
                     'Transaction ID': filterQuintusId,
@@ -219,16 +177,7 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
                     'Transaction Status': filterStatus,
                     'Date Range': formatted,
                   },
-                  onClear: () {
-                    setState(() {
-                      filterQuintusId = null;
-                      filterEmail = null;
-                      filterTransactionType = null;
-                      filterStatus = null;
-                      filterStartDate = null;
-                      filterEndDate = null;
-                    });
-                  },
+                  onClear: _clearFilters,
                 ),
               Expanded(
                 child: PaymentCardList(
