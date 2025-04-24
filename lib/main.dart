@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qt_distributer/constants/commonString.dart';
 import 'package:qt_distributer/providers/agent_provider.dart';
 import 'package:qt_distributer/providers/allocation_provider.dart';
 import 'package:qt_distributer/providers/customer_provider.dart';

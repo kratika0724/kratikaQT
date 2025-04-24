@@ -33,6 +33,9 @@ dependencies:
   http: ^1.1.0
   logger: ^2.0.2+1
   provider: ^6.1.1
+  file_picker: ^10.1.2
+  path_provider: ^2.1.2
+  excel: ^4.0.6
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -45,6 +48,9 @@ dependencies:
   webview_flutter: ^4.10.0
   url_launcher: ^6.3.1
   fl_chart: ^0.64.0
+  permission_handler: ^12.0.0+1
+  open_file: ^3.5.10
+  share_plus: ^11.0.0
 
 
 
@@ -75,6 +81,7 @@ flutter:
   assets:
     - assets/images/
     - assets/
+    - assets/files/
     - assets/icons/
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -1,9 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:open_file/open_file.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+import 'package:qt_distributer/constants/app_assets.dart';
 import 'package:qt_distributer/widgets/common_text_widgets.dart';
+import 'package:file_picker/file_picker.dart';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
+import 'package:flutter/services.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:excel/excel.dart';
 import '../../constants/app_colors.dart';
 import '../../providers/allocation_provider.dart';
 import '../../widgets/common_form_widgets.dart';
+
 class AddAllocationScreen extends StatefulWidget {
   const AddAllocationScreen({super.key});
 
@@ -12,7 +23,6 @@ class AddAllocationScreen extends StatefulWidget {
 }
 
 class _AddAllocationScreenState extends State<AddAllocationScreen> {
-
   final pincodeController = TextEditingController();
   final areaController = TextEditingController();
 
@@ -22,6 +32,7 @@ class _AddAllocationScreenState extends State<AddAllocationScreen> {
     areaController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<AllocationProvider>(context);
@@ -29,103 +40,229 @@ class _AddAllocationScreenState extends State<AddAllocationScreen> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         foregroundColor: AppColors.secondary,
-        title: HeaderTextThemeSecondary("Add allocation"),
+        title: HeaderTextThemeSecondary("Add Allocation"),
         elevation: 3,
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child:  Column(
-                children: [
-                  Card(
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal:12),
-                      child: Column(
-                        children: [
-                          buildTextField('Allocation Pincode', controller: pincodeController),
-                          buildTextField('Allocation Area',controller: areaController),
-                        ],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Manual Entry Section
+              _buildSectionHeader("Manual Entry"),
+              Card(
+                elevation: 2,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    children: [
+                      buildTextField(
+                        'Pincode',
+                        controller: pincodeController,
                       ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: FormActionButtons(
-                      onSubmit: () {
-                        provider.createAllocation(
+                      const SizedBox(height: 16),
+                      buildTextField(
+                        'Area',
+                        controller: areaController,
+                      ),
+                      const SizedBox(height: 16),
+                      FormActionButtons(
+                        onSubmit: () {
+                          if (pincodeController.text.isEmpty ||
+                              areaController.text.isEmpty) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text('Please fill all fields')),
+                            );
+                            return;
+                          }
+                          provider.createAllocation(
                             context,
                             pincodeController,
-                            areaController
-                        );
-                      },
-                      onCancel: () {
-                        Navigator.pop(context);
-                      },
-                    ),
+                            areaController,
+                          );
+                        },
+                        onCancel: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 20),
-                  const SizedBox(height: 20),
-                  // Upload Excel Section
-                  const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                ),
+              ),
+              const SizedBox(height: 32),
+
+              // Excel Upload Section
+              _buildSectionHeader("Bulk Upload via Excel"),
+              Card(
+                elevation: 2,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
                     children: [
-                      Text(
-                        'UPLOAD YOUR EXCEL HERE',
+                      const Text(
+                        'Upload your Excel file containing allocation data',
                         style: TextStyle(
-                          fontWeight: FontWeight.w600,
                           fontSize: 14,
                           color: Colors.grey,
                         ),
+                        textAlign: TextAlign.center,
                       ),
-
-                    ],
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      // File picker logic here
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.grey.shade200,
-                      foregroundColor: Colors.black,
-                      elevation: 0,
-                    ),
-                    child: const Text('Choose file'),
-                  ),
-                  const SizedBox(height: 5),
-                  const Text('No file chosen'),
-                  const SizedBox(height: 50),
-
-                  // Download Sample Section
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(
-                        'Download Sample File From Here : ',
-                        style: TextStyle(fontWeight: FontWeight.w500),
-                      ),
-                      const SizedBox(width: 10),
-                      ElevatedButton(
-                        onPressed: () {
-                          // Download sample logic
+                      const SizedBox(height: 16),
+                      ElevatedButton.icon(
+                        onPressed: () async {
+                          provider.select_excelFile(context);
                         },
+                        icon: const Icon(Icons.upload_file),
+                        label: const Text('Choose Excel File'),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.green,
+                          backgroundColor: Colors.blue.shade50,
+                          foregroundColor: Colors.blue,
+                          elevation: 0,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 24, vertical: 12),
                         ),
-                        child: const Text('Click Here'),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        provider.selectedFileName ?? 'No file chosen',
+                        style: TextStyle(
+                          color: provider.selectedFileName != null
+                              ? Colors.green
+                              : Colors.grey,
+                          fontSize: 14,
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            'Sample File Options',
+                            style: TextStyle(fontWeight: FontWeight.w500),
+                          ),
+                          const SizedBox(height: 8),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              TextButton.icon(
+                                onPressed: () async {
+                                  try {
+                                    final ByteData data = await rootBundle
+                                        .load(AppAssets.sampleFile);
+                                    final buffer = data.buffer;
+                                    final downloadsDirectory = Directory(
+                                        '/storage/emulated/0/Download');
+                                    final file = File(
+                                        '${downloadsDirectory.path}/sample_file.xlsx');
+
+                                    await file.writeAsBytes(
+                                      buffer.asUint8List(data.offsetInBytes,
+                                          data.lengthInBytes),
+                                    );
+
+                                    if (mounted) {
+                                      final result =
+                                          await OpenFile.open(file.path);
+                                      Fluttertoast.showToast(
+                                          msg:
+                                              'OpenFile result: ${result.message}');
+                                      print(
+                                          'OpenFile result: ${result.message}');
+                                    }
+                                  } catch (e) {
+                                    if (mounted) {
+                                      SnackBar(
+                                          content:
+                                              Text('Error opening file: $e'));
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                            content:
+                                                Text('Error opening file: $e')),
+                                      );
+                                    }
+                                  }
+                                },
+                                icon: const Icon(Icons.open_in_new),
+                                label: const Text('Open Sample'),
+                                style: TextButton.styleFrom(
+                                  foregroundColor: Colors.blue,
+                                ),
+                              ),
+                              const SizedBox(width: 16),
+                              TextButton.icon(
+                                onPressed: () async {
+                                  try {
+                                    final ByteData data = await rootBundle
+                                        .load(AppAssets.sampleFile);
+                                    final buffer = data.buffer;
+                                    final downloadsDirectory = Directory(
+                                        '/storage/emulated/0/Download');
+                                    final file = File(
+                                        '${downloadsDirectory.path}/sample_file.xlsx');
+
+                                    await file.writeAsBytes(
+                                      buffer.asUint8List(data.offsetInBytes,
+                                          data.lengthInBytes),
+                                    );
+                                    if (mounted) {
+                                      // Share the file
+                                      await Share.shareXFiles(
+                                        [XFile(file.path)],
+                                        text: 'Sample Allocation File',
+                                      );
+                                    }
+                                  } catch (e) {
+                                    if (mounted) {
+                                      print('Error sharing file: $e');
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                            content:
+                                                Text('Error sharing file: $e')),
+                                      );
+                                    }
+                                  }
+                                },
+                                icon: const Icon(Icons.share),
+                                label: const Text('Share Sample'),
+                                style: TextButton.styleFrom(
+                                  foregroundColor: Colors.green,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
+                ),
               ),
-            ),
+            ],
           ),
-        ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSectionHeader(String title) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12.0),
+      child: Text(
+        title,
+        style: const TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+          color: AppColors.secondary,
+        ),
       ),
     );
   }

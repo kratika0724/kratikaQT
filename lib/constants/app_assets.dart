@@ -4,6 +4,7 @@ class AppAssets {
   static const String distributer_logo = 'assets/images/distributer_logo.png';
   static const String sampleProduct = 'assets/images/sample_product.png';
 
+  static const String sampleFile = 'assets/files/sample_file.xlsx';
 
   // Icon Paths
   static const String lockIcon = 'assets/icons/lock.png';
@@ -11,7 +12,8 @@ class AppAssets {
   static const String dashboardIcon = 'assets/icons/dashboard_icon.png';
   static const String customerIcon = 'assets/icons/customers_icon.png';
   static const String paymentIcon = 'assets/icons/payment_icon.png';
-  static const String realStateSellerIcon = 'assets/icons/real_state_seller_icon.png';
+  static const String realStateSellerIcon =
+      'assets/icons/real_state_seller_icon.png';
   static const String contactUs = 'assets/icons/contactUs_icon.png';
 
   // Animation Paths
