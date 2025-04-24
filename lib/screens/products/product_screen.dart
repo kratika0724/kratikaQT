@@ -19,6 +19,7 @@ class ProductScreen extends StatefulWidget {
   @override
   State<ProductScreen> createState() => _ProductScreenState();
 }
+
 class _ProductScreenState extends State<ProductScreen> {
   String? filterName;
   String? filterCode;
@@ -74,86 +75,223 @@ class _ProductScreenState extends State<ProductScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.ghostWhite,
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(90),
-        child: AppBar(
-          backgroundColor: Colors.white,
-          foregroundColor: Colors.black,
-          elevation: 0,
-          title: HeaderTextBlack("Products"),
-          automaticallyImplyLeading: true,
-          flexibleSpace: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  const SizedBox(height: 40),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            GestureDetector(
+                onTap: (){
+                  Navigator.pop(context);
+                },
+                child: Icon(Icons.arrow_back)
+            ),
+            SizedBox(width: 20,),
+            HeaderTextBlack("Products"),
+            Spacer(),
+            // Filter or Clear Filter Button
+            GestureDetector(
+              onTap: () {
+                if (filterName != null || filterCode != null) {
+                  setState(() {
+                    filterName = null;
+                    filterCode = null;
+                  });
+                } else {
+                  _openFilterBottomSheet();
+                }
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(right: 0),
+                child: Container(
+                  height: 33,
+                  constraints: const BoxConstraints(maxWidth: 125),
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: (filterName != null || filterCode != null)
+                        ? AppColors.secondary
+                        : AppColors.primary.withOpacity(0.1),
+                    border: Border.all(color: AppColors.secondary),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (_) => const AddProductScreen()),
-                          );
-                        },
-                        child: Container(
-                          height: 30,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(9),
-                            color: AppColors.primary.withOpacity(0.1),
-                            border: Border.all(color: AppColors.secondary),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Add Products ",
-                                  style: mediumTextStyle(fontSize: dimen13, color: Colors.black),
-                                ),
-                                const Icon(Icons.add, size: 16, color: Colors.black),
-                              ],
-                            ),
+                      Flexible(
+                        child: Text(
+                          (filterName != null || filterCode != null)
+                              ? "Clear Filters"
+                              : "Filter Products",
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          style: mediumTextStyle(
+                            fontSize: dimen13,
+                            color: (filterName != null || filterCode != null)
+                                ? Colors.white
+                                : Colors.black,
                           ),
                         ),
                       ),
-                      const SizedBox(width: 12),
-                      GestureDetector(
-                        onTap: _openFilterBottomSheet,
-                        child: Container(
-                          height: 30,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(9),
-                            color: AppColors.primary.withOpacity(0.1),
-                            border: Border.all(color: AppColors.secondary),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Filter ",
-                                  style: mediumTextStyle(fontSize: dimen13, color: Colors.black),
-                                ),
-                                const Icon(Icons.filter_list, size: 16, color: Colors.black),
-                              ],
-                            ),
-                          ),
-                        ),
+                      const SizedBox(width: 4),
+                      Icon(
+                        (filterName != null || filterCode != null)
+                            ? Icons.clear
+                            : Icons.filter_list,
+                        size: 16,
+                        color: (filterName != null || filterCode != null)
+                            ? Colors.white
+                            : Colors.black,
                       ),
                     ],
                   ),
-                ],
+                ),
               ),
             ),
-          ),
+          ],
         ),
+        // actions: [
+        //   // Filter or Clear Filter Button
+        //   GestureDetector(
+        //     onTap: () {
+        //       if (filterName != null || filterCode != null) {
+        //         setState(() {
+        //           filterName = null;
+        //           filterCode = null;
+        //         });
+        //       } else {
+        //         _openFilterBottomSheet();
+        //       }
+        //     },
+        //     child: Padding(
+        //       padding: const EdgeInsets.only(right: 12),
+        //       child: Container(
+        //         height: 30,
+        //         constraints: const BoxConstraints(maxWidth: 120),
+        //         padding: const EdgeInsets.symmetric(horizontal: 8),
+        //         decoration: BoxDecoration(
+        //           borderRadius: BorderRadius.circular(9),
+        //           color: (filterName != null || filterCode != null)
+        //               ? AppColors.secondary
+        //               : AppColors.primary.withOpacity(0.1),
+        //           border: Border.all(color: AppColors.secondary),
+        //         ),
+        //         child: Row(
+        //           mainAxisAlignment: MainAxisAlignment.center,
+        //           children: [
+        //             Flexible(
+        //               child: Text(
+        //                 (filterName != null || filterCode != null)
+        //                     ? "Clear Filters"
+        //                     : "Filter Products",
+        //                 overflow: TextOverflow.ellipsis,
+        //                 maxLines: 1,
+        //                 style: mediumTextStyle(
+        //                   fontSize: dimen13,
+        //                   color: (filterName != null || filterCode != null)
+        //                       ? Colors.white
+        //                       : Colors.black,
+        //                 ),
+        //               ),
+        //             ),
+        //             const SizedBox(width: 4),
+        //             Icon(
+        //               (filterName != null || filterCode != null)
+        //                   ? Icons.clear
+        //                   : Icons.filter_list,
+        //               size: 16,
+        //               color: (filterName != null || filterCode != null)
+        //                   ? Colors.white
+        //                   : Colors.black,
+        //             ),
+        //           ],
+        //         ),
+        //       ),
+        //     ),
+        //   ),
+        // ],
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
       ),
+      // appBar: PreferredSize(
+      //   preferredSize: const Size.fromHeight(90),
+      //   child: AppBar(
+      //     backgroundColor: Colors.white,
+      //     foregroundColor: Colors.black,
+      //     elevation: 0,
+      //     title: HeaderTextBlack("Products"),
+      //     automaticallyImplyLeading: true,
+      //     flexibleSpace: SafeArea(
+      //       child: Padding(
+      //         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      //         child: Column(
+      //           crossAxisAlignment: CrossAxisAlignment.end,
+      //           children: [
+      //             const SizedBox(height: 40),
+      //             Row(
+      //               mainAxisAlignment: MainAxisAlignment.end,
+      //               children: [
+      //                 GestureDetector(
+      //                   onTap: () {
+      //                     Navigator.push(
+      //                       context,
+      //                       MaterialPageRoute(builder: (_) => const AddProductScreen()),
+      //                     );
+      //                   },
+      //                   child: Container(
+      //                     height: 30,
+      //                     decoration: BoxDecoration(
+      //                       borderRadius: BorderRadius.circular(9),
+      //                       color: AppColors.primary.withOpacity(0.1),
+      //                       border: Border.all(color: AppColors.secondary),
+      //                     ),
+      //                     child: Padding(
+      //                       padding: const EdgeInsets.symmetric(horizontal: 4.0),
+      //                       child: Row(
+      //                         mainAxisAlignment: MainAxisAlignment.center,
+      //                         children: [
+      //                           Text(
+      //                             "Add Products ",
+      //                             style: mediumTextStyle(fontSize: dimen13, color: Colors.black),
+      //                           ),
+      //                           const Icon(Icons.add, size: 16, color: Colors.black),
+      //                         ],
+      //                       ),
+      //                     ),
+      //                   ),
+      //                 ),
+      //                 const SizedBox(width: 12),
+      //                 GestureDetector(
+      //                   onTap: _openFilterBottomSheet,
+      //                   child: Container(
+      //                     height: 30,
+      //                     decoration: BoxDecoration(
+      //                       borderRadius: BorderRadius.circular(9),
+      //                       color: AppColors.primary.withOpacity(0.1),
+      //                       border: Border.all(color: AppColors.secondary),
+      //                     ),
+      //                     child: Padding(
+      //                       padding: const EdgeInsets.symmetric(horizontal: 4.0),
+      //                       child: Row(
+      //                         mainAxisAlignment: MainAxisAlignment.center,
+      //                         children: [
+      //                           Text(
+      //                             "Filter ",
+      //                             style: mediumTextStyle(fontSize: dimen13, color: Colors.black),
+      //                           ),
+      //                           const Icon(Icons.filter_list, size: 16, color: Colors.black),
+      //                         ],
+      //                       ),
+      //                     ),
+      //                   ),
+      //                 ),
+      //               ],
+      //             ),
+      //           ],
+      //         ),
+      //       ),
+      //     ),
+      //   ),
+      // ),
       body: Consumer<ProductProvider>(
         builder: (context, provider, _) {
           if (provider.isLoading && provider.products.isEmpty) {
@@ -233,9 +371,38 @@ class _ProductScreenState extends State<ProductScreen> {
                   }),
                 ),
               Expanded(child: scrollableList),
+              SizedBox(height: 10,),
             ],
           );
         },
+      ),
+      bottomNavigationBar: Container(
+        color: Colors.white,
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 8),
+            child: SizedBox(
+              height: 45,
+              child: ElevatedButton.icon(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.secondary,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(9)),
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const AddProductScreen()),
+                  );
+                },
+                icon: const Icon(Icons.add, size: 18, color: Colors.white),
+                label: Text(
+                  'Add Product',
+                  style: mediumTextStyle(fontSize: dimen15, color: Colors.white),
+                ),
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }

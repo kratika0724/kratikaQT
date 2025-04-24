@@ -96,13 +96,96 @@ class _AddAgentScreenState extends State<AddAgentScreen> {
         : [];
 
 
+    // return Scaffold(
+    //   appBar: AppBar(
+    //     foregroundColor: Colors.black,
+    //     title: HeaderTextBlack("Register Agent"),
+    //     elevation: 0,
+    //   ),
+    //   backgroundColor: Colors.white,
+    //   body: SafeArea(
+    //     child: GestureDetector(
+    //       onTap: () => FocusScope.of(context).unfocus(),
+    //       child: SingleChildScrollView(
+    //         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+    //         child: Column(
+    //           crossAxisAlignment: CrossAxisAlignment.start,
+    //           children: [
+    //             buildTextField('First Name', controller: firstnameController),
+    //             buildTextField('Middle Name (Optional)', controller: middleNameController),
+    //             buildTextField('Last Name', controller: lastNameController),
+    //             buildTextField('Email', controller: emailController),
+    //             buildTextField('Mobile No', controller: mobileController),
+    //             buildCalendarTextField(
+    //               context,
+    //               'Date of Birth',
+    //               hint: 'dd/mm/yyyy',
+    //               selectedDate: selectedDOB,
+    //               onDateSelected: (date) {
+    //                 setState(() {
+    //                   selectedDOB = date;
+    //                 });
+    //               },
+    //             ),
+    //             const SizedBox(height: 16),
+    //             buildTextField('Address', controller: addressController),
+    //             buildTextField('Pincode', controller: pinCodeController),
+    //             buildTextField('City', controller: cityController),
+    //             buildTextField('State', controller: stateController),
+    //             buildGenderSelector(
+    //               selectedGender: selectedGender,
+    //               onChanged: (value) {
+    //                 setState(() {
+    //                   selectedGender = value;
+    //                 });
+    //               },
+    //             ),
+    //             buildTypableDropdown(
+    //               labelText: 'Assigned Pincode',
+    //               controller: assignedPinCodeController,
+    //               focusNode: assignedPinCodeFocusNode,
+    //               options: pincodeList,
+    //               onSelected: (value) {
+    //                 setState(() {
+    //                   selectedAssignedPinCode = value;
+    //                   selectedAssignedArea = null;
+    //                   pinCodeController.text = value ?? '';
+    //                   assignedAreaController.clear();
+    //                 });
+    //               },
+    //             ),
+    //             const SizedBox(height: 16),
+    //             buildTypableDropdown(
+    //               labelText: 'Assigned Area',
+    //               controller: assignedAreaController,
+    //               focusNode: assignedAreaFocusNode,
+    //               options: areaList,
+    //               onSelected: (value) {
+    //                 setState(() {
+    //                   selectedAssignedArea = value;
+    //                   assignedAreaController.text = value ?? '';
+    //                 });
+    //               },
+    //             ),
+    //             const SizedBox(height: 100), // Add some space so scrollable area clears keyboard
+    //           ],
+    //         ),
+    //       ),
+    //     ),
+    //   ),
+    //
+    // );
+
+
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       appBar: AppBar(
         foregroundColor: Colors.black,
         title: HeaderTextBlack("Register Agent"),
         elevation: 0,
       ),
+
       body: SafeArea(
         child: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
@@ -202,38 +285,66 @@ class _AddAgentScreenState extends State<AddAgentScreen> {
                             ),
                           ),
                         ),
-                        const SizedBox(height: 16),
-                        FormActionButtons(
-                          onSubmit: () {
-                            agentProvider.createAgent(
-                              context,
-                              firstnameController,
-                              middleNameController,
-                              lastNameController,
-                              emailController,
-                              mobileController,
-                              cityController,
-                              stateController,
-                              countryController,
-                              pinCodeController,
-                              assignedPinCodeController,
-                              assignedAreaController,
-                              gender: selectedGender?.toLowerCase(),
-                              dob: selectedDOB, // make sure you declare selectedDOB as a state variable
-                            );
-                          },
-
-                          onCancel: () {
-                            Navigator.pop(context);
-                          },
-                        ),
                         const SizedBox(height: 20),
+                        // FormActionButtons(
+                        //   onSubmit: () {
+                        //     agentProvider.createAgent(
+                        //       context,
+                        //       firstnameController,
+                        //       middleNameController,
+                        //       lastNameController,
+                        //       emailController,
+                        //       mobileController,
+                        //       cityController,
+                        //       stateController,
+                        //       countryController,
+                        //       pinCodeController,
+                        //       assignedPinCodeController,
+                        //       assignedAreaController,
+                        //       gender: selectedGender?.toLowerCase(),
+                        //       dob: selectedDOB, // make sure you declare selectedDOB as a state variable
+                        //     );
+                        //   },
+                        //
+                        //   onCancel: () {
+                        //     Navigator.pop(context);
+                        //   },
+                        // ),
+                        // const SizedBox(height: 20),
                       ],
                     ),
                   ),
                 ),
               );
             },
+          ),
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.only(bottom: 12.0),
+        child: Container(
+          color: Colors.white,
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          child: FormActionButtons(
+            onSubmit: () {
+              agentProvider.createAgent(
+                context,
+                firstnameController,
+                middleNameController,
+                lastNameController,
+                emailController,
+                mobileController,
+                cityController,
+                stateController,
+                countryController,
+                pinCodeController,
+                assignedPinCodeController,
+                assignedAreaController,
+                gender: selectedGender?.toLowerCase(),
+                dob: selectedDOB,
+              );
+            },
+            onCancel: () => Navigator.pop(context),
           ),
         ),
       ),
