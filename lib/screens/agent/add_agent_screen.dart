@@ -19,10 +19,8 @@ class _AddAgentScreenState extends State<AddAgentScreen> {
   DateTime? selectedDOB;
   // String? selectedAllocationId;
 
-
   String? selectedAssignedPinCode;
   String? selectedAssignedArea;
-
 
   // Text controllers
   final firstnameController = TextEditingController();
@@ -38,17 +36,15 @@ class _AddAgentScreenState extends State<AddAgentScreen> {
   final assignedPinCodeController = TextEditingController();
   final assignedAreaController = TextEditingController();
 
-
   final assignedPinCodeFocusNode = FocusNode();
   final assignedAreaFocusNode = FocusNode();
-
-
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<AllocationProvider>(context, listen: false).getAllocationData(); // ✅ also safe
+      Provider.of<AllocationProvider>(context, listen: false)
+          .getAllocationData(context); // ✅ also safe
     });
 
     assignedPinCodeController.addListener(() {
@@ -58,9 +54,7 @@ class _AddAgentScreenState extends State<AddAgentScreen> {
     assignedAreaController.addListener(() {
       setState(() {});
     });
-
   }
-
 
   @override
   void dispose() {
@@ -80,7 +74,6 @@ class _AddAgentScreenState extends State<AddAgentScreen> {
     middleNameController.dispose();
     lastNameController.dispose();
 
-
     super.dispose();
   }
 
@@ -94,7 +87,6 @@ class _AddAgentScreenState extends State<AddAgentScreen> {
     List<String> areaList = selectedAssignedPinCode != null
         ? allocationProvider.getAreaList(selectedAssignedPinCode!)
         : [];
-
 
     // return Scaffold(
     //   appBar: AppBar(
@@ -176,7 +168,6 @@ class _AddAgentScreenState extends State<AddAgentScreen> {
     //
     // );
 
-
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
@@ -185,7 +176,6 @@ class _AddAgentScreenState extends State<AddAgentScreen> {
         title: HeaderTextBlack("Register Agent"),
         elevation: 0,
       ),
-
       body: SafeArea(
         child: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
@@ -205,30 +195,43 @@ class _AddAgentScreenState extends State<AddAgentScreen> {
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 10, horizontal:0),
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 0),
                               child: Column(
                                 children: [
-                                  buildTextField('First Name',controller: firstnameController),
-                                  buildTextField('Middle Name (Optional)',controller: middleNameController),
-                                  buildTextField('Last Name',controller: lastNameController),
-                                  buildTextField('Email',controller: emailController),
-                                  buildTextField('Mobile No', controller: mobileController),
+                                  buildTextField('First Name',
+                                      controller: firstnameController),
+                                  buildTextField('Middle Name (Optional)',
+                                      controller: middleNameController),
+                                  buildTextField('Last Name',
+                                      controller: lastNameController),
+                                  buildTextField('Email',
+                                      controller: emailController),
+                                  buildTextField('Mobile No',
+                                      controller: mobileController),
                                   buildCalendarTextField(
                                     context,
                                     'Date of Birth',
                                     hint: 'dd/mm/yyyy',
-                                    selectedDate: selectedDOB, // ✅ Maintain state
+                                    selectedDate:
+                                        selectedDOB, // ✅ Maintain state
                                     onDateSelected: (date) {
                                       setState(() {
                                         selectedDOB = date;
                                       });
                                     },
                                   ),
-                                  const SizedBox(height: 16,),
-                                  buildTextField('Address',controller: addressController),
-                                  buildTextField('Pincode',controller: pinCodeController),
-                                  buildTextField('City',controller: cityController),
-                                  buildTextField('State',controller: stateController),
+                                  const SizedBox(
+                                    height: 16,
+                                  ),
+                                  buildTextField('Address',
+                                      controller: addressController),
+                                  buildTextField('Pincode',
+                                      controller: pinCodeController),
+                                  buildTextField('City',
+                                      controller: cityController),
+                                  buildTextField('State',
+                                      controller: stateController),
                                   buildGenderSelector(
                                     selectedGender: selectedGender,
                                     onChanged: (value) {
@@ -273,12 +276,11 @@ class _AddAgentScreenState extends State<AddAgentScreen> {
                                     onSelected: (value) async {
                                       setState(() {
                                         selectedAssignedArea = value;
-                                        assignedAreaController.text = value ?? '';
-                                        });
+                                        assignedAreaController.text =
+                                            value ?? '';
+                                      });
                                     },
-
                                   ),
-
                                   const SizedBox(height: 16),
                                 ],
                               ),
@@ -377,7 +379,9 @@ class _AddAgentScreenState extends State<AddAgentScreen> {
       focusNode: focusNode,
       optionsBuilder: (TextEditingValue textEditingValue) {
         return options
-            .where((option) => option.toLowerCase().contains(textEditingValue.text.toLowerCase()))
+            .where((option) => option
+                .toLowerCase()
+                .contains(textEditingValue.text.toLowerCase()))
             .toList();
       },
       onSelected: onSelected,
@@ -389,8 +393,10 @@ class _AddAgentScreenState extends State<AddAgentScreen> {
           decoration: InputDecoration(
             suffixIcon: Icon(Icons.arrow_drop_down),
             labelText: labelText,
-            labelStyle: regularTextStyle(fontSize: dimen13, color: Colors.black54),
-            floatingLabelStyle: regularTextStyle(fontSize: dimen16, color: AppColors.textSecondary),
+            labelStyle:
+                regularTextStyle(fontSize: dimen13, color: Colors.black54),
+            floatingLabelStyle: regularTextStyle(
+                fontSize: dimen16, color: AppColors.textSecondary),
             filled: true,
             fillColor: AppColors.ghostWhite,
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
@@ -410,7 +416,8 @@ class _AddAgentScreenState extends State<AddAgentScreen> {
                 shrinkWrap: true,
                 itemCount: options.length,
                 itemBuilder: (BuildContext context, int index) {
-                  final option = options.toList()[index]; // Use options directly, no need to convert to list
+                  final option = options.toList()[
+                      index]; // Use options directly, no need to convert to list
                   return ListTile(
                     title: Text(option),
                     onTap: () => onSelected(option),
@@ -423,5 +430,4 @@ class _AddAgentScreenState extends State<AddAgentScreen> {
       },
     );
   }
-
 }

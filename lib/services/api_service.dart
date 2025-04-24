@@ -1,24 +1,26 @@
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import 'package:qt_distributer/services/user_preferences.dart';
 import 'package:qt_distributer/utils/utils.dart';
 import '../constants/commonString.dart';
 import '../models/response models/otp_response.dart';
 import '../models/response models/verify_otp_response.dart';
+import '../providers/auth_provider.dart';
+import '../screens/login/login_screen.dart';
 import '../utils/logger.dart';
 import 'api_path.dart';
 
 class ApiService {
-
   Future<OtpResponse> sendOtp(String phoneNumber) async {
     try {
       AppLogger.info('Sending OTP to phone number: $phoneNumber');
-
-      final url = ApiPath.baseUrl+ApiPath.sendOtp;
+      final url = ApiPath.baseUrl + ApiPath.sendOtp;
       final body = jsonEncode({
         'authid': phoneNumber,
       });
-
       AppLogger.debug('API Request:', {
         'url': url,
         'method': 'POST',
@@ -55,7 +57,8 @@ class ApiService {
           'statusCode': response.statusCode,
           'response': response.body,
         });
-        throw Exception(data['message'] ?? 'Failed to send OTP: ${response.statusCode}');
+        throw Exception(
+            data['message'] ?? 'Failed to send OTP: ${response.statusCode}');
       }
     } catch (e, stackTrace) {
       AppLogger.error('Error sending OTP', e, stackTrace);
@@ -67,7 +70,7 @@ class ApiService {
     try {
       AppLogger.info('Verifying OTP for phone number: $phoneNumber');
 
-      final url = ApiPath.baseUrl+ApiPath.verifyOtp;
+      final url = ApiPath.baseUrl + ApiPath.verifyOtp;
       final body = jsonEncode({
         'authid': phoneNumber,
         'otp': otp,
@@ -119,7 +122,8 @@ class ApiService {
           'statusCode': response.statusCode,
           'response': response.body,
         });
-        throw Exception(data['message'] ?? 'Failed to verify OTP: ${response.statusCode}');
+        throw Exception(
+            data['message'] ?? 'Failed to verify OTP: ${response.statusCode}');
       }
     } catch (e, stackTrace) {
       AppLogger.error('Error verifying OTP', e, stackTrace);
@@ -127,16 +131,17 @@ class ApiService {
     }
   }
 
-
-  //GET
-  Future<Map<String, dynamic>> getAuth(String endpoint, Map<String, String> queryParams) async {
-    final url = Uri.parse(""+ApiPath.baseUrl+""+endpoint).replace(queryParameters: queryParams);
+  Future<Map<String, dynamic>> getAuth(BuildContext context, String endpoint,
+      Map<String, String> queryParams) async {
+    final url = Uri.parse("${ApiPath.baseUrl}$endpoint")
+        .replace(queryParameters: queryParams);
 
     // Fetch the token from Preferences
-    String token = await PreferencesServices.getPreferencesData(PreferencesServices.apiToken);
+    String token = await PreferencesServices.getPreferencesData(
+        PreferencesServices.apiToken);
 
     // Log the URL and query parameters
-    print("Auth Token : ${token}");
+    print("Auth Token: $token");
     print('Request URL: ${url.toString()}');
     print('Query Parameters: $queryParams');
 
@@ -153,68 +158,74 @@ class ApiService {
       print('Response Status Code: ${response.statusCode}');
       print('Response Body: ${response.body}');
 
-      // if (response.statusCode == 200) {
+      // Handle 450 status code (Session expired)
+      if (response.statusCode == 450) {
+        await Provider.of<AuthProvider>(context, listen: false).logout();
+        await PreferencesServices.clearData();
+
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const LoginScreen()),
+          (route) => false,
+        );
+      }
+
       try {
         return jsonDecode(response.body) as Map<String, dynamic>;
       } catch (e) {
-        throw Exception('Failed to parse JSON: $e');
+        throw Exception('Something Error');
       }
-      // } else {
-      //   throw Exception('HTTP ${response.statusCode}: ${response.body}');
-      // }
     } catch (e) {
       // Log the error
-      print('Error occurred: $e');
-      throw Exception('Network error: $e');
-    }}
+      throw Exception('Something Error');
+      // throw Exception('Network error: $e');
+    }
+  }
 
-
-  //REQUEST POST
-  Future<Map<String, dynamic>> post_auth(String endpoint, Map<String, dynamic> body) async {
+// POST Request
+  Future<Map<String, dynamic>> post_auth(
+      BuildContext context, String endpoint, Map<String, dynamic> body) async {
     final url = Uri.parse("${ApiPath.baseUrl}$endpoint");
-
-    // Log the request URL and body (remove or mask sensitive data in production)
     print('Request URL: ${url.toString()}');
     print('Request Body: $body');
-
-    // Get the token from preferences
-    String token = await PreferencesServices.getPreferencesData(PreferencesServices.apiToken);
+    String token = await PreferencesServices.getPreferencesData(
+        PreferencesServices.apiToken);
 
     try {
       var request = http.Request('POST', url);
-
-      // Set headers for JSON content
       request.headers['Authorization'] = 'Bearer $token';
       request.headers['Content-Type'] = 'application/json';
-
-      // Encode the body as a JSON string
       request.body = jsonEncode(body);
-
-      // Send the request
       final response = await request.send();
-
-      // Log the response details (again, avoid logging sensitive data in production)
       final responseBody = await response.stream.bytesToString();
+
+      // Log the response
       print('Response Status Code: ${response.statusCode}');
       print('Response Body: $responseBody');
+
+      // Handle 450 status code (Session expired)
+      if (response.statusCode == 450) {
+        await Provider.of<AuthProvider>(context, listen: false).logout();
+        await PreferencesServices.clearData();
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const LoginScreen()),
+          (route) => false,
+        );
+      }
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         try {
           return jsonDecode(responseBody);
         } catch (e) {
-          throw Exception('Failed to parse JSON: $e');
+          throw Exception('Something Error');
         }
       } else {
-        throw Exception('HTTP ${response.statusCode}: $responseBody');
+        throw Exception('Something Error');
       }
     } catch (e) {
-      // Log the error
-      print('Error occurred: $e');
+      throw Exception('Something Error');
       throw Exception('Network error: $e');
     }
   }
-
-
-
 }
-

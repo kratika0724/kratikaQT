@@ -10,7 +10,6 @@ class ProductFilterBottomSheet extends StatefulWidget {
   final Function(String?, String?) onApply;
   final VoidCallback onClear;
 
-
   const ProductFilterBottomSheet({
     super.key,
     required this.initialName,
@@ -20,7 +19,8 @@ class ProductFilterBottomSheet extends StatefulWidget {
   });
 
   @override
-  State<ProductFilterBottomSheet> createState() => _ProductFilterBottomSheetState();
+  State<ProductFilterBottomSheet> createState() =>
+      _ProductFilterBottomSheetState();
 }
 
 class _ProductFilterBottomSheetState extends State<ProductFilterBottomSheet> {
@@ -72,7 +72,8 @@ class _ProductFilterBottomSheetState extends State<ProductFilterBottomSheet> {
     });
   }
 
-  Widget _buildSuggestion(String value, TextEditingController controller, bool isCode) {
+  Widget _buildSuggestion(
+      String value, TextEditingController controller, bool isCode) {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(4.0),
@@ -83,7 +84,8 @@ class _ProductFilterBottomSheetState extends State<ProductFilterBottomSheet> {
         visualDensity: const VisualDensity(horizontal: 0, vertical: -4),
         minVerticalPadding: 0,
         contentPadding: const EdgeInsets.symmetric(horizontal: 8),
-        title: Text(value, style: regularTextStyle(fontSize: dimen13, color: Colors.black)),
+        title: Text(value,
+            style: regularTextStyle(fontSize: dimen13, color: Colors.black)),
         onTap: () {
           controller.text = value;
           setState(() {
@@ -98,7 +100,6 @@ class _ProductFilterBottomSheetState extends State<ProductFilterBottomSheet> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -111,21 +112,26 @@ class _ProductFilterBottomSheetState extends State<ProductFilterBottomSheet> {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            const Text("Filter Products", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const Text("Filter Products",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             const SizedBox(height: 20),
             TextField(
               controller: _nameController,
-              decoration: const InputDecoration(labelText: 'Name', border: OutlineInputBorder()),
+              decoration: const InputDecoration(
+                  labelText: 'Name', border: OutlineInputBorder()),
               onChanged: (val) => _updateSuggestions(val, false),
             ),
-            ..._nameSuggestions.map((e) => _buildSuggestion(e, _nameController, false)),
+            ..._nameSuggestions
+                .map((e) => _buildSuggestion(e, _nameController, false)),
             const SizedBox(height: 16),
             TextField(
               controller: _codeController,
-              decoration: const InputDecoration(labelText: 'Code', border: OutlineInputBorder()),
+              decoration: const InputDecoration(
+                  labelText: 'Code', border: OutlineInputBorder()),
               onChanged: (val) => _updateSuggestions(val, true),
             ),
-            ..._codeSuggestions.map((e) => _buildSuggestion(e, _codeController, true)),
+            ..._codeSuggestions
+                .map((e) => _buildSuggestion(e, _codeController, true)),
             const SizedBox(height: 24),
             Row(
               children: [
@@ -133,11 +139,16 @@ class _ProductFilterBottomSheetState extends State<ProductFilterBottomSheet> {
                   child: ElevatedButton(
                     onPressed: () {
                       widget.onApply(
-                        _nameController.text.trim().isNotEmpty ? _nameController.text.trim() : null,
-                        _codeController.text.trim().isNotEmpty ? _codeController.text.trim() : null,
+                        _nameController.text.trim().isNotEmpty
+                            ? _nameController.text.trim()
+                            : null,
+                        _codeController.text.trim().isNotEmpty
+                            ? _codeController.text.trim()
+                            : null,
                       );
-                      final provider = Provider.of<ProductProvider>(context, listen: false);
-                      provider.refreshProductData();
+                      final provider =
+                          Provider.of<ProductProvider>(context, listen: false);
+                      provider.refreshProductData(context);
 
                       Navigator.pop(context);
                     },

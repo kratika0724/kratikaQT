@@ -37,14 +37,14 @@ class DashboardProvider extends ChangeNotifier {
     return parts.where((part) => part.trim().isNotEmpty).join(" ");
   }
 
-  Future<void> fetchUserCountData(String token) async {
+  Future<void> fetchUserCountData(BuildContext context, String token) async {
     isLoading = true;
     error = null;
     notifyListeners();
 
     try {
-      final response =
-          await apiService.getAuth(ApiPath.getUSerCountDashboardData, {});
+      final response = await apiService
+          .getAuth(context, ApiPath.getUSerCountDashboardData, {});
       final mResponse = DashboardResponse.fromJson(response);
       if (mResponse.success) {
         _userCountData = mResponse;

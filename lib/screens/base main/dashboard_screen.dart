@@ -16,7 +16,6 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-
   @override
   void initState() {
     super.initState();
@@ -25,14 +24,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
       final token = authProvider.loginResponse?.accessToken ?? '';
       if (token.isNotEmpty) {
         final provider = Provider.of<DashboardProvider>(context, listen: false);
-        provider.fetchUserCountData(token);
+        provider.fetchUserCountData(context, token);
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final dashboardProvider = Provider.of<DashboardProvider>(context, listen: true);
+    final dashboardProvider =
+        Provider.of<DashboardProvider>(context, listen: true);
 
     return Scaffold(
       backgroundColor: AppColors.ghostWhite.withOpacity(0.7),
@@ -51,26 +51,26 @@ class _DashboardScreenState extends State<DashboardScreen> {
         child: dashboardProvider.isLoading
             ? const Center(child: CircularProgressIndicator())
             : dashboardProvider.error != null
-            ? Center(child: Text("Oops! Something went wrong"))
-            : SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 10.0),
-                child: Column(
-                  children: [
-                    PaymentsSection(),
-                    const SizedBox(height: 10),
-                    OverviewSection(dashboardProvider),
-                    const SizedBox(height: 10),
-                    GraphSection(),
-                    const SizedBox(height: 10),
-                  ],
-                ),
-              ),
-            ),
+                ? Center(child: Text("Oops! Something went wrong"))
+                : SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8.0, vertical: 10.0),
+                      child: Column(
+                        children: [
+                          PaymentsSection(),
+                          const SizedBox(height: 10),
+                          OverviewSection(dashboardProvider),
+                          const SizedBox(height: 10),
+                          GraphSection(),
+                          const SizedBox(height: 10),
+                        ],
+                      ),
+                    ),
+                  ),
       ),
     );
   }
-
 
   Widget _buildNotificationIcon() {
     return GestureDetector(
@@ -122,10 +122,4 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
     );
   }
-
-
 }
-
-
-
-

@@ -358,7 +358,6 @@
 //   }
 // }
 
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../constants/app_colors.dart';
@@ -379,7 +378,6 @@ class CustomerScreen extends StatefulWidget {
 }
 
 class _CustomerListScreenState extends State<CustomerScreen> {
-
   String? filterName;
   String? filterEmail;
 
@@ -387,7 +385,8 @@ class _CustomerListScreenState extends State<CustomerScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<CustomerProvider>(context, listen: false).getCustomerData();
+      Provider.of<CustomerProvider>(context, listen: false)
+          .getCustomerData(context);
     });
   }
 
@@ -427,12 +426,13 @@ class _CustomerListScreenState extends State<CustomerScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             GestureDetector(
-                onTap: (){
+                onTap: () {
                   Navigator.pop(context);
                 },
-                child: Icon(Icons.arrow_back)
+                child: Icon(Icons.arrow_back)),
+            SizedBox(
+              width: 20,
             ),
-            SizedBox(width: 20,),
             HeaderTextBlack("Customers"),
             Spacer(),
             // Filter or Clear Filter Button
@@ -579,20 +579,18 @@ class _CustomerListScreenState extends State<CustomerScreen> {
                   filters: {
                     'Name': filterName,
                     'Email': filterEmail,
-
                   },
                   onClear: () => setState(() {
                     filterEmail = null;
                     filterName = null;
                   }),
                 ),
-
-                Expanded(
-                  child: CustomerList(
-                    customers: provider.customers,
-                    filterName: filterName,
-                    filterEmail: filterEmail,
-                  ),
+              Expanded(
+                child: CustomerList(
+                  customers: provider.customers,
+                  filterName: filterName,
+                  filterEmail: filterEmail,
+                ),
               ),
             ],
           );
@@ -608,18 +606,21 @@ class _CustomerListScreenState extends State<CustomerScreen> {
               child: ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.secondary,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(9)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(9)),
                 ),
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (_) => const AddCustomerScreen()),
+                    MaterialPageRoute(
+                        builder: (_) => const AddCustomerScreen()),
                   );
                 },
                 icon: const Icon(Icons.add, size: 18, color: Colors.white),
                 label: Text(
                   'Add Customer',
-                  style: mediumTextStyle(fontSize: dimen15, color: Colors.white),
+                  style:
+                      mediumTextStyle(fontSize: dimen15, color: Colors.white),
                 ),
               ),
             ),

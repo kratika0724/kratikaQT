@@ -32,18 +32,17 @@ class _ProductScreenState extends State<ProductScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final provider = Provider.of<ProductProvider>(context, listen: false);
       provider.currentPage_product = 1;
-      provider.getProductData();
+      provider.getProductData(context);
 
       _scrollController.addListener(() {
         if (_scrollController.position.extentAfter < 300 &&
             !provider.isFetchingMore &&
             provider.hasMoreData) {
-          provider.getProductData(loadMore: true);
+          provider.getProductData(context, loadMore: true);
         }
       });
     });
   }
-
 
   void _openFilterBottomSheet() {
     showModalBottomSheet(
@@ -81,12 +80,13 @@ class _ProductScreenState extends State<ProductScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             GestureDetector(
-                onTap: (){
+                onTap: () {
                   Navigator.pop(context);
                 },
-                child: Icon(Icons.arrow_back)
+                child: Icon(Icons.arrow_back)),
+            SizedBox(
+              width: 20,
             ),
-            SizedBox(width: 20,),
             HeaderTextBlack("Products"),
             Spacer(),
             // Filter or Clear Filter Button
@@ -303,8 +303,13 @@ class _ProductScreenState extends State<ProductScreen> {
           }
 
           final filteredProducts = provider.products.where((product) {
-            final matchesName = filterName == null || product.productName?.contains(filterName!) == true;
-            final matchesCode = filterCode == null || product.productCode?.toLowerCase().contains(filterCode!.toLowerCase()) == true;
+            final matchesName = filterName == null ||
+                product.productName?.contains(filterName!) == true;
+            final matchesCode = filterCode == null ||
+                product.productCode
+                        ?.toLowerCase()
+                        .contains(filterCode!.toLowerCase()) ==
+                    true;
             return matchesName && matchesCode;
           }).toList();
 
@@ -315,47 +320,51 @@ class _ProductScreenState extends State<ProductScreen> {
           final isWide = DeviceUtils.getDeviceWidth(context);
           final scrollableList = isWide
               ? GridView.builder(
-            controller: _scrollController,
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            itemCount: filteredProducts.length + 1,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisExtent: 100,
-              crossAxisSpacing: 12,
-              mainAxisSpacing: 12,
-            ),
-            itemBuilder: (context, index) {
-              if (index == filteredProducts.length) {
-                final isFiltering = filterName != null || filterCode != null;
-                if (!isFiltering && provider.hasMoreData) {
-                  return const Center(child: CircularProgressIndicator());
-                } else {
-                  return const SizedBox.shrink();
-                }
-              }
-              return ProductCard(product: filteredProducts[index]);
-            },
-          )
+                  controller: _scrollController,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  itemCount: filteredProducts.length + 1,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisExtent: 100,
+                    crossAxisSpacing: 12,
+                    mainAxisSpacing: 12,
+                  ),
+                  itemBuilder: (context, index) {
+                    if (index == filteredProducts.length) {
+                      final isFiltering =
+                          filterName != null || filterCode != null;
+                      if (!isFiltering && provider.hasMoreData) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else {
+                        return const SizedBox.shrink();
+                      }
+                    }
+                    return ProductCard(product: filteredProducts[index]);
+                  },
+                )
               : ListView.builder(
-            controller: _scrollController,
-            padding: const EdgeInsets.only(top: 10),
-            itemCount: filteredProducts.length + 1,
-            itemBuilder: (context, index) {
-              if (index == filteredProducts.length) {
-                final isFiltering = filterName != null || filterCode != null;
-                if (!isFiltering && provider.hasMoreData) {
-                  return const Center(child: CircularProgressIndicator());
-                } else {
-                  return const SizedBox.shrink();
-                }
-              }
+                  controller: _scrollController,
+                  padding: const EdgeInsets.only(top: 10),
+                  itemCount: filteredProducts.length + 1,
+                  itemBuilder: (context, index) {
+                    if (index == filteredProducts.length) {
+                      final isFiltering =
+                          filterName != null || filterCode != null;
+                      if (!isFiltering && provider.hasMoreData) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else {
+                        return const SizedBox.shrink();
+                      }
+                    }
 
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                child: ProductCard(product: filteredProducts[index]),
-              );
-            },
-          );
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 6),
+                      child: ProductCard(product: filteredProducts[index]),
+                    );
+                  },
+                );
 
           return Column(
             children: [
@@ -371,7 +380,9 @@ class _ProductScreenState extends State<ProductScreen> {
                   }),
                 ),
               Expanded(child: scrollableList),
-              SizedBox(height: 10,),
+              SizedBox(
+                height: 10,
+              ),
             ],
           );
         },
@@ -386,7 +397,8 @@ class _ProductScreenState extends State<ProductScreen> {
               child: ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.secondary,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(9)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(9)),
                 ),
                 onPressed: () {
                   Navigator.push(
@@ -397,7 +409,8 @@ class _ProductScreenState extends State<ProductScreen> {
                 icon: const Icon(Icons.add, size: 18, color: Colors.white),
                 label: Text(
                   'Add Product',
-                  style: mediumTextStyle(fontSize: dimen15, color: Colors.white),
+                  style:
+                      mediumTextStyle(fontSize: dimen15, color: Colors.white),
                 ),
               ),
             ),
@@ -407,7 +420,6 @@ class _ProductScreenState extends State<ProductScreen> {
     );
   }
 }
-
 
 // class _ProductScreenState extends State<ProductScreen> {
 //   String? filterName;

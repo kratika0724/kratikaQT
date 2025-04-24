@@ -30,7 +30,7 @@ class _PaymentsScreenState extends State<VendorPaymentsScreen> {
     super.initState();
     Future.microtask(() {
       Provider.of<TransactionProvider>(context, listen: false)
-          .getTransactions();
+          .getTransactions(context);
     });
   }
 

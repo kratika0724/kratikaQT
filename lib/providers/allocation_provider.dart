@@ -56,7 +56,7 @@ class AllocationProvider with ChangeNotifier {
       };
 
       final response =
-          await apiService.post_auth(ApiPath.createAllocation, body);
+          await apiService.post_auth(context, ApiPath.createAllocation, body);
       final mResponse = AllocationAddModel.fromJson(response);
       if (mResponse.success) {
         UiUtils()
@@ -91,12 +91,12 @@ class AllocationProvider with ChangeNotifier {
       };
 
       final response =
-          await apiService.post_auth(ApiPath.createAllocation, body);
+          await apiService.post_auth(context, ApiPath.createAllocation, body);
       final mResponse = AllocationAddModel.fromJson(response);
       if (mResponse.success) {
         UiUtils()
             .showSuccessSnackBar(context, "Allocation added successfully!");
-        refreshAllocationData(); // Reset and reload all data
+        refreshAllocationData(context); // Reset and reload all data
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (context.mounted) {
             Navigator.pop(context);
@@ -117,11 +117,11 @@ class AllocationProvider with ChangeNotifier {
   }
 
   // Refresh allocation data and reset pagination
-  Future<void> refreshAllocationData() async {
+  Future<void> refreshAllocationData(BuildContext context) async {
     currentPage_allocation = 1;
     hasMoreData = true;
     allocations.clear();
-    await getAllocationData();
+    await getAllocationData(context);
   }
 
   Future<void> select_excelFile(BuildContext context) async {
@@ -172,7 +172,8 @@ class AllocationProvider with ChangeNotifier {
   }
 
   // Fetch allocation data, with pagination support
-  Future<void> getAllocationData({bool loadMore = false}) async {
+  Future<void> getAllocationData(BuildContext context,
+      {bool loadMore = false}) async {
     if (loadMore) {
       if (isFetchingMore || !hasMoreData) return;
       isFetchingMore = true;
@@ -187,6 +188,7 @@ class AllocationProvider with ChangeNotifier {
 
     try {
       final response = await apiService.getAuth(
+        context,
         ApiPath.getAllocation,
         {
           "page": currentPage_allocation.toString(),

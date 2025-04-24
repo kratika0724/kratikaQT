@@ -13,30 +13,27 @@ class CustomerProvider with ChangeNotifier {
   String? errorMessage;
   List<CustomerData> customers = [];
 
-
   int currentPage_customer = 1;
   final int limit = 10;
   final ApiService apiService = ApiService();
 
   void createCustomer(
-      BuildContext context,
-      TextEditingController nameController,
-      TextEditingController middleNameController,
-      TextEditingController lastNameController,
-      TextEditingController phoneController,
-      TextEditingController emailController,
-      TextEditingController cityController,
-      TextEditingController pincodeController,
-      TextEditingController stateController,
-      TextEditingController countryController,
-      {
-        required String? gender,
-        required String? productId,
-        required String? area,
-        required String? agentId,
-        required DateTime? dob,
-      }
-      ) async {
+    BuildContext context,
+    TextEditingController nameController,
+    TextEditingController middleNameController,
+    TextEditingController lastNameController,
+    TextEditingController phoneController,
+    TextEditingController emailController,
+    TextEditingController cityController,
+    TextEditingController pincodeController,
+    TextEditingController stateController,
+    TextEditingController countryController, {
+    required String? gender,
+    required String? productId,
+    required String? area,
+    required String? agentId,
+    required DateTime? dob,
+  }) async {
     isLoading = true;
     errorMessage = null;
     notifyListeners();
@@ -59,19 +56,21 @@ class CustomerProvider with ChangeNotifier {
         "dob": dob.toString(),
       };
 
-      final response = await apiService.post_auth(ApiPath.createCustomer, body);
+      final response =
+          await apiService.post_auth(context, ApiPath.createCustomer, body);
       final mResponse = CustomerAddModel.fromJson(response);
 
       if (mResponse.success) {
         UiUtils().showSuccessSnackBar(context, "Customer added successfully!");
-        refreshCustomerData();
+        refreshCustomerData(context);
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (context.mounted) {
             Navigator.pop(context);
           }
         });
       } else {
-        Fluttertoast.showToast(msg: "Failed to add customer: ${mResponse.message}");
+        Fluttertoast.showToast(
+            msg: "Failed to add customer: ${mResponse.message}");
         debugPrint("Failed to add customer: ${mResponse.message}");
       }
     } catch (error) {
@@ -83,13 +82,14 @@ class CustomerProvider with ChangeNotifier {
     }
   }
 
-  Future<void> getCustomerData() async {
+  Future<void> getCustomerData(BuildContext context) async {
     isLoading = true;
     errorMessage = null;
     notifyListeners();
 
     try {
-      final response = await apiService.getAuth(ApiPath.getCustomer, {});
+      final response =
+          await apiService.getAuth(context, ApiPath.getCustomer, {});
       final customerResponse = CustomerResponse.fromJson(response);
 
       if (customerResponse.success) {
@@ -111,13 +111,10 @@ class CustomerProvider with ChangeNotifier {
     }
   }
 
-
-  Future<void> refreshCustomerData() async {
+  Future<void> refreshCustomerData(BuildContext context) async {
     currentPage_customer = 1;
     hasMoreData = true;
     customers.clear();
-    await getCustomerData();
+    await getCustomerData(context);
   }
-
-
 }

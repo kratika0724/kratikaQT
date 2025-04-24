@@ -26,7 +26,7 @@ class AgentsScreenState extends State<DistributerScreen> {
   void initState() {
     super.initState();
     Future.microtask(() {
-      Provider.of<AgentProvider>(context, listen: false).getAgentData();
+      Provider.of<AgentProvider>(context, listen: false).getAgentData(context);
     });
   }
 

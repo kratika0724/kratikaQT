@@ -20,10 +20,8 @@ class AddCustomerScreen extends StatefulWidget {
 class _AddCustomerScreenState extends State<AddCustomerScreen> {
   bool agentFetchCompleted = false;
 
-
   String? selectedGender;
   DateTime? selectedDOB;
-
 
   String? selectedProduct;
   String? selectedPincode;
@@ -32,7 +30,6 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
 
   String? selectedAgentId;
   String? selectedProductId;
-
 
   // Text controllers
   final firstnameController = TextEditingController();
@@ -55,13 +52,14 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
   final areaFocusNode = FocusNode();
   final agentFocusNode = FocusNode();
 
-
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<ProductProvider>(context, listen: false).getProductData(); // ✅ also safe
-      Provider.of<AllocationProvider>(context, listen: false).getAllocationData(); // ✅ also safe
+      Provider.of<ProductProvider>(context, listen: false)
+          .getProductData(context); // ✅ also safe
+      Provider.of<AllocationProvider>(context, listen: false)
+          .getAllocationData(context); // ✅ also safe
     });
 
     pinCodeController.addListener(() {
@@ -79,12 +77,10 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
     agentController.addListener(() {
       setState(() {});
     });
-
   }
 
   @override
   void dispose() {
-
     pinCodeFocusNode.dispose();
     areaFocusNode.dispose();
     productFocusNode.dispose();
@@ -104,7 +100,6 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     final customerProvider = Provider.of<CustomerProvider>(context);
@@ -118,7 +113,6 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
     List<String> areaList = selectedPincode != null
         ? allocationProvider.getAreaList(selectedPincode!)
         : [];
-
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -146,19 +140,26 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 12),
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 20, horizontal: 12),
                               child: Column(
                                 children: [
-                                  buildTextField('First Name', controller: firstnameController),
-                                  buildTextField('Middle Name (Optional)', controller: middleNameController),
-                                  buildTextField('Last Name', controller: lastNameController),
-                                  buildTextField('Mobile', controller: mobileController),
-                                  buildTextField('Email', controller: emailController),
+                                  buildTextField('First Name',
+                                      controller: firstnameController),
+                                  buildTextField('Middle Name (Optional)',
+                                      controller: middleNameController),
+                                  buildTextField('Last Name',
+                                      controller: lastNameController),
+                                  buildTextField('Mobile',
+                                      controller: mobileController),
+                                  buildTextField('Email',
+                                      controller: emailController),
                                   buildCalendarTextField(
                                     context,
                                     'Date of Birth',
                                     hint: 'dd/mm/yyyy',
-                                    selectedDate: selectedDOB, // ✅ Maintain state
+                                    selectedDate:
+                                        selectedDOB, // ✅ Maintain state
                                     onDateSelected: (date) {
                                       setState(() {
                                         selectedDOB = date;
@@ -166,7 +167,9 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                                     },
                                   ),
 
-                                  const SizedBox(height: 16,),
+                                  const SizedBox(
+                                    height: 16,
+                                  ),
                                   buildGenderSelector(
                                     selectedGender: selectedGender,
                                     onChanged: (value) {
@@ -192,17 +195,20 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                                         productController.text = value ?? '';
 
                                         // Find and store the corresponding productId
-                                        final matchedProduct = productProvider.products.firstWhere(
-                                              (p) => p.productName == value,
+                                        final matchedProduct =
+                                            productProvider.products.firstWhere(
+                                          (p) => p.productName == value,
                                         );
 
-                                        selectedProductId = matchedProduct?.id?.toString(); // Assuming productId is int or String
+                                        selectedProductId = matchedProduct?.id
+                                            ?.toString(); // Assuming productId is int or String
                                       });
                                     },
                                   ),
                                   const SizedBox(height: 16),
                                   buildTextField('Address'),
-                                  buildTextField('State', controller: stateController),
+                                  buildTextField('State',
+                                      controller: stateController),
 
                                   buildTypableDropdown(
                                     labelText: 'Select Pincode',
@@ -243,39 +249,49 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                                         areaController.text = value ?? '';
                                         agentController.clear();
                                         selectedAgentId = null;
-                                        agentFetchCompleted = false; // Reset before fetching
+                                        agentFetchCompleted =
+                                            false; // Reset before fetching
                                       });
 
                                       if (value != null) {
-                                        await Provider.of<AgentProvider>(context, listen: false).getAgentDataByArea(value);
+                                        await Provider.of<AgentProvider>(
+                                                context,
+                                                listen: false)
+                                            .getAgentDataByArea(context, value);
                                         setState(() {
-                                          agentFetchCompleted = true; // Set true after fetch
+                                          agentFetchCompleted =
+                                              true; // Set true after fetch
                                         });
                                       }
                                     },
-
                                   ),
 
                                   const SizedBox(height: 16),
 
                                   Consumer<AgentProvider>(
                                     builder: (context, agentProvider, _) {
-                                      final agentList = agentProvider.getAgentNamesByArea();
+                                      final agentList =
+                                          agentProvider.getAgentNamesByArea();
 
                                       // After area selection and API call, if no agents found => disable
-                                      if (agentFetchCompleted && agentList.isEmpty) {
+                                      if (agentFetchCompleted &&
+                                          agentList.isEmpty) {
                                         return TextField(
                                           controller: agentController,
                                           focusNode: agentFocusNode,
                                           enabled: false,
-                                          style: regularTextStyle(fontSize: dimen14, color: Colors.black),
+                                          style: regularTextStyle(
+                                              fontSize: dimen14,
+                                              color: Colors.black),
                                           decoration: InputDecoration(
                                             // labelText: 'Select Agent',
                                             // labelStyle: regularTextStyle(fontSize: dimen13, color: Colors.black54),
                                             // floatingLabelStyle: regularTextStyle(fontSize: dimen16, color: AppColors.textSecondary),
                                             filled: true,
                                             fillColor: AppColors.ghostWhite,
-                                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                                            border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(12)),
                                             hintText: 'No agents available',
                                           ),
                                         );
@@ -292,11 +308,14 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                                             selectedAgent = value;
                                             agentController.text = value ?? '';
 
-                                            final matchedAgent = agentProvider.agentsbyArea.firstWhere(
-                                                  (a) => a.firstName == value,
+                                            final matchedAgent = agentProvider
+                                                .agentsbyArea
+                                                .firstWhere(
+                                              (a) => a.firstName == value,
                                             );
 
-                                            selectedAgentId = matchedAgent.id?.toString();
+                                            selectedAgentId =
+                                                matchedAgent.id?.toString();
                                           });
                                         },
                                       );
@@ -329,7 +348,8 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
 
                                   const SizedBox(height: 16),
 
-                                  buildTextField('City', controller: cityController),
+                                  buildTextField('City',
+                                      controller: cityController),
                                 ],
                               ),
                             ),
@@ -337,26 +357,26 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                         ),
                         const SizedBox(height: 16),
                         FormActionButtons(
-                            onSubmit: () {
-                              customerProvider.createCustomer(
-                                context,
-                                firstnameController,
-                                middleNameController,
-                                lastNameController,
-                                mobileController,
-                                emailController,
-                                cityController,
-                                pinCodeController,
-                                stateController,
-                                countryController,
-                                gender: selectedGender,
-                                productId: selectedProductId,
-                                area: selectedArea,
-                                agentId: selectedAgentId,
-                                dob: selectedDOB,
-                              );
-                            },
-                            onCancel: () {
+                          onSubmit: () {
+                            customerProvider.createCustomer(
+                              context,
+                              firstnameController,
+                              middleNameController,
+                              lastNameController,
+                              mobileController,
+                              emailController,
+                              cityController,
+                              pinCodeController,
+                              stateController,
+                              countryController,
+                              gender: selectedGender,
+                              productId: selectedProductId,
+                              area: selectedArea,
+                              agentId: selectedAgentId,
+                              dob: selectedDOB,
+                            );
+                          },
+                          onCancel: () {
                             Navigator.pop(context);
                           },
                         ),
@@ -399,7 +419,9 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
       focusNode: focusNode,
       optionsBuilder: (TextEditingValue textEditingValue) {
         return options
-            .where((option) => option.toLowerCase().contains(textEditingValue.text.toLowerCase()))
+            .where((option) => option
+                .toLowerCase()
+                .contains(textEditingValue.text.toLowerCase()))
             .toList();
       },
       onSelected: onSelected,
@@ -411,8 +433,10 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
           decoration: InputDecoration(
             suffixIcon: Icon(Icons.arrow_drop_down),
             labelText: labelText,
-            labelStyle: regularTextStyle(fontSize: dimen13, color: Colors.black54),
-            floatingLabelStyle: regularTextStyle(fontSize: dimen16, color: AppColors.textSecondary),
+            labelStyle:
+                regularTextStyle(fontSize: dimen13, color: Colors.black54),
+            floatingLabelStyle: regularTextStyle(
+                fontSize: dimen16, color: AppColors.textSecondary),
             filled: true,
             fillColor: AppColors.ghostWhite,
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
@@ -435,7 +459,8 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                 child: Center(
                   child: Text(
                     'No agents available',
-                    style: regularTextStyle(fontSize: dimen14, color: Colors.black54),
+                    style: regularTextStyle(
+                        fontSize: dimen14, color: Colors.black54),
                   ),
                 ),
               ),
@@ -457,7 +482,8 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                 shrinkWrap: true,
                 itemCount: options.length,
                 itemBuilder: (BuildContext context, int index) {
-                  final option = options.toList()[index]; // Use options directly, no need to convert to list
+                  final option = options.toList()[
+                      index]; // Use options directly, no need to convert to list
                   return ListTile(
                     title: Text(option),
                     onTap: () => onSelected(option),
@@ -470,9 +496,6 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
       },
     );
   }
-
-
-
 }
 
 //

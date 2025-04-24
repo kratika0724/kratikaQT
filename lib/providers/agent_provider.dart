@@ -17,28 +17,27 @@ class AgentProvider with ChangeNotifier {
   int currentPage_agent = 1;
   final int limit = 10;
 
-  List<CustomerAgentByAreaData> agentsbyArea = []; // Use CustomerAgentByAreaData directly now
+  List<CustomerAgentByAreaData> agentsbyArea =
+      []; // Use CustomerAgentByAreaData directly now
 
   final ApiService apiService = ApiService();
 
   void createAgent(
-      BuildContext context,
-      TextEditingController firstnameController,
-      TextEditingController middleNameController,
-      TextEditingController lastnameController,
-      TextEditingController emailController,
-      TextEditingController mobileController,
-      TextEditingController cityController,
-      TextEditingController stateController,
-      TextEditingController countryController,
-      TextEditingController pinCodeController,
-      TextEditingController assignedPinCodeController,
-      TextEditingController assignedAreaController,
-      {
-        required String? gender,
-        required DateTime? dob,
-      }
-      ) async {
+    BuildContext context,
+    TextEditingController firstnameController,
+    TextEditingController middleNameController,
+    TextEditingController lastnameController,
+    TextEditingController emailController,
+    TextEditingController mobileController,
+    TextEditingController cityController,
+    TextEditingController stateController,
+    TextEditingController countryController,
+    TextEditingController pinCodeController,
+    TextEditingController assignedPinCodeController,
+    TextEditingController assignedAreaController, {
+    required String? gender,
+    required DateTime? dob,
+  }) async {
     isLoading = true;
     errorMessage = null;
     notifyListeners();
@@ -60,19 +59,22 @@ class AgentProvider with ChangeNotifier {
         "dob": dob?.toIso8601String(),
       };
 
-      final response = await apiService.post_auth(ApiPath.createAgent, body);
-      final mResponse = AgentAddModel.fromJson(response); // reuse or make AgentAddModel
+      final response =
+          await apiService.post_auth(context, ApiPath.createAgent, body);
+      final mResponse =
+          AgentAddModel.fromJson(response); // reuse or make AgentAddModel
 
       if (mResponse.success) {
         UiUtils().showSuccessSnackBar(context, "Agent added successfully!");
-        refreshAgentData();
+        refreshAgentData(context);
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (context.mounted) {
             Navigator.pop(context);
           }
         });
       } else {
-        Fluttertoast.showToast(msg: "Failed to add agent: ${mResponse.message}");
+        Fluttertoast.showToast(
+            msg: "Failed to add agent: ${mResponse.message}");
         debugPrint("Failed to add agent: ${mResponse.message}");
       }
     } catch (error) {
@@ -84,21 +86,20 @@ class AgentProvider with ChangeNotifier {
     }
   }
 
-  Future<void> refreshAgentData() async {
+  Future<void> refreshAgentData(BuildContext context) async {
     currentPage_agent = 1;
     hasMoreData = true;
     agents.clear();
-    await getAgentData();
+    await getAgentData(context);
   }
 
-
-  Future<void> getAgentData() async {
+  Future<void> getAgentData(BuildContext context) async {
     isLoading = true;
     errorMessage = null;
     notifyListeners();
 
     try {
-      final response = await apiService.getAuth(ApiPath.getAgent, {});
+      final response = await apiService.getAuth(context, ApiPath.getAgent, {});
       final agentResponse = AgentResponseModel.fromJson(response);
 
       if (agentResponse.success) {
@@ -128,14 +129,15 @@ class AgentProvider with ChangeNotifier {
         .toList();
   }
 
-  Future<void> getAgentDataByArea(String area) async {
+  Future<void> getAgentDataByArea(BuildContext context, String area) async {
     isLoading = true;
     errorMessage = null;
     agentsbyArea = []; // Clear previous agent list
     notifyListeners();
 
     try {
-      final response = await apiService.getAuth(ApiPath.getAgentByArea, {
+      final response =
+          await apiService.getAuth(context, ApiPath.getAgentByArea, {
         'area': area,
       });
 
@@ -161,6 +163,4 @@ class AgentProvider with ChangeNotifier {
       notifyListeners();
     }
   }
-
 }
-

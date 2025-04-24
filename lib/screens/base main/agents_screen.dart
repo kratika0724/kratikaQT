@@ -25,7 +25,7 @@ class AgentsScreenState extends State<AgentsScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<AgentProvider>(context, listen: false).getAgentData();
+      Provider.of<AgentProvider>(context, listen: false).getAgentData(context);
     });
   }
 
@@ -69,7 +69,9 @@ class AgentsScreenState extends State<AgentsScreen> {
           // Filter or Clear Filter Button
           GestureDetector(
             onTap: () {
-              if (filterName != null || filterEmail != null || filterIsActive != true) {
+              if (filterName != null ||
+                  filterEmail != null ||
+                  filterIsActive != true) {
                 setState(() {
                   filterName = null;
                   filterEmail = null;
@@ -87,7 +89,9 @@ class AgentsScreenState extends State<AgentsScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
-                  color: (filterName != null || filterEmail != null || filterIsActive != true)
+                  color: (filterName != null ||
+                          filterEmail != null ||
+                          filterIsActive != true)
                       ? AppColors.secondary
                       : AppColors.primary.withOpacity(0.1),
                   border: Border.all(color: AppColors.secondary),
@@ -97,14 +101,18 @@ class AgentsScreenState extends State<AgentsScreen> {
                   children: [
                     Flexible(
                       child: Text(
-                        (filterName != null || filterEmail != null || filterIsActive != true)
+                        (filterName != null ||
+                                filterEmail != null ||
+                                filterIsActive != true)
                             ? "Clear Filters"
                             : "Filter Agents",
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                         style: mediumTextStyle(
                           fontSize: dimen13,
-                          color: (filterName != null || filterEmail != null || filterIsActive != true)
+                          color: (filterName != null ||
+                                  filterEmail != null ||
+                                  filterIsActive != true)
                               ? Colors.white
                               : Colors.black,
                         ),
@@ -112,11 +120,15 @@ class AgentsScreenState extends State<AgentsScreen> {
                     ),
                     const SizedBox(width: 4),
                     Icon(
-                      (filterName != null || filterEmail != null || filterIsActive != true)
+                      (filterName != null ||
+                              filterEmail != null ||
+                              filterIsActive != true)
                           ? Icons.clear
                           : Icons.filter_list,
                       size: 16,
-                      color: (filterName != null || filterEmail != null || filterIsActive != true)
+                      color: (filterName != null ||
+                              filterEmail != null ||
+                              filterIsActive != true)
                           ? Colors.white
                           : Colors.black,
                     ),
@@ -131,8 +143,10 @@ class AgentsScreenState extends State<AgentsScreen> {
       ),
       body: Consumer<AgentProvider>(
         builder: (context, provider, _) {
-          if (provider.isLoading) return const Center(child: CircularProgressIndicator());
-          if (provider.errorMessage != null) return const Center(child: Text("Oops! Something went wrong"));
+          if (provider.isLoading)
+            return const Center(child: CircularProgressIndicator());
+          if (provider.errorMessage != null)
+            return const Center(child: Text("Oops! Something went wrong"));
 
           return Column(
             children: [
@@ -170,7 +184,8 @@ class AgentsScreenState extends State<AgentsScreen> {
               child: ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.secondary,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(9)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(9)),
                 ),
                 onPressed: () {
                   Navigator.push(
@@ -181,7 +196,8 @@ class AgentsScreenState extends State<AgentsScreen> {
                 icon: const Icon(Icons.add, size: 18, color: Colors.white),
                 label: Text(
                   'Add Agent',
-                  style: mediumTextStyle(fontSize: dimen15, color: Colors.white),
+                  style:
+                      mediumTextStyle(fontSize: dimen15, color: Colors.white),
                 ),
               ),
             ),
@@ -237,7 +253,9 @@ class AgentsScreenState extends State<AgentsScreen> {
           // Filter or Clear Filter Button
           GestureDetector(
             onTap: () {
-              if (filterName != null || filterEmail != null || filterIsActive != true) {
+              if (filterName != null ||
+                  filterEmail != null ||
+                  filterIsActive != true) {
                 // Clear filters
                 setState(() {
                   filterName = null;
@@ -257,7 +275,11 @@ class AgentsScreenState extends State<AgentsScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(9),
-                  color: (filterName != null || filterEmail != null || filterIsActive != true) ? AppColors.secondary : AppColors.primary.withOpacity(0.1),
+                  color: (filterName != null ||
+                          filterEmail != null ||
+                          filterIsActive != true)
+                      ? AppColors.secondary
+                      : AppColors.primary.withOpacity(0.1),
                   border: Border.all(color: AppColors.secondary),
                 ),
                 child: Row(
@@ -265,28 +287,42 @@ class AgentsScreenState extends State<AgentsScreen> {
                   children: [
                     Flexible(
                       child: Text(
-                        (filterName != null || filterEmail != null || filterIsActive != true)
+                        (filterName != null ||
+                                filterEmail != null ||
+                                filterIsActive != true)
                             ? "Clear Filters"
                             : "Filter Agents",
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
-                        style: mediumTextStyle(fontSize: dimen13, color: (filterName != null || filterEmail != null || filterIsActive != true) ? Colors.white : Colors.black,),
+                        style: mediumTextStyle(
+                          fontSize: dimen13,
+                          color: (filterName != null ||
+                                  filterEmail != null ||
+                                  filterIsActive != true)
+                              ? Colors.white
+                              : Colors.black,
+                        ),
                       ),
                     ),
                     const SizedBox(width: 4),
                     Icon(
-                      (filterName != null || filterEmail != null || filterIsActive != true)
+                      (filterName != null ||
+                              filterEmail != null ||
+                              filterIsActive != true)
                           ? Icons.clear
                           : Icons.filter_list,
                       size: 16,
-                      color: (filterName != null || filterEmail != null || filterIsActive != true) ? Colors.white : Colors.black,
+                      color: (filterName != null ||
+                              filterEmail != null ||
+                              filterIsActive != true)
+                          ? Colors.white
+                          : Colors.black,
                     ),
                   ],
                 ),
               ),
             ),
           ),
-
 
           // Filter Button
           // GestureDetector(
@@ -326,8 +362,10 @@ class AgentsScreenState extends State<AgentsScreen> {
       ),
       body: Consumer<AgentProvider>(
         builder: (context, provider, _) {
-          if (provider.isLoading) return const Center(child: CircularProgressIndicator());
-          if (provider.errorMessage != null) return const Center(child: Text("Oops! Something went wrong"));
+          if (provider.isLoading)
+            return const Center(child: CircularProgressIndicator());
+          if (provider.errorMessage != null)
+            return const Center(child: Text("Oops! Something went wrong"));
 
           return Column(
             children: [
@@ -336,14 +374,12 @@ class AgentsScreenState extends State<AgentsScreen> {
                   filters: {
                     'Name': filterName,
                     'Email': filterEmail,
-
                   },
                   onClear: () => setState(() {
                     filterEmail = null;
                     filterName = null;
                   }),
                 ),
-
               Expanded(
                 child: AgentList(
                   agents: provider.agents,
@@ -353,7 +389,6 @@ class AgentsScreenState extends State<AgentsScreen> {
                 ),
               ),
               const SizedBox(height: 10),
-
             ],
           );
         },

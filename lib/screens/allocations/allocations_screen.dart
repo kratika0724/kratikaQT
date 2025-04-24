@@ -24,7 +24,6 @@ class _AllocationsScreenState extends State<AllocationsScreen> {
   String? filterArea;
   final ScrollController _scrollController = ScrollController();
 
-
   @override
   void initState() {
     super.initState();
@@ -32,13 +31,13 @@ class _AllocationsScreenState extends State<AllocationsScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final provider = Provider.of<AllocationProvider>(context, listen: false);
       provider.currentPage_allocation = 1;
-      provider.getAllocationData();
+      provider.getAllocationData(context);
 
       _scrollController.addListener(() {
         if (_scrollController.position.extentAfter < 300 &&
             !provider.isFetchingMore &&
             provider.hasMoreData) {
-          provider.getAllocationData(loadMore: true);
+          provider.getAllocationData(context, loadMore: true);
         }
       });
     });
@@ -86,12 +85,13 @@ class _AllocationsScreenState extends State<AllocationsScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             GestureDetector(
-                onTap: (){
+                onTap: () {
                   Navigator.pop(context);
                 },
-                child: Icon(Icons.arrow_back)
+                child: Icon(Icons.arrow_back)),
+            SizedBox(
+              width: 20,
             ),
-            SizedBox(width: 20,),
             HeaderTextBlack("Allocations"),
             Spacer(),
             // Filter or Clear Filter Button
@@ -228,8 +228,13 @@ class _AllocationsScreenState extends State<AllocationsScreen> {
           }
 
           final filteredAllocations = provider.allocations.where((allocation) {
-            final matchesPincode = filterPincode == null || allocation.allocationPincode?.contains(filterPincode!) == true;
-            final matchesArea = filterArea == null || allocation.allocationArea?.toLowerCase().contains(filterArea!.toLowerCase()) == true;
+            final matchesPincode = filterPincode == null ||
+                allocation.allocationPincode?.contains(filterPincode!) == true;
+            final matchesArea = filterArea == null ||
+                allocation.allocationArea
+                        ?.toLowerCase()
+                        .contains(filterArea!.toLowerCase()) ==
+                    true;
             return matchesPincode && matchesArea;
           }).toList();
 
@@ -240,40 +245,44 @@ class _AllocationsScreenState extends State<AllocationsScreen> {
           final isWide = DeviceUtils.getDeviceWidth(context);
           final scrollableList = isWide
               ? GridView.builder(
-            controller: _scrollController,
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            itemCount: filteredAllocations.length + 1,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisExtent: 100,
-              crossAxisSpacing: 12,
-              mainAxisSpacing: 12,
-            ),
-            itemBuilder: (context, index) {
-              if (index == filteredAllocations.length) {
-                return provider.hasMoreData
-                    ? const Center(child: CircularProgressIndicator())
-                    : const SizedBox.shrink();
-              }
-              return AllocationCard(allocation: filteredAllocations[index]);
-            },
-          )
+                  controller: _scrollController,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  itemCount: filteredAllocations.length + 1,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisExtent: 100,
+                    crossAxisSpacing: 12,
+                    mainAxisSpacing: 12,
+                  ),
+                  itemBuilder: (context, index) {
+                    if (index == filteredAllocations.length) {
+                      return provider.hasMoreData
+                          ? const Center(child: CircularProgressIndicator())
+                          : const SizedBox.shrink();
+                    }
+                    return AllocationCard(
+                        allocation: filteredAllocations[index]);
+                  },
+                )
               : ListView.builder(
-            controller: _scrollController,
-            padding: const EdgeInsets.only(top: 10),
-            itemCount: filteredAllocations.length + 1,
-            itemBuilder: (context, index) {
-              if (index == filteredAllocations.length) {
-                return provider.hasMoreData
-                    ? const Center(child: CircularProgressIndicator())
-                    : const SizedBox.shrink();
-              }
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                child: AllocationCard(allocation: filteredAllocations[index]),
-              );
-            },
-          );
+                  controller: _scrollController,
+                  padding: const EdgeInsets.only(top: 10),
+                  itemCount: filteredAllocations.length + 1,
+                  itemBuilder: (context, index) {
+                    if (index == filteredAllocations.length) {
+                      return provider.hasMoreData
+                          ? const Center(child: CircularProgressIndicator())
+                          : const SizedBox.shrink();
+                    }
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 6),
+                      child: AllocationCard(
+                          allocation: filteredAllocations[index]),
+                    );
+                  },
+                );
 
           return Column(
             children: [
@@ -303,18 +312,21 @@ class _AllocationsScreenState extends State<AllocationsScreen> {
               child: ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.secondary,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(9)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(9)),
                 ),
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (_) => const AddAllocationScreen()),
+                    MaterialPageRoute(
+                        builder: (_) => const AddAllocationScreen()),
                   );
                 },
                 icon: const Icon(Icons.add, size: 18, color: Colors.white),
                 label: Text(
                   'Add Allocation',
-                  style: mediumTextStyle(fontSize: dimen15, color: Colors.white),
+                  style:
+                      mediumTextStyle(fontSize: dimen15, color: Colors.white),
                 ),
               ),
             ),

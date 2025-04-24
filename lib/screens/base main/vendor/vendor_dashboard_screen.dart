@@ -26,7 +26,7 @@ class _DashboardScreenState extends State<VendorDashboardScreen> {
       final token = authProvider.loginResponse?.accessToken ?? '';
       if (token.isNotEmpty) {
         final provider = Provider.of<DashboardProvider>(context, listen: false);
-        provider.fetchUserCountData(token);
+        provider.fetchUserCountData(context, token);
       }
     });
   }

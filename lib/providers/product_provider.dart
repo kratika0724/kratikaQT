@@ -18,9 +18,7 @@ class ProductProvider with ChangeNotifier {
   final int limit = 10;
   final ApiService apiService = ApiService();
 
-
-
-  List<String> getProductNames(){
+  List<String> getProductNames() {
     return products
         .map((p) => p.productName ?? '')
         .where((name) => name.isNotEmpty)
@@ -28,16 +26,15 @@ class ProductProvider with ChangeNotifier {
         .toList();
   }
 
-  
   void createProduct(
-      BuildContext context,
-      TextEditingController nameController,
-      TextEditingController codeController,
-      TextEditingController amountController,
-      TextEditingController quarterDiscountController,
-      TextEditingController halfYearDiscountController,
-      TextEditingController yearlyDiscountController,
-      ) async {
+    BuildContext context,
+    TextEditingController nameController,
+    TextEditingController codeController,
+    TextEditingController amountController,
+    TextEditingController quarterDiscountController,
+    TextEditingController halfYearDiscountController,
+    TextEditingController yearlyDiscountController,
+  ) async {
     isLoading = true;
     errorMessage = null;
     notifyListeners();
@@ -52,18 +49,20 @@ class ProductProvider with ChangeNotifier {
         "yearly_discount": yearlyDiscountController.text.trim(),
       };
 
-      final response = await apiService.post_auth(ApiPath.createProduct, body);
+      final response =
+          await apiService.post_auth(context, ApiPath.createProduct, body);
       final mResponse = ProductAddModel.fromJson(response);
       if (mResponse.success) {
         UiUtils().showSuccessSnackBar(context, "Product added successfully!");
-        refreshProductData(); // Reset and reload all data
+        refreshProductData(context); // Reset and reload all data
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (context.mounted) {
             Navigator.pop(context);
           }
         });
       } else {
-        Fluttertoast.showToast(msg: "Failed to add product: ${mResponse.message}");
+        Fluttertoast.showToast(
+            msg: "Failed to add product: ${mResponse.message}");
         debugPrint("Failed to add product: ${mResponse.message}");
       }
     } catch (error) {
@@ -75,21 +74,22 @@ class ProductProvider with ChangeNotifier {
     }
   }
 
-  Future<void> refreshProductData() async {
+  Future<void> refreshProductData(BuildContext context) async {
     currentPage_product = 1;
     hasMoreData = true;
     products.clear();
-    await getProductData();
+    await getProductData(context);
   }
 
-  Future<void> getProductData({bool loadMore = false}) async {
+  Future<void> getProductData(BuildContext context,
+      {bool loadMore = false}) async {
     if (loadMore) {
       if (isFetchingMore || !hasMoreData) return;
       isFetchingMore = true;
     } else {
       isLoading = true;
       currentPage_product = 1; // reset on fresh fetch
-      hasMoreData = true;      // reset hasMoreData on fresh fetch
+      hasMoreData = true; // reset hasMoreData on fresh fetch
     }
 
     errorMessage = null;
@@ -97,6 +97,7 @@ class ProductProvider with ChangeNotifier {
 
     try {
       final response = await apiService.getAuth(
+        context,
         ApiPath.getProduct,
         {
           "page": currentPage_product.toString(),
@@ -109,7 +110,8 @@ class ProductProvider with ChangeNotifier {
       if (productResponse.success) {
         final newProducts = productResponse.data;
 
-        debugPrint("Fetched Page: $currentPage_product | Items: ${newProducts.length}");
+        debugPrint(
+            "Fetched Page: $currentPage_product | Items: ${newProducts.length}");
 
         if (loadMore) {
           products.addAll(newProducts);
@@ -138,11 +140,4 @@ class ProductProvider with ChangeNotifier {
       notifyListeners();
     }
   }
-
-
 }
-
-
-
-
-
