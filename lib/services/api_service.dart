@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:qt_distributer/services/user_preferences.dart';
@@ -162,7 +163,7 @@ class ApiService {
       if (response.statusCode == 450) {
         await Provider.of<AuthProvider>(context, listen: false).logout();
         await PreferencesServices.clearData();
-
+        Fluttertoast.showToast(msg: "Your Session is expired please log in again to continue!");
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => const LoginScreen()),
@@ -205,6 +206,7 @@ class ApiService {
 
       // Handle 450 status code (Session expired)
       if (response.statusCode == 450) {
+        Fluttertoast.showToast(msg: "Your Session is expired please log in again to continue!");
         await Provider.of<AuthProvider>(context, listen: false).logout();
         await PreferencesServices.clearData();
         Navigator.pushAndRemoveUntil(
