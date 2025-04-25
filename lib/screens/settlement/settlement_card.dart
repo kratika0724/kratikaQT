@@ -202,13 +202,13 @@ class SettlementCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Text(
-                  "$prefix ₹$transactionAmount",
+                  "₹$transactionAmount",
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
-                  style: semiBoldTextStyle(fontSize: dimen16, color: textColor),
+                  style: semiBoldTextStyle(fontSize: dimen16, color: AppColors.secondary),
                 ),
                 Text(
-                  "$dateLabel $formattedDate",
+                  "$formattedDate",
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                   style: thinTextStyle(fontSize: dimen13, color: Colors.grey),
@@ -264,21 +264,21 @@ class SettlementCard extends StatelessWidget {
         //     ),
         //   ),
         // ),
-        Container(
-          constraints: const BoxConstraints(maxWidth: 120),
-          padding: const EdgeInsets.symmetric(vertical: 1, horizontal: 6),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            // border: Border.all(color: textColorStatus.withOpacity(0.8),width: 0.7),
-            borderRadius: BorderRadius.circular(6),
-          ),
-          child: Text(
-            status,
-            overflow: TextOverflow.ellipsis,
-            maxLines: 1,
-            style: mediumTextStyle(fontSize: dimen12, color: textColorStatus),
-          ),
-        ),
+        // Container(
+        //   constraints: const BoxConstraints(maxWidth: 120),
+        //   padding: const EdgeInsets.symmetric(vertical: 1, horizontal: 6),
+        //   decoration: BoxDecoration(
+        //     color: Colors.white,
+        //     // border: Border.all(color: textColorStatus.withOpacity(0.8),width: 0.7),
+        //     borderRadius: BorderRadius.circular(6),
+        //   ),
+        //   child: Text(
+        //     status,
+        //     overflow: TextOverflow.ellipsis,
+        //     maxLines: 1,
+        //     style: mediumTextStyle(fontSize: dimen12, color: textColorStatus),
+        //   ),
+        // ),
         const Icon(Icons.keyboard_arrow_down, color: Colors.black, size: 22),
       ],
     );
