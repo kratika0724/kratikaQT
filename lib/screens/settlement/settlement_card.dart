@@ -219,7 +219,7 @@ class SettlementCard extends StatelessWidget {
         ElevatedButton(
           onPressed: () => _showActionPopup(context),
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.blueGrey.shade50,
+            backgroundColor: AppColors.secondary,
             foregroundColor: Colors.white,
             elevation: 0,
             shadowColor: Colors.white,
@@ -227,7 +227,7 @@ class SettlementCard extends StatelessWidget {
             minimumSize: Size.zero,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)) ,
           ),
-          child: Text('Take Action',style: regularTextStyle(fontSize: dimen13, color: Colors.black), overflow: TextOverflow.ellipsis,),
+          child: Text('Take Action',style: regularTextStyle(fontSize: dimen13, color: Colors.white), overflow: TextOverflow.ellipsis,),
         ),
       ],
     );
