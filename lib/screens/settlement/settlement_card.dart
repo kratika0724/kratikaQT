@@ -227,7 +227,7 @@ class SettlementCard extends StatelessWidget {
             minimumSize: Size.zero,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)) ,
           ),
-          child: Text('Take Action',style: regularTextStyle(fontSize: dimen13, color: Colors.black),),
+          child: Text('Take Action',style: regularTextStyle(fontSize: dimen13, color: Colors.black), overflow: TextOverflow.ellipsis,),
         ),
       ],
     );
