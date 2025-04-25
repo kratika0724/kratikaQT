@@ -7,15 +7,48 @@ import '../services/api_service.dart';
 import '../utils/ui_utils.dart';
 
 class CustomerProvider with ChangeNotifier {
+  final ApiService apiService = ApiService();
+
   bool isLoading = false;
   bool isFetchingMore = false;
   bool hasMoreData = true;
   String? errorMessage;
-  List<CustomerData> customers = [];
 
   int currentPage_customer = 1;
   final int limit = 10;
-  final ApiService apiService = ApiService();
+  CustomerMeta? meta;
+
+  List<CustomerData> customers = [];
+
+  String? filterName;
+  String? filterEmail;
+
+  void setFilters({
+    String? name,
+    String? email,
+  }) {
+    filterName = name;
+    filterEmail = email;
+    notifyListeners();
+  }
+
+  List<CustomerData> get FilteredCustomers {
+    return customers.where((customer) {
+      final matchesName = filterName == null ||
+          (customer.firstName ?? '').toLowerCase().contains(filterName!.toLowerCase());
+      final matchesEmail = filterEmail == null ||
+          (customer.email ?? '').toLowerCase().contains(filterEmail!.toLowerCase());
+
+      return matchesName && matchesEmail;
+    }).toList();
+  }
+
+  Future<void> refreshCustomerData(BuildContext context) async {
+    currentPage_customer = 1;
+    hasMoreData = true;
+    customers.clear();
+    await getCustomerData(context);
+  }
 
   void createCustomer(
     BuildContext context,
@@ -82,18 +115,46 @@ class CustomerProvider with ChangeNotifier {
     }
   }
 
-  Future<void> getCustomerData(BuildContext context) async {
-    isLoading = true;
+  Future<void> getCustomerData(BuildContext context, {bool loadMore = false}) async {
+    if (loadMore) {
+      if (isFetchingMore || !hasMoreData) return;
+      isFetchingMore = true;
+    } else {
+      isLoading = true;
+      currentPage_customer = 1; // reset on fresh fetch
+      hasMoreData = true;
+    }
+
     errorMessage = null;
     notifyListeners();
 
     try {
-      final response =
-          await apiService.getAuth(context, ApiPath.getCustomer, {});
+      final response = await apiService.getAuth(
+          context,
+          ApiPath.getCustomer,
+          {
+            "page": currentPage_customer.toString(),
+            "limit": limit.toString(),
+          },
+      );
+
       final customerResponse = CustomerResponse.fromJson(response);
 
       if (customerResponse.success) {
-        customers = customerResponse.data;
+        final newCustomers = customerResponse.data;
+        meta = customerResponse.meta;
+
+        if (loadMore) {
+          customers.addAll(newCustomers);
+          currentPage_customer++;
+        } else {
+          customers = newCustomers;
+          currentPage_customer = 2;
+        }
+        if (newCustomers.length < limit) {
+          hasMoreData = false;
+          debugPrint("No more customers to load.");
+        }
       } else {
         customers = [];
         errorMessage = customerResponse.message;
@@ -107,14 +168,17 @@ class CustomerProvider with ChangeNotifier {
       debugPrint(errorMessage);
     } finally {
       isLoading = false;
+      isFetchingMore = false;
       notifyListeners();
     }
   }
 
-  Future<void> refreshCustomerData(BuildContext context) async {
+  void clearCustomers() {
+    customers.clear();
+    meta = null;
     currentPage_customer = 1;
     hasMoreData = true;
-    customers.clear();
-    await getCustomerData(context);
+    notifyListeners();
   }
+
 }

@@ -1,16 +1,20 @@
 class PaymentModel {
   final String status;
+  final String transactiontype;
   final String transactionId;
   final String name;
   final String email;
+  final String mobile;
   final String amount;
   final String createdAt;
 
   PaymentModel({
     required this.status,
     required this.transactionId,
+    required this.transactiontype,
     required this.name,
     required this.email,
+    required this.mobile,
     required this.amount,
     required this.createdAt,
   });
@@ -24,6 +28,8 @@ class PaymentModel {
       email: map['email'] ?? '',
       amount: map['amount'] ?? '',
       createdAt: map['createdAt'] ?? '',
+      transactiontype: map['transactiontype'] ?? '',
+      mobile: map['mobile'] ?? '',
     );
   }
 
@@ -36,6 +42,8 @@ class PaymentModel {
       'email': email,
       'amount': amount,
       'createdAt': createdAt,
+      'transactiontype': transactiontype,
+      'mobile': mobile,
     };
   }
 }
@@ -48,6 +56,8 @@ final List<Map<String, String>> samplePayments = [
     'email': 'john@example.com',
     'amount': '₹ 500',
     'createdAt': '10 Apr 2025, 10:00 AM',
+    'transactiontype': 'Credit',
+    'mobile': '9876543210'
   },
   {
     'status': 'Pending',
@@ -56,6 +66,8 @@ final List<Map<String, String>> samplePayments = [
     'email': 'jane@example.com',
     'amount': '₹ 850',
     'createdAt': '09 Apr 2025, 8:50 AM',
+    'transactiontype': 'Debit',
+    'mobile': '9876543210'
   },
   {
     'status': 'Failed',
@@ -64,6 +76,8 @@ final List<Map<String, String>> samplePayments = [
     'email': 'smith@example.com',
     'amount': '₹ 1300',
     'createdAt': '11 Apr 2025, 1:00 PM',
+    'transactiontype': 'Credit',
+    'mobile': '9876543210'
   },
 ];
 

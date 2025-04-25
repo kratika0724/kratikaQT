@@ -6,17 +6,17 @@ import '../../../constants/app_colors.dart';
 import '../../../providers/transaction_provider.dart';
 import '../../../widgets/common_text_widgets.dart';
 import '../../../widgets/filter_chips_widget.dart';
-import '../../settlement/payment_filter_bottom_sheet.dart';
-import '../../settlement/payment_list.dart';
+import '../../settlement/settlement_filter_bottom_sheet.dart';
+import '../../settlement/settlement_list.dart';
 
-class VendorPaymentsScreen extends StatefulWidget {
-  const VendorPaymentsScreen({super.key});
+class VendorSettlementScreen extends StatefulWidget {
+  const VendorSettlementScreen({super.key});
 
   @override
-  State<VendorPaymentsScreen> createState() => _PaymentsScreenState();
+  State<VendorSettlementScreen> createState() => _SettlementScreenState();
 }
 
-class _PaymentsScreenState extends State<VendorPaymentsScreen> {
+class _SettlementScreenState extends State<VendorSettlementScreen> {
   String? filterQuintusId;
   String? filterEmail;
   String? filterStatus;
@@ -41,7 +41,7 @@ class _PaymentsScreenState extends State<VendorPaymentsScreen> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
-      builder: (_) => PaymentFilterBottomSheet(
+      builder: (_) => SettlementFilterBottomSheet(
         initialQuintusId: filterQuintusId,
         initialEmail: filterEmail,
         initialStatus: filterStatus,
@@ -75,12 +75,12 @@ class _PaymentsScreenState extends State<VendorPaymentsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.ghostWhite.withOpacity(0.7),
+      backgroundColor: AppColors.ghostWhite,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: HeaderTextBlack("Settlement Request"),
         backgroundColor: Colors.white,
-        foregroundColor: AppColors.primary,
+        foregroundColor: Colors.black,
         actions: [
           GestureDetector(
             onTap: () => _openFilterBottomSheet(),
@@ -91,7 +91,7 @@ class _PaymentsScreenState extends State<VendorPaymentsScreen> {
                 constraints: const BoxConstraints(maxWidth: 80),
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(9),
+                  borderRadius: BorderRadius.circular(8),
                   color: AppColors.primary.withOpacity(0.1),
                   border: Border.all(color: AppColors.secondary),
                 ),
@@ -110,58 +110,37 @@ class _PaymentsScreenState extends State<VendorPaymentsScreen> {
           )
         ],
       ),
-      body: Consumer<TransactionProvider>(
-        builder: (context, provider, _) {
-          if (provider.isLoading)
-            return const Center(child: CircularProgressIndicator());
-          if (provider.errorMessage != null)
-            return const Center(child: Text("Oops! Something went wrong"));
-
-          if (filterStartDate != null && filterEndDate != null)
-            formatted =
-                "${DateFormat('dd MMM yyyy').format(filterStartDate!)} - ${DateFormat('dd MMM yyyy').format(filterEndDate!)}";
-
-          return Column(
-            children: [
-              if (filterQuintusId != null ||
-                  filterTransactionType != null ||
-                  filterStatus != null ||
-                  filterEmail != null ||
-                  filterStartDate != null && filterEndDate != null)
-                FilterChipsWidget(
-                  filters: {
-                    'Transaction ID': filterQuintusId,
-                    'Email': filterEmail,
-                    'Transaction Type': filterTransactionType,
-                    'Transaction Status': filterStatus,
-                    'Date Range': formatted,
-                  },
-                  onClear: () {
-                    setState(() {
-                      filterQuintusId = null;
-                      filterEmail = null;
-                      filterTransactionType = null;
-                      filterStatus = null;
-                      filterStartDate = null;
-                      filterEndDate = null;
-                    });
-                  },
-                ),
-              Expanded(
-                child: PaymentCardList(
-                  transactions: provider.transactions,
-                  filterTransactionId: filterQuintusId,
-                  filterTransactionType: filterTransactionType,
-                  filterStatus: filterStatus,
-                  filterEmail: filterEmail,
-                  filterStartDate: filterStartDate,
-                  filterEndDate: filterEndDate,
-                ),
-              ),
-              const SizedBox(height: 10),
-            ],
-          );
-        },
+      body: Column(
+        children: [
+          if (filterQuintusId != null ||
+              filterTransactionType != null ||
+              filterStatus != null ||
+              filterEmail != null ||
+              filterStartDate != null && filterEndDate != null)
+            FilterChipsWidget(
+              filters: {
+                'Transaction ID': filterQuintusId,
+                'Email': filterEmail,
+                'Transaction Type': filterTransactionType,
+                'Transaction Status': filterStatus,
+                'Date Range': formatted,
+              },
+              onClear: () {
+                setState(() {
+                  filterQuintusId = null;
+                  filterEmail = null;
+                  filterTransactionType = null;
+                  filterStatus = null;
+                  filterStartDate = null;
+                  filterEndDate = null;
+                });
+              },
+            ),
+          Expanded(
+              child: SettlementListScreen()
+          ),
+          const SizedBox(height: 10),
+        ],
       ),
     );
   }

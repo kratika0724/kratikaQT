@@ -7,16 +7,41 @@ import '../services/api_service.dart';
 import '../utils/ui_utils.dart';
 
 class ProductProvider with ChangeNotifier {
+  final ApiService apiService = ApiService();
+
   bool isLoading = false;
   bool isFetchingMore = false;
   bool hasMoreData = true;
   String? errorMessage;
-  ProductAddModel? responseModel;
-  List<ProductModel> products = [];
 
   int currentPage_product = 1;
   final int limit = 10;
-  final ApiService apiService = ApiService();
+  Meta? meta;
+
+  List<ProductModel> products = [];
+
+  String? filterName;
+  String? filterCode;
+
+  void setFilters({
+    String? name,
+    String? code,
+  }) {
+    filterName = name;
+    filterCode = code;
+    notifyListeners();
+  }
+
+  List<ProductModel> get FilteredProducts {
+    return products.where((product) {
+      final matchesName = filterName == null ||
+          (product.productName ?? '').toLowerCase().contains(filterName!.toLowerCase());
+      final matchesCode = filterCode == null ||
+          (product.productCode ?? '').toLowerCase().contains(filterCode!.toLowerCase());
+      return matchesName && matchesCode;
+    }).toList();
+  }
+
 
   List<String> getProductNames() {
     return products
@@ -81,8 +106,7 @@ class ProductProvider with ChangeNotifier {
     await getProductData(context);
   }
 
-  Future<void> getProductData(BuildContext context,
-      {bool loadMore = false}) async {
+  Future<void> getProductData(BuildContext context, {bool loadMore = false}) async {
     if (loadMore) {
       if (isFetchingMore || !hasMoreData) return;
       isFetchingMore = true;
@@ -123,14 +147,16 @@ class ProductProvider with ChangeNotifier {
 
         if (newProducts.length < limit) {
           hasMoreData = false;
-          debugPrint("No more data to load.");
+          debugPrint("No more products to load.");
         }
       } else {
         errorMessage = productResponse.message;
+        products = [];
         Fluttertoast.showToast(msg: errorMessage!);
         debugPrint("Get product failed: ${productResponse.message}");
       }
     } catch (error) {
+      products = [];
       errorMessage = "Error fetching products: $error";
       Fluttertoast.showToast(msg: errorMessage!);
       debugPrint(errorMessage);
@@ -139,5 +165,13 @@ class ProductProvider with ChangeNotifier {
       isFetchingMore = false;
       notifyListeners();
     }
+  }
+
+  void clearProducts() {
+    products.clear();
+    meta = null;
+    currentPage_product = 1;
+    hasMoreData = true;
+    notifyListeners();
   }
 }

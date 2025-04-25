@@ -7,7 +7,7 @@ import 'package:qt_distributer/screens/base%20main/payments_screen.dart';
 import 'package:qt_distributer/screens/base%20main/profile_screen.dart';
 import 'package:qt_distributer/screens/base%20main/vendor/distributer_screen.dart';
 import 'package:qt_distributer/screens/base%20main/vendor/vendor_dashboard_screen.dart';
-import 'package:qt_distributer/screens/base%20main/vendor/vendor_payments_screen.dart';
+import 'package:qt_distributer/screens/base%20main/vendor/vendor_settlement_screen.dart';
 import 'package:qt_distributer/screens/base%20main/vendor/vendor_profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -28,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   List<Widget> non_distributer_pages = [
     VendorDashboardScreen(),
-    VendorPaymentsScreen(),
+    VendorSettlementScreen(),
     DistributerScreen(),
     VendorProfileScreen(),
   ];
@@ -70,7 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   label: 'Dashboard',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.assignment),
+                  icon: Icon(Icons.payment),
                   label: 'Payments',
                 ),
                 BottomNavigationBarItem(
@@ -89,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.assignment),
-                  label: 'Payments',
+                  label: 'Settlements',
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.person),

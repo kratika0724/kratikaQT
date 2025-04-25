@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../models/response models/customer_response.dart';
 import '../../models/sample models/customer_model.dart';
+import '../../providers/customer_provider.dart';
 import '../../utils/device_utils.dart';
 import 'customer_card.dart';
 
@@ -36,7 +38,8 @@ class _CustomerListState extends State<CustomerList> {
   @override
   Widget build(BuildContext context) {
     final isWide = DeviceUtils.getDeviceWidth(context);
-    final filteredCustomers = _getFilteredCustomers();
+    final customerProvider = Provider.of<CustomerProvider>(context);
+    final filteredCustomers = customerProvider.FilteredCustomers;
 
     if (filteredCustomers.isEmpty) {
       return const Center(child: Text('No customers found.'));
@@ -46,30 +49,7 @@ class _CustomerListState extends State<CustomerList> {
         ? _buildGridView(filteredCustomers)
         : _buildListView(filteredCustomers);
 
-    return ListView.builder(
-      padding: const EdgeInsets.symmetric(horizontal: 12,vertical: 8),
-      itemCount: widget.customers.length,
-      itemBuilder: (context, index) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4.0),
-          child: CustomerCard(customer: widget.customers[index], isExpanded: false, onExpandToggle: () {  },),
-        );
-      },
-    );
   }
-
-  List<CustomerData> _getFilteredCustomers() {
-    return widget.customers.where((agent) {
-      final matchesName = widget.filterName == null ||
-          (agent.firstName ?? '').toLowerCase().contains(widget.filterName!.toLowerCase());
-
-      final matchesEmail = widget.filterEmail == null ||
-          (agent.email ?? '').toLowerCase().contains(widget.filterEmail!.toLowerCase());
-
-      return matchesName && matchesEmail;
-    }).toList();
-  }
-
 
 
   Widget _buildGridView(List<CustomerData> customers) {

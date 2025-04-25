@@ -113,7 +113,7 @@ class _AllocationFilterBottomSheetState extends State<AllocationFilterBottomShee
             const SizedBox(height: 20),
             TextField(
               controller: _pincodeController,
-              decoration: const InputDecoration(labelText: 'Pincode', border: OutlineInputBorder(),),
+              decoration: const InputDecoration(labelText: 'Pincode', border: OutlineInputBorder(),counterText: ''),
               keyboardType: TextInputType.number,
               maxLength: 6,
               onChanged: (val) => _updateSuggestions(val, true),

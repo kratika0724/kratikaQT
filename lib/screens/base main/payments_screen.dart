@@ -35,8 +35,8 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
   @override
   void initState() {
     super.initState();
-    _applyFilters();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      _applyFilters();
       Provider.of<TransactionProvider>(context, listen: false)
           .getTransactions(context);
     });

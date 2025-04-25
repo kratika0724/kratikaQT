@@ -22,32 +22,35 @@ class AllocationsScreen extends StatefulWidget {
 class _AllocationsScreenState extends State<AllocationsScreen> {
   String? filterPincode;
   String? filterArea;
-  final ScrollController _scrollController = ScrollController();
+
+  bool get _hasFilters => filterPincode != null || filterArea != null;
+
 
   @override
   void initState() {
     super.initState();
-    // Use WidgetsBinding to ensure the context is available after the widget is built
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final provider = Provider.of<AllocationProvider>(context, listen: false);
-      provider.currentPage_allocation = 1;
-      provider.getAllocationData(context);
-
-      _scrollController.addListener(() {
-        if (_scrollController.position.extentAfter < 300 &&
-            !provider.isFetchingMore &&
-            provider.hasMoreData) {
-          provider.getAllocationData(context, loadMore: true);
-        }
-      });
+      _applyFilters();
+      Provider.of<AllocationProvider>(context, listen: false)
+          .getAllocationData(context);
     });
   }
 
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
+  void _applyFilters() {
+    Provider.of<AllocationProvider>(context, listen: false).setFilters(
+      pincode: filterPincode,
+      area: filterArea,
+    );
   }
+
+  void _clearFilters() {
+    setState(() {
+      filterPincode = null;
+      filterArea = null;
+      _applyFilters();
+    });
+  }
+
 
   void _openFilterBottomSheet() {
     showModalBottomSheet(
@@ -63,14 +66,50 @@ class _AllocationsScreenState extends State<AllocationsScreen> {
           setState(() {
             filterPincode = pincode;
             filterArea = area;
+            _applyFilters();
           });
         },
-        onClear: () {
-          setState(() {
-            filterPincode = null;
-            filterArea = null;
-          });
-        },
+        onClear: _clearFilters,
+      ),
+    );
+  }
+
+  Widget _buildFilterButton() {
+    return GestureDetector(
+      onTap: () => _hasFilters ? _clearFilters() : _openFilterBottomSheet(),
+      child: Container(
+        height: 33,
+        constraints: const BoxConstraints(maxWidth: 145),
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          color: _hasFilters
+              ? AppColors.secondary
+              : AppColors.primary.withOpacity(0.1),
+          border: Border.all(color: AppColors.secondary),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Flexible(
+              child: Text(
+                _hasFilters ? "Clear Filters" : "Filter Allocations",
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+                style: mediumTextStyle(
+                  fontSize: dimen14,
+                  color: _hasFilters ? Colors.white : Colors.black,
+                ),
+              ),
+            ),
+            const SizedBox(width: 4),
+            Icon(
+              _hasFilters ? Icons.clear : Icons.filter_list,
+              size: 16,
+              color: _hasFilters ? Colors.white : Colors.black,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -95,125 +134,9 @@ class _AllocationsScreenState extends State<AllocationsScreen> {
             HeaderTextBlack("Allocations"),
             Spacer(),
             // Filter or Clear Filter Button
-            GestureDetector(
-              onTap: () {
-                if (filterPincode != null || filterArea != null) {
-                  setState(() {
-                    filterPincode = null;
-                    filterArea = null;
-                  });
-                } else {
-                  _openFilterBottomSheet();
-                }
-              },
-              child: Padding(
-                padding: const EdgeInsets.only(right: 0),
-                child: Container(
-                  height: 33,
-                  constraints: const BoxConstraints(maxWidth: 140),
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: (filterPincode != null || filterArea != null)
-                        ? AppColors.secondary
-                        : AppColors.primary.withOpacity(0.1),
-                    border: Border.all(color: AppColors.secondary),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Flexible(
-                        child: Text(
-                          (filterPincode != null || filterArea != null)
-                              ? "Clear Filters"
-                              : "Filter Allocations",
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                          style: mediumTextStyle(
-                            fontSize: dimen13,
-                            color: (filterPincode != null || filterArea != null)
-                                ? Colors.white
-                                : Colors.black,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 4),
-                      Icon(
-                        (filterPincode != null || filterArea != null)
-                            ? Icons.clear
-                            : Icons.filter_list,
-                        size: 16,
-                        color: (filterPincode != null || filterArea != null)
-                            ? Colors.white
-                            : Colors.black,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
+            _buildFilterButton(),
           ],
         ),
-        // actions: [
-        //   // Filter or Clear Filter Button
-        //   GestureDetector(
-        //     onTap: () {
-        //       if (filterName != null || filterCode != null) {
-        //         setState(() {
-        //           filterName = null;
-        //           filterCode = null;
-        //         });
-        //       } else {
-        //         _openFilterBottomSheet();
-        //       }
-        //     },
-        //     child: Padding(
-        //       padding: const EdgeInsets.only(right: 12),
-        //       child: Container(
-        //         height: 30,
-        //         constraints: const BoxConstraints(maxWidth: 120),
-        //         padding: const EdgeInsets.symmetric(horizontal: 8),
-        //         decoration: BoxDecoration(
-        //           borderRadius: BorderRadius.circular(9),
-        //           color: (filterName != null || filterCode != null)
-        //               ? AppColors.secondary
-        //               : AppColors.primary.withOpacity(0.1),
-        //           border: Border.all(color: AppColors.secondary),
-        //         ),
-        //         child: Row(
-        //           mainAxisAlignment: MainAxisAlignment.center,
-        //           children: [
-        //             Flexible(
-        //               child: Text(
-        //                 (filterName != null || filterCode != null)
-        //                     ? "Clear Filters"
-        //                     : "Filter Products",
-        //                 overflow: TextOverflow.ellipsis,
-        //                 maxLines: 1,
-        //                 style: mediumTextStyle(
-        //                   fontSize: dimen13,
-        //                   color: (filterName != null || filterCode != null)
-        //                       ? Colors.white
-        //                       : Colors.black,
-        //                 ),
-        //               ),
-        //             ),
-        //             const SizedBox(width: 4),
-        //             Icon(
-        //               (filterName != null || filterCode != null)
-        //                   ? Icons.clear
-        //                   : Icons.filter_list,
-        //               size: 16,
-        //               color: (filterName != null || filterCode != null)
-        //                   ? Colors.white
-        //                   : Colors.black,
-        //             ),
-        //           ],
-        //         ),
-        //       ),
-        //     ),
-        //   ),
-        // ],
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
       ),
@@ -222,82 +145,30 @@ class _AllocationsScreenState extends State<AllocationsScreen> {
           if (provider.isLoading && provider.allocations.isEmpty) {
             return const Center(child: CircularProgressIndicator());
           }
-
           if (provider.errorMessage != null && provider.allocations.isEmpty) {
             return const Center(child: Text("Oops! Something went wrong"));
           }
-
-          final filteredAllocations = provider.allocations.where((allocation) {
-            final matchesPincode = filterPincode == null ||
-                allocation.allocationPincode?.contains(filterPincode!) == true;
-            final matchesArea = filterArea == null ||
-                allocation.allocationArea
-                        ?.toLowerCase()
-                        .contains(filterArea!.toLowerCase()) ==
-                    true;
-            return matchesPincode && matchesArea;
-          }).toList();
-
-          if (filteredAllocations.isEmpty) {
-            return const Center(child: Text("No allocations found."));
+          if (provider.allocations.isEmpty) {
+            return const Center(child: Text("No Data Found!"));
           }
-
-          final isWide = DeviceUtils.getDeviceWidth(context);
-          final scrollableList = isWide
-              ? GridView.builder(
-                  controller: _scrollController,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  itemCount: filteredAllocations.length + 1,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    mainAxisExtent: 100,
-                    crossAxisSpacing: 12,
-                    mainAxisSpacing: 12,
-                  ),
-                  itemBuilder: (context, index) {
-                    if (index == filteredAllocations.length) {
-                      return provider.hasMoreData
-                          ? const Center(child: CircularProgressIndicator())
-                          : const SizedBox.shrink();
-                    }
-                    return AllocationCard(
-                        allocation: filteredAllocations[index]);
-                  },
-                )
-              : ListView.builder(
-                  controller: _scrollController,
-                  padding: const EdgeInsets.only(top: 10),
-                  itemCount: filteredAllocations.length + 1,
-                  itemBuilder: (context, index) {
-                    if (index == filteredAllocations.length) {
-                      return provider.hasMoreData
-                          ? const Center(child: CircularProgressIndicator())
-                          : const SizedBox.shrink();
-                    }
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 6),
-                      child: AllocationCard(
-                          allocation: filteredAllocations[index]),
-                    );
-                  },
-                );
 
           return Column(
             children: [
-              if (filterPincode != null || filterArea != null)
+              if (_hasFilters)
                 FilterChipsWidget(
                   filters: {
                     'Pincode': filterPincode,
                     'Area': filterArea,
                   },
-                  onClear: () => setState(() {
-                    filterPincode = null;
-                    filterArea = null;
-                  }),
+                  onClear: _clearFilters,
                 ),
-              Expanded(child: scrollableList),
+              Expanded(
+                child: AllocationList(
+                  allocations: provider.allocations,
+                  filterPincode: filterPincode,
+                  filterArea: filterArea,
+                ),
+              ),
             ],
           );
         },

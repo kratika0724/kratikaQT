@@ -3,7 +3,7 @@ class AllocationResponseModel {
   final int status;
   final String message;
   final List<AllocationModel> data;
-  final MetaData meta;
+  final AllocationMeta meta;
 
   AllocationResponseModel({
     required this.success,
@@ -21,7 +21,7 @@ class AllocationResponseModel {
       data: List<AllocationModel>.from(
         json['data'].map((x) => AllocationModel.fromJson(x)),
       ),
-      meta: MetaData.fromJson(json['meta']),
+      meta: AllocationMeta.fromJson(json['meta']),
     );
   }
 }
@@ -65,7 +65,7 @@ class AllocationModel {
 }
 
 
-class MetaData {
+class AllocationMeta {
   final int currentPage;
   final int from;
   final int lastPage;
@@ -73,7 +73,7 @@ class MetaData {
   final int to;
   final int total;
 
-  MetaData({
+  AllocationMeta({
     required this.currentPage,
     required this.from,
     required this.lastPage,
@@ -82,8 +82,8 @@ class MetaData {
     required this.total,
   });
 
-  factory MetaData.fromJson(Map<String, dynamic> json) {
-    return MetaData(
+  factory AllocationMeta.fromJson(Map<String, dynamic> json) {
+    return AllocationMeta(
       currentPage: json['current_page'],
       from: json['from'],
       lastPage: json['last_page'],

@@ -8,19 +8,48 @@ import '../services/api_service.dart';
 import '../utils/ui_utils.dart';
 
 class AgentProvider with ChangeNotifier {
+  final ApiService apiService = ApiService();
+
   bool isLoading = false;
   bool isFetchingMore = false;
   bool hasMoreData = true;
   String? errorMessage;
-  List<AgentModel> agents = [];
 
   int currentPage_agent = 1;
   final int limit = 10;
+  Meta? meta;
 
-  List<CustomerAgentByAreaData> agentsbyArea =
-      []; // Use CustomerAgentByAreaData directly now
+  List<AgentModel> agents = [];
+  List<CustomerAgentByAreaData> agentsbyArea = []; // Use CustomerAgentByAreaData directly now
 
-  final ApiService apiService = ApiService();
+  String? filterName;
+  String? filterEmail;
+  bool? filterIsActive = true;
+
+  void setFilters({
+    String? name,
+    String? email,
+    bool? isActive,
+  }) {
+    filterName = name;
+    filterEmail = email;
+    filterIsActive = isActive;
+    notifyListeners();
+  }
+
+  List<AgentModel> get FilteredAgents {
+    return agents.where((agent) {
+      final matchesName = filterName == null ||
+          (agent.firstName ?? '').toLowerCase().contains(filterName!.toLowerCase());
+
+      final matchesEmail = filterEmail == null ||
+          (agent.email ?? '').toLowerCase().contains(filterEmail!.toLowerCase());
+
+      final matchesStatus = filterIsActive == null || agent.isActive == filterIsActive;
+
+      return matchesName && matchesEmail && matchesStatus;
+    }).toList();
+  }
 
   void createAgent(
     BuildContext context,
@@ -37,7 +66,8 @@ class AgentProvider with ChangeNotifier {
     TextEditingController assignedAreaController, {
     required String? gender,
     required DateTime? dob,
-  }) async {
+  })
+  async {
     isLoading = true;
     errorMessage = null;
     notifyListeners();
@@ -93,17 +123,47 @@ class AgentProvider with ChangeNotifier {
     await getAgentData(context);
   }
 
-  Future<void> getAgentData(BuildContext context) async {
-    isLoading = true;
+  Future<void> getAgentData(BuildContext context,{bool loadMore = false}) async {
+    if (loadMore) {
+      if (isFetchingMore || !hasMoreData) return;
+      isFetchingMore = true;
+    } else {
+      isLoading = true;
+      currentPage_agent = 1; // reset on fresh fetch
+      hasMoreData = true;
+    }
+
     errorMessage = null;
     notifyListeners();
 
     try {
-      final response = await apiService.getAuth(context, ApiPath.getAgent, {});
+      final response = await apiService.getAuth(
+          context,
+          ApiPath.getAgent,
+          {
+            "page": currentPage_agent.toString(),
+            "limit": limit.toString(),
+          },
+      );
+
       final agentResponse = AgentResponseModel.fromJson(response);
 
       if (agentResponse.success) {
-        agents = agentResponse.data;
+        final newAgents = agentResponse.data;
+        meta = agentResponse.meta;
+
+        if (loadMore) {
+          agents.addAll(newAgents);
+          currentPage_agent++;
+        } else {
+          agents = newAgents;
+          currentPage_agent = 2;
+        }
+
+        if (newAgents.length < limit) {
+          hasMoreData = false;
+          debugPrint("No more agents to load.");
+        }
       } else {
         errorMessage = agentResponse.message;
         agents = [];
@@ -117,6 +177,7 @@ class AgentProvider with ChangeNotifier {
       debugPrint(errorMessage);
     } finally {
       isLoading = false;
+      isFetchingMore = false;
       notifyListeners();
     }
   }
@@ -162,5 +223,13 @@ class AgentProvider with ChangeNotifier {
       isLoading = false;
       notifyListeners();
     }
+  }
+
+  void clearAgents() {
+    agents.clear();
+    meta = null;
+    currentPage_agent = 1;
+    hasMoreData = true;
+    notifyListeners();
   }
 }

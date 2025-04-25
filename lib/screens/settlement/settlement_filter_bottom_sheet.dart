@@ -5,7 +5,7 @@ import '../../constants/app_colors.dart';
 import '../../constants/app_textstyles.dart';
 import '../../providers/transaction_provider.dart';
 
-class PaymentFilterBottomSheet extends StatefulWidget {
+class SettlementFilterBottomSheet extends StatefulWidget {
   final String? initialQuintusId;
   final String? initialEmail;
   final String? initialStatus; // "Success", "Pending", "Failed"
@@ -16,7 +16,7 @@ class PaymentFilterBottomSheet extends StatefulWidget {
       DateTime? endDate,) onApply;
   final VoidCallback onClear;
 
-  const PaymentFilterBottomSheet({
+  const SettlementFilterBottomSheet({
     super.key,
     required this.initialQuintusId,
     required this.initialEmail,
@@ -29,10 +29,10 @@ class PaymentFilterBottomSheet extends StatefulWidget {
   });
 
   @override
-  State<PaymentFilterBottomSheet> createState() => _PaymentFilterBottomSheetState();
+  State<SettlementFilterBottomSheet> createState() => _SettlementFilterBottomSheetState();
 }
 
-class _PaymentFilterBottomSheetState extends State<PaymentFilterBottomSheet> {
+class _SettlementFilterBottomSheetState extends State<SettlementFilterBottomSheet> {
   late TextEditingController _quintusIdController;
   late TextEditingController _emailController;
   late String? _selectedStatus;

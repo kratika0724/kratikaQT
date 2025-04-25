@@ -21,11 +21,34 @@ class AgentsScreenState extends State<AgentsScreen> {
   String? filterEmail;
   bool? filterIsActive = true;
 
+  bool get _hasFilters =>
+      filterName != null ||
+          filterEmail != null ||
+          filterIsActive != true;
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      _applyFilters();
       Provider.of<AgentProvider>(context, listen: false).getAgentData(context);
+    });
+  }
+
+  void _applyFilters() {
+    Provider.of<AgentProvider>(context, listen: false).setFilters(
+      name: filterName,
+      email: filterEmail,
+      isActive: filterIsActive,
+    );
+  }
+
+  void _clearFilters() {
+    setState(() {
+      filterName = null;
+      filterEmail = null;
+      filterIsActive = true;
+      _applyFilters();
     });
   }
 
@@ -45,15 +68,53 @@ class AgentsScreenState extends State<AgentsScreen> {
             filterName = name;
             filterEmail = email;
             filterIsActive = isActive;
+            _applyFilters();
           });
         },
-        onClear: () {
-          setState(() {
-            filterName = null;
-            filterEmail = null;
-            filterIsActive = true;
-          });
-        },
+        onClear: _clearFilters,
+      ),
+    );
+  }
+
+  Widget _buildFilterButton() {
+    return GestureDetector(
+      onTap: () => _hasFilters ? _clearFilters() : _openFilterBottomSheet(),
+      child: Padding(
+        padding: const EdgeInsets.only(right: 12),
+        child: Container(
+          height: 33,
+          constraints: const BoxConstraints(maxWidth: 120),
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            color: _hasFilters
+                ? AppColors.secondary
+                : AppColors.primary.withOpacity(0.1),
+            border: Border.all(color: AppColors.secondary),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Flexible(
+                child: Text(
+                  _hasFilters ? "Clear Filters" : "Filter Agents",
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  style: mediumTextStyle(
+                    fontSize: dimen14,
+                    color: _hasFilters ? Colors.white : Colors.black,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 4),
+              Icon(
+                _hasFilters ? Icons.clear : Icons.filter_list,
+                size: 16,
+                color: _hasFilters ? Colors.white : Colors.black,
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -65,101 +126,31 @@ class AgentsScreenState extends State<AgentsScreen> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: HeaderTextBlack("Agents"),
-        actions: [
-          // Filter or Clear Filter Button
-          GestureDetector(
-            onTap: () {
-              if (filterName != null ||
-                  filterEmail != null ||
-                  filterIsActive != true) {
-                setState(() {
-                  filterName = null;
-                  filterEmail = null;
-                  filterIsActive = true;
-                });
-              } else {
-                _openFilterBottomSheet();
-              }
-            },
-            child: Padding(
-              padding: const EdgeInsets.only(right: 12),
-              child: Container(
-                height: 33,
-                constraints: const BoxConstraints(maxWidth: 120),
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  color: (filterName != null ||
-                          filterEmail != null ||
-                          filterIsActive != true)
-                      ? AppColors.secondary
-                      : AppColors.primary.withOpacity(0.1),
-                  border: Border.all(color: AppColors.secondary),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Flexible(
-                      child: Text(
-                        (filterName != null ||
-                                filterEmail != null ||
-                                filterIsActive != true)
-                            ? "Clear Filters"
-                            : "Filter Agents",
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        style: mediumTextStyle(
-                          fontSize: dimen13,
-                          color: (filterName != null ||
-                                  filterEmail != null ||
-                                  filterIsActive != true)
-                              ? Colors.white
-                              : Colors.black,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 4),
-                    Icon(
-                      (filterName != null ||
-                              filterEmail != null ||
-                              filterIsActive != true)
-                          ? Icons.clear
-                          : Icons.filter_list,
-                      size: 16,
-                      color: (filterName != null ||
-                              filterEmail != null ||
-                              filterIsActive != true)
-                          ? Colors.white
-                          : Colors.black,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
+        actions: [_buildFilterButton()],
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
       ),
       body: Consumer<AgentProvider>(
         builder: (context, provider, _) {
-          if (provider.isLoading)
+          if (provider.isLoading) {
             return const Center(child: CircularProgressIndicator());
-          if (provider.errorMessage != null)
+          }
+          if (provider.errorMessage != null) {
             return const Center(child: Text("Oops! Something went wrong"));
+          }
+          if (provider.agents.isEmpty) {
+            return const Center(child: Text("No Data Found!"));
+          }
 
           return Column(
             children: [
-              if (filterName != null || filterEmail != null)
+              if (_hasFilters)
                 FilterChipsWidget(
                   filters: {
                     'Name': filterName,
                     'Email': filterEmail,
                   },
-                  onClear: () => setState(() {
-                    filterEmail = null;
-                    filterName = null;
-                  }),
+                  onClear: _clearFilters
                 ),
               Expanded(
                 child: AgentList(
@@ -203,195 +194,6 @@ class AgentsScreenState extends State<AgentsScreen> {
             ),
           ),
         ),
-      ),
-    );
-
-    return Scaffold(
-      backgroundColor: AppColors.ghostWhite.withOpacity(0.7),
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: HeaderTextBlack("Agents"),
-        actions: [
-          // // Add Agent Button
-          // GestureDetector(
-          //   onTap: () {
-          //     Navigator.push(
-          //       context,
-          //       MaterialPageRoute(builder: (_) => const AddAgentScreen()),
-          //     );
-          //   },
-          //   child: Padding(
-          //     padding: const EdgeInsets.symmetric(horizontal: 8),
-          //     child: Container(
-          //       height: 30,
-          //       constraints: const BoxConstraints(maxWidth: 110),
-          //       padding: const EdgeInsets.symmetric(horizontal: 8),
-          //       decoration: BoxDecoration(
-          //         borderRadius: BorderRadius.circular(9),
-          //         color: AppColors.primary.withOpacity(0.1),
-          //         border: Border.all(color: AppColors.secondary),
-          //       ),
-          //       child: Row(
-          //         mainAxisAlignment: MainAxisAlignment.center,
-          //         children: [
-          //           Flexible(
-          //             child: Text(
-          //               "Add Agent",
-          //               overflow: TextOverflow.ellipsis,
-          //               maxLines: 1,
-          //               style: mediumTextStyle(fontSize: dimen13, color: Colors.black),
-          //             ),
-          //           ),
-          //           const SizedBox(width: 4),
-          //           const Icon(Icons.add, size: 16, color: Colors.black),
-          //         ],
-          //       ),
-          //     ),
-          //   ),
-          // ),
-
-          // Filter or Clear Filter Button
-          GestureDetector(
-            onTap: () {
-              if (filterName != null ||
-                  filterEmail != null ||
-                  filterIsActive != true) {
-                // Clear filters
-                setState(() {
-                  filterName = null;
-                  filterEmail = null;
-                  filterIsActive = true;
-                });
-              } else {
-                // Open filter bottom sheet
-                _openFilterBottomSheet();
-              }
-            },
-            child: Padding(
-              padding: const EdgeInsets.only(right: 12),
-              child: Container(
-                height: 30,
-                constraints: const BoxConstraints(maxWidth: 120),
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(9),
-                  color: (filterName != null ||
-                          filterEmail != null ||
-                          filterIsActive != true)
-                      ? AppColors.secondary
-                      : AppColors.primary.withOpacity(0.1),
-                  border: Border.all(color: AppColors.secondary),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Flexible(
-                      child: Text(
-                        (filterName != null ||
-                                filterEmail != null ||
-                                filterIsActive != true)
-                            ? "Clear Filters"
-                            : "Filter Agents",
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        style: mediumTextStyle(
-                          fontSize: dimen13,
-                          color: (filterName != null ||
-                                  filterEmail != null ||
-                                  filterIsActive != true)
-                              ? Colors.white
-                              : Colors.black,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 4),
-                    Icon(
-                      (filterName != null ||
-                              filterEmail != null ||
-                              filterIsActive != true)
-                          ? Icons.clear
-                          : Icons.filter_list,
-                      size: 16,
-                      color: (filterName != null ||
-                              filterEmail != null ||
-                              filterIsActive != true)
-                          ? Colors.white
-                          : Colors.black,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-
-          // Filter Button
-          // GestureDetector(
-          //   onTap: () => _openFilterBottomSheet(),
-          //   child: Padding(
-          //     padding: const EdgeInsets.only(right: 12),
-          //     child: Container(
-          //       height: 30,
-          //       constraints: const BoxConstraints(maxWidth: 80),
-          //       padding: const EdgeInsets.symmetric(horizontal: 8),
-          //       decoration: BoxDecoration(
-          //         borderRadius: BorderRadius.circular(9),
-          //         color: AppColors.primary.withOpacity(0.1),
-          //         border: Border.all(color: AppColors.secondary),
-          //       ),
-          //       child: Row(
-          //         mainAxisAlignment: MainAxisAlignment.center,
-          //         children: [
-          //           Flexible(
-          //             child: Text(
-          //               "Filter",
-          //               overflow: TextOverflow.ellipsis,
-          //               maxLines: 1,
-          //               style: mediumTextStyle(fontSize: dimen13, color: Colors.black),
-          //             ),
-          //           ),
-          //           const SizedBox(width: 4),
-          //           const Icon(Icons.filter_list, size: 16, color: Colors.black),
-          //         ],
-          //       ),
-          //     ),
-          //   ),
-          // ),
-        ],
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-      ),
-      body: Consumer<AgentProvider>(
-        builder: (context, provider, _) {
-          if (provider.isLoading)
-            return const Center(child: CircularProgressIndicator());
-          if (provider.errorMessage != null)
-            return const Center(child: Text("Oops! Something went wrong"));
-
-          return Column(
-            children: [
-              if (filterName != null || filterEmail != null)
-                FilterChipsWidget(
-                  filters: {
-                    'Name': filterName,
-                    'Email': filterEmail,
-                  },
-                  onClear: () => setState(() {
-                    filterEmail = null;
-                    filterName = null;
-                  }),
-                ),
-              Expanded(
-                child: AgentList(
-                  agents: provider.agents,
-                  filterName: filterName,
-                  filterEmail: filterEmail,
-                  filterIsActive: filterIsActive,
-                ),
-              ),
-              const SizedBox(height: 10),
-            ],
-          );
-        },
       ),
     );
   }

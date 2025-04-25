@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../../models/response models/allocation_response.dart';
+import '../../providers/allocation_provider.dart';
 import '../../utils/device_utils.dart';
 import 'allocation_card.dart';
 
@@ -17,22 +19,24 @@ class AllocationList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final filteredAllocations = allocations.where((allocation) {
-      final matchesPincode = filterPincode == null || allocation.allocationPincode?.contains(filterPincode!) == true;
-      final matchesArea = filterArea == null || allocation.allocationArea?.toLowerCase().contains(filterArea!.toLowerCase()) == true;
-      return matchesPincode && matchesArea;
-    }).toList();
+    final isWide = DeviceUtils.getDeviceWidth(context);
+    final allocationProvider = Provider.of<AllocationProvider>(context);
+    final filteredAllocations = allocationProvider.FilteredAllocations;
 
     if (filteredAllocations.isEmpty) {
-      return const Center(child: Text("No matching allocations found."));
+      return const Center(
+          child: Text("No allocations found.")
+      );
     }
-
-    final isWide = DeviceUtils.getDeviceWidth(context);
-
     return isWide
-        ? GridView.builder(
+        ? _buildGridView(filteredAllocations)
+        : _buildListView(filteredAllocations);
+  }
+
+  Widget _buildGridView(List<AllocationModel> allocations) {
+    return GridView.builder(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      itemCount: filteredAllocations.length,
+      itemCount: allocations.length,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         mainAxisExtent: 80, // Adjust height as needed
@@ -40,15 +44,18 @@ class AllocationList extends StatelessWidget {
         mainAxisSpacing: 12,
       ),
       itemBuilder: (context, index) {
-        return AllocationCard(allocation: filteredAllocations[index]);
+        return AllocationCard(allocation: allocations[index]);
       },
-    )
-        : ListView.builder(
-      itemCount: filteredAllocations.length,
+    );
+  }
+
+  Widget _buildListView(List<AllocationModel> allocations) {
+    return ListView.builder(
+      itemCount: allocations.length,
       itemBuilder: (context, index) {
         return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-          child: AllocationCard(allocation: filteredAllocations[index]),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 3),
+          child: AllocationCard(allocation: allocations[index]),
         );
       },
     );

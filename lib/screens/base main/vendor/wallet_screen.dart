@@ -61,6 +61,7 @@ class WalletScreenState extends State<WalletScreen> {
         children: [
           // Wallet Balance Card
           Container(
+            width: double.infinity,
             margin: const EdgeInsets.all(16),
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
@@ -93,14 +94,14 @@ class WalletScreenState extends State<WalletScreen> {
                     color: Colors.black,
                   ),
                 ),
-                const SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _buildBalanceInfo("Total Credit", totalCredit),
-                    _buildBalanceInfo("Total Debit", totalDebit),
-                  ],
-                ),
+                // const SizedBox(height: 16),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //   children: [
+                //     _buildBalanceInfo("Total Credit", totalCredit),
+                //     _buildBalanceInfo("Total Debit", totalDebit),
+                //   ],
+                // ),
               ],
             ),
           ),

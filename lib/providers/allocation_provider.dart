@@ -11,17 +11,43 @@ import '../services/api_service.dart';
 import '../utils/ui_utils.dart';
 
 class AllocationProvider with ChangeNotifier {
+  final ApiService apiService = ApiService();
+
   bool isLoading = false;
   bool isFetchingMore = false;
   bool hasMoreData = true;
   String? errorMessage;
-  AllocationAddModel? responseModel;
-  List<AllocationModel> allocations = [];
 
   String? selectedFileName;
+
   int currentPage_allocation = 1;
   final int limit = 10;
-  final ApiService apiService = ApiService();
+  AllocationMeta? meta;
+
+  List<AllocationModel> allocations = [];
+
+  String? filterPinCode;
+  String? filterArea;
+
+  void setFilters({
+    String? pincode,
+    String? area,
+  }) {
+    filterPinCode = pincode;
+    filterArea = area;
+    notifyListeners();
+  }
+
+  List<AllocationModel> get FilteredAllocations {
+    return allocations.where((allocation) {
+      final matchesPincode = filterPinCode == null ||
+          (allocation.allocationPincode ?? '').toLowerCase().contains(filterPinCode!.toLowerCase());
+      final matchesArea = filterArea == null ||
+          (allocation.allocationArea ?? '').toLowerCase().contains(filterArea!.toLowerCase());
+      return matchesPincode && matchesArea;
+      }).toList();
+  }
+
 
   List<String> getPincodeList() {
     return allocations
@@ -231,87 +257,14 @@ class AllocationProvider with ChangeNotifier {
       notifyListeners();
     }
   }
+
+  void clearAllocations() {
+    allocations.clear();
+    meta = null;
+    currentPage_allocation = 1;
+    hasMoreData = true;
+    notifyListeners();
+  }
+
 }
 
-// import 'package:flutter/material.dart';
-// import 'package:fluttertoast/fluttertoast.dart';
-// import '../models/add models/add_allocation_model.dart';
-// import '../models/response models/allocation_response.dart';
-// import '../services/api_path.dart';
-// import '../services/api_service.dart';
-// import '../utils/ui_utils.dart';
-//
-// class AllocationProvider with ChangeNotifier {
-//
-//   bool isLoading = false;
-//   String? errorMessage;
-//   AllocationAddModel? responseModel;
-//   List<AllocationModel> allocations = [];
-//
-//
-//   final ApiService apiService = ApiService();
-//
-//   void createAllocation(
-//       BuildContext context,
-//       TextEditingController pincodeController,
-//       TextEditingController areaController,
-//       ) async {
-//     isLoading = true;
-//     errorMessage = null;
-//     notifyListeners();
-//
-//     try {
-//       Map<String, dynamic> body = {
-//         "allocation_pincode": pincodeController.text.trim(),
-//         "allocation_area": areaController.text.trim(),
-//       };
-//
-//       final response = await apiService.post_auth(ApiPath.createAllocation, body);
-//       final mResponse = AllocationAddModel.fromJson(response);
-//       if (mResponse.success) {
-//         UiUtils().showSuccessSnackBar(context,"Allocation added successfully!");
-//         getAllocationData();
-//         WidgetsBinding.instance.addPostFrameCallback((_) {
-//           if (context.mounted) {
-//             Navigator.pop(context);
-//           }
-//         });
-//       } else {
-//         Fluttertoast.showToast(msg: "Failed to add allocation: ${mResponse.message}");
-//         debugPrint("Failed to add product: ${mResponse.message}");
-//       }
-//     } catch (error) {
-//       Fluttertoast.showToast(msg: "Error adding allocation: $error");
-//       debugPrint("Error adding allocation: $error");
-//     }finally {
-//       isLoading = false;
-//       notifyListeners();
-//     }
-//   }
-//
-//   Future<void> getAllocationData() async {
-//     isLoading = true;
-//     errorMessage = null;
-//     notifyListeners();
-//
-//     try {
-//       final response = await apiService.getAuth(ApiPath.getAllocation, {});
-//       final allocationResponse = AllocationResponseModel.fromJson(response);
-//
-//       if (allocationResponse.success) {
-//         allocations = allocationResponse.data;
-//       } else {
-//         errorMessage = allocationResponse.message;
-//         Fluttertoast.showToast(msg: errorMessage!);
-//         debugPrint("Get allocation failed: ${allocationResponse.message}");
-//       }
-//     } catch (error) {
-//       errorMessage = "Error fetching allocations: $error";
-//       Fluttertoast.showToast(msg: errorMessage!);
-//       debugPrint(errorMessage);
-//     } finally {
-//       isLoading = false;
-//       notifyListeners();
-//     }
-//   }
-// }

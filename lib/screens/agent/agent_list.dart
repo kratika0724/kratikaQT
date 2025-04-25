@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../models/response models/agent_response.dart';
+import '../../providers/agent_provider.dart';
 import '../../utils/device_utils.dart';
 import 'agent_card.dart';
 
@@ -37,7 +39,8 @@ class _AgentListState extends State<AgentList> {
   @override
   Widget build(BuildContext context) {
     final isWide = DeviceUtils.getDeviceWidth(context);
-    final filteredAgents = _getFilteredAgents();
+    final agentProvider = Provider.of<AgentProvider>(context);
+    final filteredAgents = agentProvider.FilteredAgents;
 
     if (filteredAgents.isEmpty) {
       return const Center(
@@ -48,21 +51,6 @@ class _AgentListState extends State<AgentList> {
         ? _buildGridView(filteredAgents)
         : _buildListView(filteredAgents);
   }
-
-  List<AgentModel> _getFilteredAgents() {
-    return widget.agents.where((agent) {
-      final matchesName = widget.filterName == null ||
-          (agent.firstName ?? '').toLowerCase().contains(widget.filterName!.toLowerCase());
-
-      final matchesEmail = widget.filterEmail == null ||
-          (agent.email ?? '').toLowerCase().contains(widget.filterEmail!.toLowerCase());
-
-      final matchesStatus = widget.filterIsActive == null || agent.isActive == widget.filterIsActive;
-
-      return matchesName && matchesEmail && matchesStatus;
-    }).toList();
-  }
-
 
   Widget _buildGridView(List<AgentModel> agents) {
     return GridView.builder(

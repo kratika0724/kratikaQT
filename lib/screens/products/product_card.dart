@@ -43,9 +43,10 @@ class ProductCard extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 0.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          SizedBox(
-            width: 100,
+          Expanded(
+            flex: 1,
             child: Text(
               label,
               style: mediumTextStyle(fontSize: dimen13, color: Colors.black),
@@ -55,6 +56,7 @@ class ProductCard extends StatelessWidget {
           ),
           const Text(': '),
           Expanded(
+            flex: 3,
             child: Text(
               value,
               style: mediumTextStyle(fontSize: dimen13, color: Colors.black54),
