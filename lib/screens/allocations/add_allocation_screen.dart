@@ -171,11 +171,8 @@ class _AddAllocationScreenState extends State<AddAllocationScreen> {
                                     if (mounted) {
                                       final result =
                                           await OpenFile.open(file.path);
-                                      Fluttertoast.showToast(
-                                          msg:
-                                              'OpenFile result: ${result.message}');
-                                      print(
-                                          'OpenFile result: ${result.message}');
+                                      Fluttertoast.showToast(msg: 'OpenFile result: ${result.message}');
+                                      print('OpenFile result: ${result.message}');
                                     }
                                   } catch (e) {
                                     if (mounted) {

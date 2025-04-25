@@ -81,19 +81,16 @@ class AllocationProvider with ChangeNotifier {
         "allocation_area": area.trim(),
       };
 
-      final response =
-          await apiService.post_auth(context, ApiPath.createAllocation, body);
+      final response = await apiService.post_auth(context, ApiPath.createAllocation, body);
       final mResponse = AllocationAddModel.fromJson(response);
       if (mResponse.success) {
-        UiUtils()
-            .showSuccessSnackBar(context, "Allocation added successfully!");
+        UiUtils().showSuccessSnackBar(context, "Allocation added successfully!");
       } else {
-        Fluttertoast.showToast(
-            msg: "Failed to add allocation: ${mResponse.message}");
+        // Fluttertoast.showToast(msg: "Failed to add allocation: ${mResponse.message}");
         debugPrint("Failed to add allocation: ${mResponse.message}");
       }
     } catch (error) {
-      Fluttertoast.showToast(msg: "Error adding allocation: $error");
+      // Fluttertoast.showToast(msg: "Error adding allocation: $error");
       debugPrint("Error adding allocation: $error");
     } finally {
       notifyListeners();
@@ -120,8 +117,7 @@ class AllocationProvider with ChangeNotifier {
           await apiService.post_auth(context, ApiPath.createAllocation, body);
       final mResponse = AllocationAddModel.fromJson(response);
       if (mResponse.success) {
-        UiUtils()
-            .showSuccessSnackBar(context, "Allocation added successfully!");
+        UiUtils().showSuccessSnackBar(context, "Allocation added successfully!");
         refreshAllocationData(context); // Reset and reload all data
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (context.mounted) {
@@ -129,12 +125,11 @@ class AllocationProvider with ChangeNotifier {
           }
         });
       } else {
-        Fluttertoast.showToast(
-            msg: "Failed to add allocation: ${mResponse.message}");
+        // Fluttertoast.showToast(msg: "Failed to add allocation: ${mResponse.message}");
         debugPrint("Failed to add allocation: ${mResponse.message}");
       }
     } catch (error) {
-      Fluttertoast.showToast(msg: "Error adding allocation: $error");
+      // Fluttertoast.showToast(msg: "Error adding allocation: $error");
       debugPrint("Error adding allocation: $error");
     } finally {
       isLoading = false;
@@ -244,12 +239,12 @@ class AllocationProvider with ChangeNotifier {
         }
       } else {
         errorMessage = allocationResponse.message;
-        Fluttertoast.showToast(msg: errorMessage!);
+        // Fluttertoast.showToast(msg: errorMessage!);
         debugPrint("Get allocation failed: ${allocationResponse.message}");
       }
     } catch (error) {
       errorMessage = "Error fetching allocations: $error";
-      Fluttertoast.showToast(msg: errorMessage!);
+      // Fluttertoast.showToast(msg: errorMessage!);
       debugPrint(errorMessage);
     } finally {
       isLoading = false;

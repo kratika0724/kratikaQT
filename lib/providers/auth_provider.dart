@@ -50,9 +50,6 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-
-
-
   Future<void> _saveAuthState() async {
     final prefs = await SharedPreferences.getInstance();
     if (_loginResponse != null) {

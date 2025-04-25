@@ -36,6 +36,8 @@ class DistributorCard extends StatelessWidget {
               children: [
                 Text(
                   distributor.name,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
                   style: semiBoldTextStyle(fontSize: dimen16, color: Colors.black),
                 ),
                 const Icon(Icons.keyboard_arrow_down, color: Colors.black),
@@ -44,6 +46,8 @@ class DistributorCard extends StatelessWidget {
             const SizedBox(height: 4),
             Text(
               formattedDate,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
               style: thinTextStyle(fontSize: dimen13, color: Colors.black),
             ),
             if (isExpanded) ...[
@@ -64,13 +68,18 @@ class DistributorCard extends StatelessWidget {
         children: [
           Expanded(
               flex: 3,
-              child: Text(label,
-                  style: mediumTextStyle(fontSize: dimen13, color: Colors.black))),
+              child: Text(
+                  label,
+                  style: mediumTextStyle(fontSize: dimen13, color: Colors.black),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+              )),
           const Text(": "),
           Expanded(
               flex: 6,
               child: Text(value,
-                  style: mediumTextStyle(fontSize: dimen13, color: Colors.black))),
+                  style: mediumTextStyle(fontSize: dimen13, color: Colors.black),overflow: TextOverflow.ellipsis,
+                maxLines: 1,)),
         ],
       ),
     );

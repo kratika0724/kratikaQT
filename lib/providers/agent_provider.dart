@@ -103,12 +103,11 @@ class AgentProvider with ChangeNotifier {
           }
         });
       } else {
-        Fluttertoast.showToast(
-            msg: "Failed to add agent: ${mResponse.message}");
+        // Fluttertoast.showToast(msg: "Failed to add agent: ${mResponse.message}");
         debugPrint("Failed to add agent: ${mResponse.message}");
       }
     } catch (error) {
-      Fluttertoast.showToast(msg: "Error adding agent: $error");
+      // Fluttertoast.showToast(msg: "Error adding agent: $error");
       debugPrint("Error adding agent: $error");
     } finally {
       isLoading = false;
@@ -167,13 +166,13 @@ class AgentProvider with ChangeNotifier {
       } else {
         errorMessage = agentResponse.message;
         agents = [];
-        Fluttertoast.showToast(msg: errorMessage!);
+        // Fluttertoast.showToast(msg: errorMessage!);
         debugPrint("Get agent failed: ${agentResponse.message}");
       }
     } catch (error) {
       agents = [];
       errorMessage = "Error fetching agents: $error";
-      Fluttertoast.showToast(msg: errorMessage!);
+      // Fluttertoast.showToast(msg: errorMessage!);
       debugPrint(errorMessage);
     } finally {
       isLoading = false;
@@ -211,13 +210,13 @@ class AgentProvider with ChangeNotifier {
         errorMessage = areaResponse.message.isNotEmpty
             ? areaResponse.message
             : 'No Agent Found';
-        Fluttertoast.showToast(msg: errorMessage!);
+        // Fluttertoast.showToast(msg: errorMessage!);
         debugPrint("Get agent failed: $errorMessage");
       }
     } catch (error) {
       agentsbyArea = []; // Clear the list in case of error
       errorMessage = "Error fetching agents: $error";
-      Fluttertoast.showToast(msg: errorMessage!);
+      // Fluttertoast.showToast(msg: errorMessage!);
       debugPrint(errorMessage);
     } finally {
       isLoading = false;

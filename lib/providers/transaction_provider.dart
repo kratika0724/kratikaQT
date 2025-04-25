@@ -131,13 +131,13 @@ class TransactionProvider with ChangeNotifier {
         errorMessage = transactionResponse.message;
         // Check if the message is "No Data Found" before showing the toast
         if (errorMessage != "No Data Found.") {
-          Fluttertoast.showToast(msg: errorMessage!);
+          // Fluttertoast.showToast(msg: errorMessage!);
         }
         debugPrint("Transaction fetch failed: ${transactionResponse.message}");
       }
     } catch (error) {
       errorMessage = "Error fetching transactions: $error";
-      Fluttertoast.showToast(msg: errorMessage!);
+      // Fluttertoast.showToast(msg: errorMessage!);
       debugPrint(errorMessage);
     } finally {
       isLoading = false;

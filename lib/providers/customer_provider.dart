@@ -102,12 +102,11 @@ class CustomerProvider with ChangeNotifier {
           }
         });
       } else {
-        Fluttertoast.showToast(
-            msg: "Failed to add customer: ${mResponse.message}");
+        // Fluttertoast.showToast(msg: "Failed to add customer: ${mResponse.message}");
         debugPrint("Failed to add customer: ${mResponse.message}");
       }
     } catch (error) {
-      Fluttertoast.showToast(msg: "Error adding customer: $error");
+      // Fluttertoast.showToast(msg: "Error adding customer: $error");
       debugPrint("Error adding customer: $error");
     } finally {
       isLoading = false;
@@ -158,13 +157,13 @@ class CustomerProvider with ChangeNotifier {
       } else {
         customers = [];
         errorMessage = customerResponse.message;
-        Fluttertoast.showToast(msg: errorMessage!);
+        // Fluttertoast.showToast(msg: errorMessage!);
         debugPrint("Get customer failed: ${customerResponse.message}");
       }
     } catch (error) {
       customers = [];
       errorMessage = "Error fetching customers: $error";
-      Fluttertoast.showToast(msg: errorMessage!);
+      // Fluttertoast.showToast(msg: errorMessage!);
       debugPrint(errorMessage);
     } finally {
       isLoading = false;

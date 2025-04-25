@@ -86,12 +86,11 @@ class ProductProvider with ChangeNotifier {
           }
         });
       } else {
-        Fluttertoast.showToast(
-            msg: "Failed to add product: ${mResponse.message}");
+        // Fluttertoast.showToast(msg: "Failed to add product: ${mResponse.message}");
         debugPrint("Failed to add product: ${mResponse.message}");
       }
     } catch (error) {
-      Fluttertoast.showToast(msg: "Error adding product: $error");
+      // Fluttertoast.showToast(msg: "Error adding product: $error");
       debugPrint("Error adding product: $error");
     } finally {
       isLoading = false;
@@ -152,13 +151,13 @@ class ProductProvider with ChangeNotifier {
       } else {
         errorMessage = productResponse.message;
         products = [];
-        Fluttertoast.showToast(msg: errorMessage!);
+        // Fluttertoast.showToast(msg: errorMessage!);
         debugPrint("Get product failed: ${productResponse.message}");
       }
     } catch (error) {
       products = [];
       errorMessage = "Error fetching products: $error";
-      Fluttertoast.showToast(msg: errorMessage!);
+      // Fluttertoast.showToast(msg: errorMessage!);
       debugPrint(errorMessage);
     } finally {
       isLoading = false;

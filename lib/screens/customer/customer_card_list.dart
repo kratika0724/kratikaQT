@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../models/response models/customer_response.dart';
-import '../../models/sample models/customer_model.dart';
 import '../../providers/customer_provider.dart';
 import '../../utils/device_utils.dart';
 import 'customer_card.dart';

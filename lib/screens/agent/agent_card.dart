@@ -1,9 +1,7 @@
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:qt_distributer/constants/app_colors.dart';
 import 'package:qt_distributer/constants/app_textstyles.dart';
-import '../../models/sample models/agent_model.dart';
 import '../../models/response models/agent_response.dart';
 
 class AgentCard extends StatelessWidget {
