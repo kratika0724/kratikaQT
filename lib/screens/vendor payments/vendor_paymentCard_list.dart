@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:qt_distributer/screens/vendor%20payments/vendor_payment_card.dart';
 import '../../models/sample models/payment_model.dart';
-import 'settlement_card.dart'; // Import your SettlementCard file
 
-class SettlementListScreen extends StatefulWidget {
-  const SettlementListScreen({Key? key}) : super(key: key);
+class VendorPaymentCardList extends StatefulWidget {
+  const VendorPaymentCardList({Key? key}) : super(key: key);
 
   @override
-  State<SettlementListScreen> createState() => _SettlementListScreenState();
+  State<VendorPaymentCardList> createState() => _VendorPaymentCardListState();
 }
 
-class _SettlementListScreenState extends State<SettlementListScreen> {
-  final List<PaymentModel> _settlements = [
+class _VendorPaymentCardListState extends State<VendorPaymentCardList> {
+  final List<PaymentModel> _payments = [
     PaymentModel(
       amount: "1200.50",
       status: 'Success',
@@ -69,11 +69,11 @@ class _SettlementListScreenState extends State<SettlementListScreen> {
   Widget build(BuildContext context) {
     return ListView.separated(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      itemCount: _settlements.length,
+      itemCount: _payments.length,
       separatorBuilder: (_, __) => const SizedBox(height: 8),
       itemBuilder: (context, index) {
-        final payment = _settlements[index];
-        return SettlementCard(
+        final payment = _payments[index];
+        return VendorPaymentCard(
           payment: payment,
           isExpanded: expandedIndex == index,
           onExpandToggle: () => toggleExpanded(index),

@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import '../constants/commonString.dart';
 import '../models/response models/verify_otp_response.dart';
 import '../services/user_preferences.dart';
 
@@ -54,4 +55,14 @@ void setUserData(User userData) {
     PreferencesServices.customerId,
     userData.customerId ?? '',
   );
+  // distributor OR vendor
+  final roleName = (userData.roleName ?? '').toLowerCase().trim();
+  if (roleName == 'distributor') {
+    is_distributer = true;
+  } else {
+    is_distributer = false;
+  }
+
+  // debugPrint('Role: $roleName');
+  // debugPrint('Is Distributor: $is_distributer');
 }
