@@ -16,163 +16,11 @@ class VendorPaymentCard extends StatelessWidget {
     required this.onExpandToggle,
   }) : super(key: key);
 
-
-
-  // void _showActionPopup(BuildContext context) {
-  //   showDialog(
-  //     context: context,
-  //     builder: (context) => AlertDialog(
-  //       title: const Text('Payment request Action'),
-  //       content: Column(
-  //         mainAxisSize: MainAxisSize.min,
-  //         children: [
-  //           ListTile(
-  //             leading: const Icon(Icons.check_circle, color: Colors.green),
-  //             title: const Text('Accept'),
-  //             onTap: () {
-  //               Navigator.pop(context);
-  //               // TODO: Implement accept action
-  //             },
-  //           ),
-  //           ListTile(
-  //             leading: const Icon(Icons.cancel, color: Colors.red),
-  //             title: const Text('Reject'),
-  //             onTap: () {
-  //               Navigator.pop(context);
-  //               // TODO: Implement reject action
-  //             },
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
-
-  void _showActionPopup(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              'Confirm Payment',
-              textAlign: TextAlign.center,
-              style: mediumTextStyle(fontSize: dimen20, color: Colors.black),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              "Tap Accept to confirm and complete this payment.",
-              textAlign: TextAlign.center,
-              style: mediumTextStyle(fontSize: dimen15, color: Colors.grey[600]!),
-            ),
-            const SizedBox(height: 24),
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton.icon(
-                    onPressed: () {
-                      Navigator.pop(context);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text("Payment Confirmed!")),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      foregroundColor: Colors.green,
-                      elevation: 2,
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        // side: const BorderSide(color: Colors.green),
-                      ),
-                    ),
-                    icon: const Icon(Icons.check_circle, color: Colors.green),
-                    label: const Text('Accept'),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: ElevatedButton.icon(
-                    onPressed: () {
-                      Navigator.pop(context);
-                      // TODO: Implement reject action
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      foregroundColor: Colors.red,
-                      elevation: 2,
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        // side: const BorderSide(color: Colors.red),
-                      ),
-                    ),
-                    icon: const Icon(Icons.cancel, color: Colors.red),
-                    label: const Text('Reject'),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-
-// Inside your class...
-
-  // void _showActionPopup(BuildContext context) {
-  //   final GlobalKey<SlideActionState> _sliderKey = GlobalKey();
-  //
-  //   showDialog(
-  //     context: context,
-  //     builder: (context) => AlertDialog(
-  //       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-  //       title: const Text('Confirm Payment'),
-  //       content: Column(
-  //         mainAxisSize: MainAxisSize.min,
-  //         children: [
-  //           const Text("Slide to confirm this payment", textAlign: TextAlign.center,),
-  //           const SizedBox(height: 20),
-  //           SlideAction(
-  //             key: _sliderKey,
-  //             innerColor: AppColors.secondary,
-  //             outerColor: Colors.white,
-  //             sliderButtonIcon: const Icon(Icons.arrow_forward, color: Colors.white),
-  //             text: "  Slide to Pay",
-  //             textStyle: boldTextStyle(fontSize: dimen14, color: Colors.black87),
-  //             onSubmit: () {
-  //               Navigator.pop(context);
-  //
-  //               // TODO: Trigger your payment logic here
-  //
-  //               ScaffoldMessenger.of(context).showSnackBar(
-  //                 const SnackBar(content: Text("Payment Confirmed!")),
-  //               );
-  //             },
-  //           ),
-  //           const SizedBox(height: 10),
-  //           TextButton(
-  //             onPressed: () => Navigator.pop(context),
-  //             child: Text("Cancel", style: mediumTextStyle(fontSize: dimen16, color: Colors.grey)),
-  //           )
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
-
-
   @override
   Widget build(BuildContext context) {
     final statusColor = _getStatusColor(payment.status);
     final bgColorStatus = statusColor.withOpacity(0.1);
-    final transactionTypeColor =
-    _getTransactionTypeColor(payment.transactiontype);
+    final transactionTypeColor = _getTransactionTypeColor(payment.transactiontype);
     final bgColorTransactionType = transactionTypeColor.withOpacity(0.2);
 
     return GestureDetector(
@@ -185,44 +33,76 @@ class VendorPaymentCard extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
         child: Padding(
           padding: const EdgeInsets.only(bottom: 0.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
+          child: Row(
             children: [
-              _buildAmountRow(payment.amount , payment.createdAt, payment.status, bgColorStatus, statusColor, bgColorTransactionType,transactionTypeColor, context),
-              // Padding(
-              //   padding: EdgeInsets.only(top: 6, bottom:4),
-              //   child: DottedLine(
-              //       dashLength: 4.0, dashColor: Colors.grey.shade400, lineThickness: 0.5),
-              // ),
-              SizedBox(height: 8,),
-              Row(
-                children: [
-                  Expanded(
-                    child: _buildBaseInfoRow(payment.name,payment.status,
-                      payment.transactiontype,
-                      bgColorStatus,
-                      statusColor, payment.createdAt,),
-                  ),
-                  SizedBox(
-                    width: 2,
-                  ),
-
-                ],
-              ),
-
-              if (isExpanded)
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildInfoRow("Email", payment.email),
-                      _buildInfoRow("Mobile", payment.mobile),
-                      _buildInfoRow("Quintus ID", "${payment.transactionId}"),
-                    ],
-                  ),
+              // 🟢 Circle Avatar for Initials
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.secondary.withOpacity(0.2),
                 ),
+                alignment: Alignment.center,
+                child: Text(
+                  payment.name.isNotEmpty ? payment.name[0].toUpperCase() : '',
+                  style: boldTextStyle(fontSize: dimen18, color: AppColors.secondary),
+                ),
+              ),
+              const SizedBox(width: 10),
+
+              // 🟢 Wrap this part in a Flexible widget to avoid layout issues
+              Flexible(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildAmountRow(
+                      payment.amount,
+                      payment.name,
+                      payment.createdAt,
+                      payment.status,
+                      bgColorStatus,
+                      statusColor,
+                      bgColorTransactionType,
+                      transactionTypeColor,
+                      context,
+                    ),
+                    const SizedBox(height: 2),
+                    _buildStatusRow(
+                      payment.status,
+                      bgColorStatus,
+                      statusColor,
+
+                    ),
+                    // Row(
+                    //   children: [
+                    //     Expanded(
+                    //       child: _buildBaseInfoRow(
+                    //         payment.name,
+                    //         payment.status,
+                    //         payment.transactiontype,
+                    //         bgColorStatus,
+                    //         statusColor,
+                    //         payment.createdAt,
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
+                    if (isExpanded)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildInfoRow("Email", payment.email),
+                            _buildInfoRow("Mobile", payment.mobile),
+                            _buildInfoRow("Quintus ID", "${payment.transactionId}"),
+                          ],
+                        ),
+                      ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
@@ -231,7 +111,7 @@ class VendorPaymentCard extends StatelessWidget {
   }
 
 
-  Widget _buildAmountRow(String transactionAmount, String formattedDate, String status, Color bgColorStatus, Color textColorStatus, Color bgColorTransactionType , Color textColor, BuildContext context) {
+  Widget _buildAmountRow(String transactionAmount, String refId, String formattedDate, String status, Color bgColorStatus, Color textColorStatus, Color bgColorTransactionType , Color textColor, BuildContext context) {
     final isCredit = payment.transactiontype.toLowerCase() == 'credit';
     final prefix = isCredit ? '+' : '-';
     final dateLabel = isCredit ? 'Received on' : 'Paid on';
@@ -241,28 +121,87 @@ class VendorPaymentCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Expanded(
+          flex: 2,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    refId,
+                    style: regularTextStyle(fontSize: dimen15, color: Colors.black),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Text(
+                    "$prefix ₹$transactionAmount",
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    style: semiBoldTextStyle(fontSize: dimen14, color: textColor),
+                  ),
+                ],
+              ),
               Text(
-                "$prefix ₹$transactionAmount",
+                "$dateLabel $formattedDate",
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
-                style: semiBoldTextStyle(fontSize: dimen16, color: textColor),
+                style: thinTextStyle(fontSize: dimen13, color: Colors.grey),
               ),
-              // Text(
-              //   "$dateLabel $formattedDate",
-              //   overflow: TextOverflow.ellipsis,
-              //   maxLines: 1,
-              //   style: thinTextStyle(fontSize: dimen13, color: Colors.grey),
-              // ),
             ],
           ),
         ),
+
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            // Text(
+            //   "$prefix ₹$transactionAmount",
+            //   overflow: TextOverflow.ellipsis,
+            //   maxLines: 1,
+            //   style: semiBoldTextStyle(fontSize: dimen14, color: textColor),
+            // ),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                // Container(
+                //   constraints: const BoxConstraints(maxWidth: 120),
+                //   padding: const EdgeInsets.symmetric(vertical: 1, horizontal: 4),
+                //   decoration: BoxDecoration(
+                //     color: Colors.white,
+                //     // border: Border.all(color: textColorStatus.withOpacity(0.8),width: 0.7),
+                //     borderRadius: BorderRadius.circular(6),
+                //   ),
+                //   child: Text(
+                //     status,
+                //     overflow: TextOverflow.ellipsis,
+                //     maxLines: 1,
+                //     style: mediumTextStyle(fontSize: dimen12, color: textColorStatus),
+                //   ),
+                // ),
+                // const Icon(Icons.keyboard_arrow_down, color: Colors.black, size: 20),
+              ],
+            ),
+
+          ],
+        ),
+
+
+        // const Icon(Icons.keyboard_arrow_down, color: Colors.black, size: 22),
+      ],
+
+    );
+  }
+
+  Widget _buildStatusRow(String status, Color bgColorStatus, Color textColorStatus) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
         Container(
           constraints: const BoxConstraints(maxWidth: 120),
-          padding: const EdgeInsets.symmetric(vertical: 1, horizontal: 6),
+          padding: const EdgeInsets.symmetric(vertical: 1, horizontal: 4),
           decoration: BoxDecoration(
             color: bgColorStatus,
             // border: Border.all(color: textColorStatus.withOpacity(0.8),width: 0.7),
@@ -275,10 +214,10 @@ class VendorPaymentCard extends StatelessWidget {
             style: mediumTextStyle(fontSize: dimen12, color: textColorStatus),
           ),
         ),
+        const Icon(Icons.keyboard_arrow_down, color: Colors.black, size: 20),
       ],
     );
   }
-
   Widget _buildBaseInfoRow(String refId,String status,
       String transactionType,
       Color bgColorStatus,
