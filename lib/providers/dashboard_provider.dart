@@ -38,13 +38,14 @@ class DashboardProvider extends ChangeNotifier {
   }
 
   Future<void> fetchUserCountData(BuildContext context, String token) async {
+
     isLoading = true;
     error = null;
     notifyListeners();
 
     try {
       final response = await apiService
-          .getAuth(context, ApiPath.getUSerCountDashboardData, {});
+          .getAuth(context, ApiPath.getDashboardData, {});
       final mResponse = DashboardResponse.fromJson(response);
       if (mResponse.success) {
         _userCountData = mResponse;
@@ -105,7 +106,8 @@ class DashboardProvider extends ChangeNotifier {
         .then((profileImg) {
       user_profile_img = (profileImg?.toString() ?? "").isEmpty ||
               profileImg == ""
-          ? "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png"
+          // ? "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png"
+          ? "https://www.gravatar.com/avatar/2c7d99fe281ecd3bcd65ab915bac6dd5?s=250"
           : profileImg.toString();
     });
     PreferencesServices.getPreferencesData(PreferencesServices.roleName)

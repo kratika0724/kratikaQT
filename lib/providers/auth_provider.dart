@@ -2,8 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../constants/commonString.dart';
 import '../models/response models/verify_otp_response.dart';
 import '../services/api_service.dart';
+import '../services/user_preferences.dart';
 
 class AuthProvider extends ChangeNotifier {
   final ApiService _apiService = ApiService();
@@ -39,6 +41,12 @@ class AuthProvider extends ChangeNotifier {
           final Map<String, dynamic> json = Map<String, dynamic>.from(
               Map<String, dynamic>.from(jsonDecode(authData)));
           _loginResponse = VerifyOtpResponse.fromJson(json);
+
+          // Restore roleName and is_distributer flag
+          final roleName = await PreferencesServices.getPreferencesData(PreferencesServices.roleName);
+          is_distributer = (roleName?.toLowerCase().trim() == 'distributor');
+          debugPrint('Restored role: $roleName');
+          debugPrint('Is distributor: $is_distributer');
         } catch (e) {
           _isAuthenticated = false;
           await prefs.remove(_authKey);
@@ -91,6 +99,17 @@ class AuthProvider extends ChangeNotifier {
       if (response.success) {
         _loginResponse = response;
         _isAuthenticated = true;
+
+        // Save and apply role
+        final roleName = (response.user?.roleName ?? '').toLowerCase().trim();
+        PreferencesServices.setPreferencesData(
+          PreferencesServices.roleName,
+          roleName,
+        );
+        debugPrint('Restored role: $roleName');
+        is_distributer = roleName == 'distributor';
+        debugPrint('Is distributor: $is_distributer');
+
         await _saveAuthState();
         notifyListeners();
         return true;

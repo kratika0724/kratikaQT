@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import '../models/add models/add_agent_model.dart';
+import 'package:qt_distributer/models/response%20models/common_response.dart';
 import '../models/response models/get_agent_by_area_response.dart';
 import '../models/response models/agent_response.dart';
 import '../services/api_path.dart';
@@ -39,8 +38,17 @@ class AgentProvider with ChangeNotifier {
 
   List<AgentModel> get FilteredAgents {
     return agents.where((agent) {
-      final matchesName = filterName == null ||
-          (agent.firstName ?? '').toLowerCase().contains(filterName!.toLowerCase());
+      // final matchesName = filterName == null ||
+      //     (agent.firstName ?? '').toLowerCase().contains(filterName!.toLowerCase());
+
+      // Combine first, middle, and last names into a single string
+      final fullName = [
+        agent.firstName,
+        agent.middleName,
+        agent.lastName,
+      ].where((name) => name != null && name.trim().isNotEmpty).join(' ').toLowerCase();
+
+      final matchesName = filterName == null || fullName.contains(filterName!.toLowerCase());
 
       final matchesEmail = filterEmail == null ||
           (agent.email ?? '').toLowerCase().contains(filterEmail!.toLowerCase());
@@ -92,9 +100,9 @@ class AgentProvider with ChangeNotifier {
       final response =
           await apiService.post_auth(context, ApiPath.createAgent, body);
       final mResponse =
-          AgentAddModel.fromJson(response); // reuse or make AgentAddModel
+          CommonResponse.fromJson(response); // reuse or make AgentAddModel
 
-      if (mResponse.success) {
+      if (mResponse.success!) {
         UiUtils().showSuccessSnackBar(context, "Agent added successfully!");
         refreshAgentData(context);
         WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -183,11 +191,19 @@ class AgentProvider with ChangeNotifier {
 
   List<String> getAgentNamesByArea() {
     return agentsbyArea
-        .map((agent) => agent.firstName ?? '')
-        .where((name) => name.isNotEmpty)
+        .map((agent) => [
+      agent.firstName,
+      agent.middleName,
+      agent.lastName,
+    ]
+        .where((name) => name != null && name.trim().isNotEmpty)
+        .join(' ')
+        .trim())
+        .where((fullName) => fullName.isNotEmpty)
         .toSet()
         .toList();
   }
+
 
   Future<void> getAgentDataByArea(BuildContext context, String area) async {
     isLoading = true;

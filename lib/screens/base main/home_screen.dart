@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:qt_distributer/constants/app_colors.dart';
 import 'package:qt_distributer/constants/commonString.dart';
-import 'package:qt_distributer/screens/base%20main/agents_screen.dart';
-import 'package:qt_distributer/screens/base%20main/dashboard_screen.dart';
-import 'package:qt_distributer/screens/base%20main/payments_screen.dart';
-import 'package:qt_distributer/screens/base%20main/profile_screen.dart';
+import 'package:qt_distributer/screens/base%20main/distributor/agents_screen.dart';
+import 'package:qt_distributer/screens/base%20main/distributor/dashboard_screen.dart';
+import 'package:qt_distributer/screens/base%20main/distributor/payments_screen.dart';
+import 'package:qt_distributer/screens/base%20main/distributor/profile_screen.dart';
 import 'package:qt_distributer/screens/base%20main/vendor/distributer_screen.dart';
 import 'package:qt_distributer/screens/base%20main/vendor/vendor_dashboard_screen.dart';
 import 'package:qt_distributer/screens/base%20main/vendor/vendor_settlement_screen.dart';

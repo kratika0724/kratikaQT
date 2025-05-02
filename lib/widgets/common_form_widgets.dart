@@ -21,8 +21,9 @@ Widget buildTextField(
     keyboardType = TextInputType.number;
   }
 
+
   List<TextInputFormatter> inputFormatters = [];
-  if (label.toLowerCase().contains('first name') || label.toLowerCase().contains('last name') || label.toLowerCase().contains('middle name (optional)')) {
+  if (label.toLowerCase().contains('first name') || label.toLowerCase().contains('last name') || label.toLowerCase().contains('middle name (optional)') || label.toLowerCase().contains('email')) {
     inputFormatters.add(LengthLimitingTextInputFormatter(30));
   }
   if (label.toLowerCase().contains('pincode')) {
@@ -40,11 +41,11 @@ Widget buildTextField(
       controller: _controller,
       inputFormatters: inputFormatters,
       keyboardType: keyboardType,
-      style: regularTextStyle(fontSize: dimen14, color: Colors.black),
+      style: regularTextStyle(fontSize: dimen14, color: AppColors.textBlack),
       decoration: InputDecoration(
         labelText: label,
         hintText: hint,
-        labelStyle: regularTextStyle(fontSize: dimen13, color: Colors.black54),
+        labelStyle: regularTextStyle(fontSize: dimen13, color: AppColors.textBlack54),
         floatingLabelStyle: regularTextStyle(fontSize: dimen16, color: AppColors.textSecondary),
         filled: true,
         fillColor: AppColors.ghostWhite,
@@ -78,11 +79,11 @@ Widget buildProductTextField(
       controller: _controller,
       inputFormatters: inputFormatters,
       keyboardType: keyboardType,
-      style: regularTextStyle(fontSize: dimen14, color: Colors.black),
+      style: regularTextStyle(fontSize: dimen14, color: AppColors.textBlack),
       decoration: InputDecoration(
         labelText: label,
         hintText: hint,
-        labelStyle: regularTextStyle(fontSize: dimen13, color: Colors.black54),
+        labelStyle: regularTextStyle(fontSize: dimen13, color: AppColors.textBlack54),
         floatingLabelStyle: regularTextStyle(fontSize: dimen16, color: AppColors.textSecondary),
         filled: true,
         fillColor: AppColors.ghostWhite,
@@ -127,13 +128,13 @@ Widget buildCalendarTextField(
         ),
         decoration: InputDecoration(
           labelText: label,
-          labelStyle: regularTextStyle(fontSize: dimen14, color: Colors.black54),
+          labelStyle: regularTextStyle(fontSize: dimen14, color: AppColors.textBlack54),
           hintText: hint,
           filled: true,
           fillColor: AppColors.ghostWhite,
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
         ),
-        style: regularTextStyle(fontSize: dimen14, color: Colors.black),
+        style: regularTextStyle(fontSize: dimen14, color: AppColors.textBlack),
       ),
     ),
   );
@@ -150,17 +151,17 @@ Widget buildDropdown(
     padding: const EdgeInsets.only(bottom: 16),
     child: DropdownButtonFormField<String>(
       value: value,
-      style: regularTextStyle(fontSize: dimen14, color: Colors.black),
+      style: regularTextStyle(fontSize: dimen14, color: AppColors.textBlack),
       decoration: InputDecoration(
         labelText: label,
-        labelStyle: regularTextStyle(fontSize: dimen14, color: Colors.black54),
+        labelStyle: regularTextStyle(fontSize: dimen14, color: AppColors.textBlack54),
         filled: true,
         fillColor: AppColors.ghostWhite,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
         ),
       ),
-      dropdownColor: Colors.white, // Dropdown menu background color
+      dropdownColor: AppColors.textWhite, // Dropdown menu background color
       borderRadius: BorderRadius.circular(12), // Rounded dropdown corners
       items: items
           .map((item) => DropdownMenuItem(
@@ -182,16 +183,16 @@ Widget buildGenderSelector({String? selectedGender, required Null Function(dynam
       children: [
         Text(
             'Gender',
-            style: regularTextStyle(fontSize: dimen14, color: Colors.black)),
+            style: regularTextStyle(fontSize: dimen14, color: AppColors.textBlack)),
         Theme(
           data: ThemeData(
-            unselectedWidgetColor: Colors.black54, // border color
+            unselectedWidgetColor: AppColors.textBlack54, // border color
             radioTheme: RadioThemeData(
               fillColor: MaterialStateProperty.resolveWith<Color>((states) {
                 if (states.contains(MaterialState.selected)) {
                   return AppColors.secondary; // selected = secondary
                 }
-                return Colors.black54; // unselected = primary
+                return AppColors.textBlack54; // unselected = primary
               }),
             ),
           ),
@@ -202,13 +203,13 @@ Widget buildGenderSelector({String? selectedGender, required Null Function(dynam
               groupValue: selectedGender,
               onChanged: onChanged,
             ),
-            Text('Male',style: regularTextStyle(fontSize: dimen14, color: Colors.black)),
+            Text('Male',style: regularTextStyle(fontSize: dimen14, color: AppColors.textBlack)),
             Radio<String>(
                 value: 'Female',
                 groupValue: selectedGender,
                 onChanged: onChanged
             ),
-            Text('Female',style: regularTextStyle(fontSize: dimen14, color: Colors.black)),
+            Text('Female',style: regularTextStyle(fontSize: dimen14, color: AppColors.textBlack)),
           ],
         ),
         )
@@ -265,7 +266,7 @@ class FormActionButtons extends StatelessWidget {
                     child: Center(
                       child: Text(
                         submitText,
-                        style: semiBoldTextStyle(fontSize: dimen16, color: Colors.white),
+                        style: semiBoldTextStyle(fontSize: dimen16, color: AppColors.textWhite),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                       ),
@@ -284,7 +285,7 @@ class FormActionButtons extends StatelessWidget {
                 //   begin: Alignment.topLeft,
                 //   end: Alignment.bottomRight,
                 // ),
-                color: Colors.white,
+                color: AppColors.background,
                 border: Border.all(color: AppColors.primary),
                 borderRadius: BorderRadius.circular(8),
               ),

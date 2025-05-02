@@ -32,11 +32,11 @@ class _ShowUserProfileScreenState extends State<ShowUserProfileScreen> {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12.0),
             child: Card(
-              color: AppColors.primary.withOpacity(0.02),
+              color: AppColors.primary.withOpacity(0.1),
               elevation: 0,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(6),
-                side:BorderSide(color: AppColors.primary, width: 0.5),
+                // side:BorderSide(color: AppColors.primary, width: 0.5),
               ),
               child: Padding(
                 padding: const EdgeInsets.only(top: 20.0, bottom: 10.0),
@@ -72,7 +72,7 @@ class _ShowUserProfileScreenState extends State<ShowUserProfileScreen> {
                           provider.fullName,
                           style: boldTextStyle(
                             fontSize: dimen22,
-                            color: Colors.black,
+                            color: AppColors.secondary,
                             latterSpace: 1.0,
                           ),
                           maxLines: 1,
@@ -105,49 +105,123 @@ class _ShowUserProfileScreenState extends State<ShowUserProfileScreen> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Icon(icon, color: AppColors.primary),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 12.0),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Flexible(
-                      child: FittedBox(
-                        fit: BoxFit.scaleDown,
-                        child: Text("$label - ",
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            style: semiBoldTextStyle(fontSize: dimen14, color: Colors.black)),
-                      ),
-                    ),
-                    Flexible(
-                      child: FittedBox(
-                        fit: BoxFit.scaleDown,
-                        child: Text(
-                          value,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                          style: semiBoldTextStyle(fontSize: dimen14, color: Colors.black),
-                        ),
-                      ),
-                    ),
-                  ],
+        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+        child: IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Icon(icon, color: AppColors.secondary),
                 ),
               ),
-            ),
-          ],
+
+              // Blue vertical line with no fixed height
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: VerticalDivider(
+                  color: AppColors.secondary.withOpacity(0.1),
+                  thickness: 1.5,
+                  width: 10,
+                ),
+              ),
+
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 15.0),
+                  child: Row(
+                    children: [
+                      Flexible(
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text(
+                            "$label - ",
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            style: mediumTextStyle(fontSize: dimen14, color: Colors.black),
+                          ),
+                        ),
+                      ),
+                      Flexible(
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text(
+                            value,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            style: mediumTextStyle(fontSize: dimen14, color: Colors.black),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
+
+  // Widget _buildProfileTile(IconData icon, String label, String value) {
+  //   return Card(
+  //     elevation: 0,
+  //     color: Colors.white,
+  //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+  //     margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+  //     child: Padding(
+  //       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+  //       child: Row(
+  //         crossAxisAlignment: CrossAxisAlignment.center,
+  //         mainAxisAlignment: MainAxisAlignment.start,
+  //         children: [
+  //           Padding(
+  //             padding: const EdgeInsets.all(10.0),
+  //             child: Icon(icon, color: AppColors.secondary),
+  //           ),
+  //
+  //           // Dynamic-height vertical divider
+  //           VerticalDivider(
+  //             color: Colors.black, // or Colors.blue
+  //             thickness: 4,
+  //           ),
+  //
+  //           Expanded(
+  //             child: Padding(
+  //               padding: const EdgeInsets.only(left: 12.0),
+  //               child: Row(
+  //                 crossAxisAlignment: CrossAxisAlignment.center,
+  //                 mainAxisAlignment: MainAxisAlignment.start,
+  //                 children: [
+  //                   Flexible(
+  //                     child: FittedBox(
+  //                       fit: BoxFit.scaleDown,
+  //                       child: Text("$label - ",
+  //                           overflow: TextOverflow.ellipsis,
+  //                           maxLines: 1,
+  //                           style: mediumTextStyle(fontSize: dimen14, color: Colors.black)),
+  //                     ),
+  //                   ),
+  //                   Flexible(
+  //                     child: FittedBox(
+  //                       fit: BoxFit.scaleDown,
+  //                       child: Text(
+  //                         value,
+  //                         overflow: TextOverflow.ellipsis,
+  //                         maxLines: 1,
+  //                         style: mediumTextStyle(fontSize: dimen14, color: Colors.black),
+  //                       ),
+  //                     ),
+  //                   ),
+  //                 ],
+  //               ),
+  //             ),
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 }

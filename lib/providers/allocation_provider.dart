@@ -1,10 +1,8 @@
 import 'dart:io';
-
 import 'package:excel/excel.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import '../models/add models/add_allocation_model.dart';
+import 'package:qt_distributer/models/response%20models/common_response.dart';
 import '../models/response models/allocation_response.dart';
 import '../services/api_path.dart';
 import '../services/api_service.dart';
@@ -82,8 +80,8 @@ class AllocationProvider with ChangeNotifier {
       };
 
       final response = await apiService.post_auth(context, ApiPath.createAllocation, body);
-      final mResponse = AllocationAddModel.fromJson(response);
-      if (mResponse.success) {
+      final mResponse = CommonResponse.fromJson(response);
+      if (mResponse.success!) {
         UiUtils().showSuccessSnackBar(context, "Allocation added successfully!");
       } else {
         // Fluttertoast.showToast(msg: "Failed to add allocation: ${mResponse.message}");
@@ -115,8 +113,8 @@ class AllocationProvider with ChangeNotifier {
 
       final response =
           await apiService.post_auth(context, ApiPath.createAllocation, body);
-      final mResponse = AllocationAddModel.fromJson(response);
-      if (mResponse.success) {
+      final mResponse = CommonResponse.fromJson(response);
+      if (mResponse.success!) {
         UiUtils().showSuccessSnackBar(context, "Allocation added successfully!");
         refreshAllocationData(context); // Reset and reload all data
         WidgetsBinding.instance.addPostFrameCallback((_) {

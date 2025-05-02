@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qt_distributer/screens/base%20main/vendor/wallet_screen.dart';
 import 'package:qt_distributer/widgets/common_text_widgets.dart';
-
 import '../../../constants/app_colors.dart';
 import '../../../providers/auth_provider.dart';
 import '../../../providers/dashboard_provider.dart';
-import '../../dashboard/widgets/graph_section.dart';
-import '../../dashboard/widgets/overview_section.dart';
-import '../../dashboard/widgets/payments_section.dart';
+import '../../vendor_pages/vendor dashboard/widgets/vendor_graph_section.dart';
+import '../../vendor_pages/vendor dashboard/widgets/vendor_overview_section.dart';
+import '../../vendor_pages/vendor dashboard/widgets/vendor_payments_section.dart';
 
 class VendorDashboardScreen extends StatefulWidget {
   const VendorDashboardScreen({super.key});
@@ -59,11 +58,11 @@ class _DashboardScreenState extends State<VendorDashboardScreen> {
                           horizontal: 8.0, vertical: 10.0),
                       child: Column(
                         children: [
-                          PaymentsSection(),
+                          VendorPaymentsSection(),
                           const SizedBox(height: 10),
-                          OverviewSection(dashboardProvider),
+                          VendorOverviewSection(dashboardProvider),
                           const SizedBox(height: 10),
-                          GraphSection(),
+                          VendorGraphSection(),
                           const SizedBox(height: 10),
                         ],
                       ),

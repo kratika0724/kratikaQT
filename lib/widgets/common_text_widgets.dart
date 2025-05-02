@@ -9,7 +9,7 @@ Widget HeaderTextBlack(String value){
     maxLines: 1,
     style: headTextStyle(
         fontSize: dimen20,
-        color: Colors.black),
+        color: AppColors.textBlack),
   );
 }
 
@@ -20,7 +20,7 @@ Widget HeaderTextWhite(String value){
     maxLines: 1,
     style: headTextStyle(
         fontSize: dimen20,
-        color: Colors.white),
+        color: AppColors.textWhite),
   );
 }
 

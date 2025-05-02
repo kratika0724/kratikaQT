@@ -55,14 +55,14 @@ void setUserData(User userData) {
     PreferencesServices.customerId,
     userData.customerId ?? '',
   );
-  // distributor OR vendor
-  final roleName = (userData.roleName ?? '').toLowerCase().trim();
-  if (roleName == 'distributor') {
-    is_distributer = true;
-  } else {
-    is_distributer = false;
-  }
-
+  // distributor OR vendor_pages
+  // final roleName = (userData.roleName ?? '').toLowerCase().trim();
+  // if (roleName == 'distributor') {
+  //   is_distributer = true;
+  // } else {
+  //   is_distributer = false;
+  // }
+  //
   // debugPrint('Role: $roleName');
   // debugPrint('Is Distributor: $is_distributer');
 }

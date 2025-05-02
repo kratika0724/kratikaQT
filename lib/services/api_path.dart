@@ -8,7 +8,7 @@ class ApiPath{
   // static const String imageURL = 'https://api.qtcollector.com/uploads/images/';
 
 
-  static const String getUSerCountDashboardData = '/qt/ds/dashboard';
+  static const String getDashboardData = '/qt/ds/dashboard';
 
 
   static const String createProduct = '/qt/product/create';
@@ -22,6 +22,9 @@ class ApiPath{
   static const String getAllocation = '/qt/allocation/getList';
   static const String getCustomer = '/qt/customer/getList';
   static const String getTransactions = '/qt/transaction/getList';
+
+
+  static const String getVendorPayments = '/qt/vendorPayment/getList';
 
   static const String getAgentByArea = '/qt/agents/getListByArea';
 

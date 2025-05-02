@@ -15,10 +15,20 @@ class AppColors {
   static const Color ghostWhite = Color(0xffF8F8FF);
   static const Color grey100 = Color(0xfff1efef);
   static const Color grey50 = Color(0xFFFAFAFA);
+  static const Color grey = Colors.grey;
+
 
   // Text Colors
   static const Color textPrimary = Color(0xFF0C99D2);
   static const Color textSecondary = Color(0xFF0A5F86);
+  static const Color textBlack = Colors.black;
+  static const Color textBlack54 = Colors.black54;
+  static const Color textWhite = Colors.white;
+  static const Color textGreen = Colors.green;
+  static const Color textRed = Colors.red;
+  static const Color textYellow = Colors.yellow;
+
+
   // static const Color
 
   // Input Colors

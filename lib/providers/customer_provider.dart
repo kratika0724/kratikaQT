@@ -1,6 +1,7 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import '../models/add models/add_customer_model.dart';
+import 'package:qt_distributer/models/response%20models/common_response.dart';
 import '../models/response models/customer_response.dart';
 import '../services/api_path.dart';
 import '../services/api_service.dart';
@@ -59,17 +60,25 @@ class CustomerProvider with ChangeNotifier {
     TextEditingController emailController,
     TextEditingController cityController,
     TextEditingController pincodeController,
+    TextEditingController addressController,
     TextEditingController stateController,
-    TextEditingController countryController, {
+    // TextEditingController countryController,
+    {
     required String? gender,
     required String? productId,
     required String? area,
     required String? agentId,
     required DateTime? dob,
   }) async {
-    isLoading = true;
-    errorMessage = null;
-    notifyListeners();
+
+    if (phoneController.text.length < 10) {
+      Fluttertoast.showToast(msg: "Please enter valid mobile number");
+      return;
+    }
+    if (!EmailValidator.validate(emailController.text.trim())) {
+      Fluttertoast.showToast(msg: "Please enter valid Email Id");
+      return;
+    }
 
     try {
       Map<String, dynamic> body = {
@@ -78,22 +87,22 @@ class CustomerProvider with ChangeNotifier {
         "last_name": lastNameController.text.trim(),
         "mobile": phoneController.text.trim(),
         "email": emailController.text.trim(),
-        "city": cityController.text.trim(),
-        "pin": pincodeController.text.trim(),
-        "state": stateController.text.trim(),
-        "country": countryController.text.trim(),
+        "dob": dob.toString(),
         "gender": gender,
         "product_id": productId,
+        "address": addressController.text.trim(),
+        "pin": pincodeController.text.trim(),
+        "state": stateController.text.trim(),
+        // "country": countryController.text.trim(),
         "area": area,
         "assinged_agent": agentId,
-        "dob": dob.toString(),
+        "city": cityController.text.trim(),
       };
 
-      final response =
-          await apiService.post_auth(context, ApiPath.createCustomer, body);
-      final mResponse = CustomerAddModel.fromJson(response);
+      final response = await apiService.post_auth(context, ApiPath.createCustomer, body);
+      final mResponse = CommonResponse.fromJson(response);
 
-      if (mResponse.success) {
+      if (mResponse.success!) {
         UiUtils().showSuccessSnackBar(context, "Customer added successfully!");
         refreshCustomerData(context);
         WidgetsBinding.instance.addPostFrameCallback((_) {
