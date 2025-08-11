@@ -8,7 +8,6 @@ import '../../distributer_pages/distributor dashboard/widgets/graph_section.dart
 import '../../distributer_pages/distributor dashboard/widgets/overview_section.dart';
 import '../../distributer_pages/distributor dashboard/widgets/payments_section.dart';
 
-
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
 
@@ -32,7 +31,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final dashboardProvider = Provider.of<DashboardProvider>(context, listen: true);
+    final dashboardProvider =
+        Provider.of<DashboardProvider>(context, listen: true);
     return Scaffold(
       backgroundColor: AppColors.ghostWhite.withOpacity(0.7),
       extendBodyBehindAppBar: true,

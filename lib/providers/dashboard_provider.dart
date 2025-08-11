@@ -38,14 +38,13 @@ class DashboardProvider extends ChangeNotifier {
   }
 
   Future<void> fetchUserCountData(BuildContext context, String token) async {
-
     isLoading = true;
     error = null;
     notifyListeners();
-
+    getDatabyId(context, token);
     try {
-      final response = await apiService
-          .getAuth(context, ApiPath.getDashboardData, {});
+      final response =
+          await apiService.getAuth(context, ApiPath.getDashboardData, {});
       final mResponse = DashboardResponse.fromJson(response);
       if (mResponse.success) {
         _userCountData = mResponse;
@@ -57,6 +56,27 @@ class DashboardProvider extends ChangeNotifier {
     }
 
     isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> getDatabyId(BuildContext context, String token) async {
+    notifyListeners();
+    try {
+      final response = await apiService
+          .getAuth(context, ApiPath.getDatabyId, {"id": user_id ?? ""});
+
+      print("response: $response");
+      // final mResponse = DashboardResponse.fromJson(response);
+      // if (mResponse.success) {
+      //   _userCountData = mResponse;
+      // } else {
+      //   error = "Failed to load data: ${mResponse.message}";
+      // }
+    } catch (e) {
+      error = "Error: $e";
+    }
+
+    // isLoading = false;
     notifyListeners();
   }
 
