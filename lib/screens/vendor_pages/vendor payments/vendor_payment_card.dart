@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_textstyles.dart';
-import '../../../models/sample models/payment_model.dart';
+import '../../../models/response models/transaction_response.dart';
 
 class VendorPaymentCard extends StatelessWidget {
-  final PaymentModel payment;
+  final TransactionData transaction;
   final bool isExpanded;
   final VoidCallback onExpandToggle;
 
   const VendorPaymentCard({
     Key? key,
-    required this.payment,
+    required this.transaction,
     required this.isExpanded,
     required this.onExpandToggle,
   }) : super(key: key);
@@ -116,9 +116,10 @@ class VendorPaymentCard extends StatelessWidget {
   @override
   //Animated build
   Widget build(BuildContext context) {
-    final statusColor = _getStatusColor(payment.status);
+    final statusColor = _getStatusColor(transaction.status);
     final bgColorStatus = statusColor.withOpacity(0.1);
-    final transactionTypeColor = _getTransactionTypeColor(payment.transactiontype);
+    final transactionTypeColor =
+        _getTransactionTypeColor(transaction.walletHistory.transactionType);
     final bgColorTransactionType = transactionTypeColor.withOpacity(0.2);
 
     return GestureDetector(
@@ -129,13 +130,15 @@ class VendorPaymentCard extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(6),
-            color: isExpanded ? bgColorStatus.withOpacity(0.1): Colors.white,
+            color: isExpanded ? bgColorStatus.withOpacity(0.1) : Colors.white,
           ),
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
           child: Padding(
             padding: const EdgeInsets.only(bottom: 0.0),
             child: Row(
-              crossAxisAlignment: isExpanded ? CrossAxisAlignment.start : CrossAxisAlignment.center,
+              crossAxisAlignment: isExpanded
+                  ? CrossAxisAlignment.start
+                  : CrossAxisAlignment.center,
               children: [
                 // Avatar
                 Container(
@@ -147,8 +150,11 @@ class VendorPaymentCard extends StatelessWidget {
                   ),
                   alignment: Alignment.center,
                   child: Text(
-                    payment.name.isNotEmpty ? payment.name[0].toUpperCase() : '',
-                    style: boldTextStyle(fontSize: dimen18, color: AppColors.secondary),
+                    transaction.user.firstName.isNotEmpty
+                        ? transaction.user.firstName[0].toUpperCase()
+                        : '',
+                    style: boldTextStyle(
+                        fontSize: dimen18, color: AppColors.secondary),
                   ),
                 ),
                 const SizedBox(width: 10),
@@ -159,10 +165,10 @@ class VendorPaymentCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _buildAmountRow(
-                        payment.amount,
-                        payment.name,
-                        payment.createdAt,
-                        payment.status,
+                        transaction.transactionAmount,
+                        transaction.user.firstName,
+                        _formatDate(transaction.createdAt),
+                        transaction.status,
                         bgColorStatus,
                         statusColor,
                         bgColorTransactionType,
@@ -171,7 +177,7 @@ class VendorPaymentCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 2),
                       _buildStatusRow(
-                        payment.status,
+                        transaction.status,
                         bgColorStatus,
                         statusColor,
                       ),
@@ -181,9 +187,10 @@ class VendorPaymentCard extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              _buildInfoRow("Email", payment.email),
-                              _buildInfoRow("Mobile", payment.mobile),
-                              _buildInfoRow("Quintus ID", "${payment.transactionId}"),
+                              _buildInfoRow("Email", transaction.user.email),
+                              _buildInfoRow("Mobile", transaction.user.mobile),
+                              _buildInfoRow("Quintus ID",
+                                  transaction.quintusTransactionId),
                             ],
                           ),
                         ),
@@ -198,11 +205,20 @@ class VendorPaymentCard extends StatelessWidget {
     );
   }
 
-
-  Widget _buildAmountRow(String transactionAmount, String refId, String formattedDate, String status, Color bgColorStatus, Color textColorStatus, Color bgColorTransactionType , Color textColor, BuildContext context) {
-    final isCredit = payment.transactiontype.toLowerCase() == 'credit';
-    final prefix = isCredit ? '+' : '-';
-    final dateLabel = isCredit ? 'Received on' : 'Paid on';
+  Widget _buildAmountRow(
+      double transactionAmount,
+      String refId,
+      String formattedDate,
+      String status,
+      Color bgColorStatus,
+      Color textColorStatus,
+      Color bgColorTransactionType,
+      Color textColor,
+      BuildContext context) {
+    final isCredit =
+        transaction.walletHistory.transactionType.toLowerCase() == 'credit';
+    final prefix = isCredit ? '+' : '';
+    final dateLabel = isCredit ? 'Received on' : 'Debited on';
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -219,14 +235,16 @@ class VendorPaymentCard extends StatelessWidget {
                 children: [
                   Text(
                     refId,
-                    style: regularTextStyle(fontSize: dimen15, color: Colors.black),
+                    style: regularTextStyle(
+                        fontSize: dimen15, color: Colors.black),
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    "$prefix ₹$transactionAmount",
+                    "$prefix ₹${transactionAmount.toStringAsFixed(2)}",
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
-                    style: semiBoldTextStyle(fontSize: dimen14, color: textColor),
+                    style:
+                        semiBoldTextStyle(fontSize: dimen14, color: textColor),
                   ),
                 ],
               ),
@@ -272,18 +290,16 @@ class VendorPaymentCard extends StatelessWidget {
                 // const Icon(Icons.keyboard_arrow_down, color: Colors.black, size: 20),
               ],
             ),
-
           ],
         ),
 
-
         // const Icon(Icons.keyboard_arrow_down, color: Colors.black, size: 22),
       ],
-
     );
   }
 
-  Widget _buildStatusRow(String status, Color bgColorStatus, Color textColorStatus) {
+  Widget _buildStatusRow(
+      String status, Color bgColorStatus, Color textColorStatus) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -302,60 +318,8 @@ class VendorPaymentCard extends StatelessWidget {
             style: mediumTextStyle(fontSize: dimen12, color: textColorStatus),
           ),
         ),
-        Icon(isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: Colors.black, size: 20),
-      ],
-    );
-  }
-  Widget _buildBaseInfoRow(String refId,String status,
-      String transactionType,
-      Color bgColorStatus,
-      Color textColorStatus,
-      String formattedDate,
-      ) {
-    final isCredit = payment.transactiontype.toLowerCase() == 'credit';
-    final dateLabel = isCredit ? 'Received on' : 'Paid on';
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                refId,
-                style: regularTextStyle(fontSize: dimen15, color: Colors.black),
-                overflow: TextOverflow.ellipsis,
-              ),
-              Text(
-                "$dateLabel $formattedDate",
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-                style: thinTextStyle(fontSize: dimen13, color: Colors.grey),
-              ),
-            ],
-          ),
-        ),
-        // Status Badge
-        // Container(
-        //   height: 15,
-        //   width: 15,
-        //   decoration: BoxDecoration(
-        //     shape: BoxShape.circle,
-        //     color: bgColorStatus,
-        //   ),
-        //   child: Padding(
-        //     padding: const EdgeInsets.all(4.0),
-        //     child: Container(
-        //       decoration: BoxDecoration(
-        //         shape: BoxShape.circle,
-        //         color: textColorStatus,
-        //       ),
-        //     ),
-        //   ),
-        // ),
-
-        const Icon(Icons.keyboard_arrow_down, color: Colors.black, size: 22),
+        Icon(isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+            color: Colors.black, size: 20),
       ],
     );
   }
@@ -369,13 +333,13 @@ class VendorPaymentCard extends StatelessWidget {
               flex: 3,
               child: Text(label,
                   style:
-                  mediumTextStyle(fontSize: dimen13, color: Colors.black))),
+                      mediumTextStyle(fontSize: dimen13, color: Colors.black))),
           const Text(": "),
           Expanded(
               flex: 6,
               child: Text(value,
                   style:
-                  mediumTextStyle(fontSize: dimen13, color: Colors.black))),
+                      mediumTextStyle(fontSize: dimen13, color: Colors.black))),
         ],
       ),
     );
@@ -394,7 +358,6 @@ class VendorPaymentCard extends StatelessWidget {
     }
   }
 
-
   Color _getTransactionTypeColor(String status) {
     switch (status.toLowerCase()) {
       case 'credit':
@@ -404,5 +367,27 @@ class VendorPaymentCard extends StatelessWidget {
       default:
         return Colors.grey;
     }
+  }
+
+  String _formatDate(DateTime date) {
+    return "${date.day} ${_getMonthName(date.month)}, ${date.year}, ${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}";
+  }
+
+  String _getMonthName(int month) {
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec'
+    ];
+    return months[month - 1];
   }
 }

@@ -23,14 +23,21 @@ class TransactionResponseModel {
       status: json['status'] ?? 0,
       data: (json['data'] != null && json['data'] is List)
           ? List<TransactionData>.from(
-          json['data'].map((x) => TransactionData.fromJson(x)))
+              json['data'].map((x) => TransactionData.fromJson(x)))
           : [],
       meta: json['meta'] != null
           ? Meta.fromJson(json['meta'])
-          : Meta(currentPage: 1, from: 0, lastPage: 1, perPage: 10, to: 0, total: 0),
+          : Meta(
+              currentPage: 1,
+              from: 0,
+              lastPage: 1,
+              perPage: 10,
+              to: 0,
+              total: 0),
     );
   }
 }
+
 class TransactionData {
   final String id;
   final double customerCommission;
@@ -63,7 +70,10 @@ class TransactionData {
       id: json['_id'] ?? '',
       customerCommission: (json['customerCommission'] ?? 0).toDouble(),
       serviceCharge: (json['serviceCharge'] ?? 0).toDouble(),
-      transactionAmount: (json['transactionAmount'] ?? 0).toDouble(),
+      transactionAmount: double.tryParse((json['transactionAmount'] ?? '0')
+              .toString()
+              .replaceAll('-', '')) ??
+          0.0,
       referenceNo: json['referenceNo'] ?? '',
       quintusTransactionId: json['quintus_transaction_id'] ?? '',
       status: json['status'] ?? '',
@@ -78,6 +88,7 @@ class TransactionData {
     );
   }
 }
+
 class TransactionUser {
   final String firstName;
   final String middleName;
@@ -116,6 +127,7 @@ class TransactionUser {
     );
   }
 }
+
 class WalletHistory {
   final List<Map<String, dynamic>> serviceDetails;
   final double previousBalance;
@@ -153,11 +165,14 @@ class WalletHistory {
 
   factory WalletHistory.fromJson(Map<String, dynamic> json) {
     return WalletHistory(
-      serviceDetails: (json['serviceDetails'] != null && json['serviceDetails'] is List)
-          ? List<Map<String, dynamic>>.from(json['serviceDetails'].map((x) => Map<String, dynamic>.from(x)))
+      serviceDetails: (json['serviceDetails'] != null &&
+              json['serviceDetails'] is List)
+          ? List<Map<String, dynamic>>.from(
+              json['serviceDetails'].map((x) => Map<String, dynamic>.from(x)))
           : [],
       previousBalance: (json['previous_balance'] ?? 0.0).toDouble(),
-      previousPayoutBalance: (json['previous_payout_balance'] ?? 0.0).toDouble(),
+      previousPayoutBalance:
+          (json['previous_payout_balance'] ?? 0.0).toDouble(),
       amount: (json['amount'] ?? 0.0).toDouble(),
       updatedBalance: (json['updated_balance'] ?? 0.0).toDouble(),
       updatedPayoutBalance: (json['updated_payout_balance'] ?? 0.0).toDouble(),
@@ -166,6 +181,7 @@ class WalletHistory {
     );
   }
 }
+
 class Meta {
   final int currentPage;
   final int from;

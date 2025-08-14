@@ -16,10 +16,10 @@ class AgentProvider with ChangeNotifier {
 
   int currentPage_agent = 1;
   final int limit = 10;
-  Meta? meta;
 
   List<AgentModel> agents = [];
-  List<CustomerAgentByAreaData> agentsbyArea = []; // Use CustomerAgentByAreaData directly now
+  List<CustomerAgentByAreaData> agentsbyArea =
+      []; // Use CustomerAgentByAreaData directly now
 
   String? filterName;
   String? filterEmail;
@@ -34,29 +34,6 @@ class AgentProvider with ChangeNotifier {
     filterEmail = email;
     filterIsActive = isActive;
     notifyListeners();
-  }
-
-  List<AgentModel> get FilteredAgents {
-    return agents.where((agent) {
-      // final matchesName = filterName == null ||
-      //     (agent.firstName ?? '').toLowerCase().contains(filterName!.toLowerCase());
-
-      // Combine first, middle, and last names into a single string
-      final fullName = [
-        agent.firstName,
-        agent.middleName,
-        agent.lastName,
-      ].where((name) => name != null && name.trim().isNotEmpty).join(' ').toLowerCase();
-
-      final matchesName = filterName == null || fullName.contains(filterName!.toLowerCase());
-
-      final matchesEmail = filterEmail == null ||
-          (agent.email ?? '').toLowerCase().contains(filterEmail!.toLowerCase());
-
-      final matchesStatus = filterIsActive == null || agent.isActive == filterIsActive;
-
-      return matchesName && matchesEmail && matchesStatus;
-    }).toList();
   }
 
   void createAgent(
@@ -74,8 +51,7 @@ class AgentProvider with ChangeNotifier {
     TextEditingController assignedAreaController, {
     required String? gender,
     required DateTime? dob,
-  })
-  async {
+  }) async {
     isLoading = true;
     errorMessage = null;
     notifyListeners();
@@ -130,7 +106,8 @@ class AgentProvider with ChangeNotifier {
     await getAgentData(context);
   }
 
-  Future<void> getAgentData(BuildContext context,{bool loadMore = false}) async {
+  Future<void> getAgentData(BuildContext context,
+      {bool loadMore = false}) async {
     if (loadMore) {
       if (isFetchingMore || !hasMoreData) return;
       isFetchingMore = true;
@@ -145,20 +122,17 @@ class AgentProvider with ChangeNotifier {
 
     try {
       final response = await apiService.getAuth(
-          context,
-          ApiPath.getAgent,
-          {
-            "page": currentPage_agent.toString(),
-            "limit": limit.toString(),
-          },
+        context,
+        ApiPath.getAgent,
+        {
+          "page": currentPage_agent.toString(),
+          "limit": limit.toString(),
+        },
       );
 
       final agentResponse = AgentResponseModel.fromJson(response);
-
       if (agentResponse.success) {
         final newAgents = agentResponse.data;
-        meta = agentResponse.meta;
-
         if (loadMore) {
           agents.addAll(newAgents);
           currentPage_agent++;
@@ -166,7 +140,6 @@ class AgentProvider with ChangeNotifier {
           agents = newAgents;
           currentPage_agent = 2;
         }
-
         if (newAgents.length < limit) {
           hasMoreData = false;
           debugPrint("No more agents to load.");
@@ -192,18 +165,17 @@ class AgentProvider with ChangeNotifier {
   List<String> getAgentNamesByArea() {
     return agentsbyArea
         .map((agent) => [
-      agent.firstName,
-      agent.middleName,
-      agent.lastName,
-    ]
-        .where((name) => name != null && name.trim().isNotEmpty)
-        .join(' ')
-        .trim())
+              agent.firstName,
+              agent.middleName,
+              agent.lastName,
+            ]
+                .where((name) => name != null && name.trim().isNotEmpty)
+                .join(' ')
+                .trim())
         .where((fullName) => fullName.isNotEmpty)
         .toSet()
         .toList();
   }
-
 
   Future<void> getAgentDataByArea(BuildContext context, String area) async {
     isLoading = true;
@@ -242,7 +214,6 @@ class AgentProvider with ChangeNotifier {
 
   void clearAgents() {
     agents.clear();
-    meta = null;
     currentPage_agent = 1;
     hasMoreData = true;
     notifyListeners();

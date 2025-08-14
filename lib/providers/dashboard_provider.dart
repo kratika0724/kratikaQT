@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qt_distributer/services/api_path.dart';
 import '../models/response models/dashboard_response.dart';
+import '../models/response models/user_data_response.dart';
 import '../services/api_service.dart';
 import '../services/user_preferences.dart';
 
@@ -11,11 +12,21 @@ class DashboardProvider extends ChangeNotifier {
   String? error;
 
   DashboardResponse? _userCountData;
+  UserDataResponse? _userData;
+
   DashboardResponse? get userCountData => _userCountData;
+  UserDataResponse? get userData => _userData;
 
   int get userCount => _userCountData?.total.userCount ?? 0;
+
   int get productCount => _userCountData?.total.productCount ?? 0;
+
   int get customerCount => _userCountData?.total.customerCount ?? 0;
+
+  // Wallet balance getters
+  double get walletBalance => _userData?.data.balance ?? 0.0;
+  double get holdAmount => _userData?.data.holdAmount ?? 0.0;
+  double get payoutBalance => _userData?.data.payoutBalance ?? 0.0;
 
   String? user_firstname = "";
   String? user_middlename = "";
@@ -60,23 +71,27 @@ class DashboardProvider extends ChangeNotifier {
   }
 
   Future<void> getDatabyId(BuildContext context, String token) async {
-    notifyListeners();
-    try {
-      final response = await apiService
-          .getAuth(context, ApiPath.getDatabyId, {"id": user_id ?? ""});
-
-      print("response: $response");
-      // final mResponse = DashboardResponse.fromJson(response);
-      // if (mResponse.success) {
-      //   _userCountData = mResponse;
-      // } else {
-      //   error = "Failed to load data: ${mResponse.message}";
-      // }
-    } catch (e) {
-      error = "Error: $e";
-    }
-
-    // isLoading = false;
+    PreferencesServices.getPreferencesData(PreferencesServices.userId)
+        .then((userid) async {
+      String uid = (userid?.toString() ?? "").isEmpty || userid == ""
+          ? "UserId"
+          : userid.toString();
+      try {
+        final response = await apiService
+            .getAuth(context, ApiPath.getDatabyId, {"id": uid ?? ""});
+        
+        if (response != null) {
+          final userDataResponse = UserDataResponse.fromJson(response);
+          if (userDataResponse.success) {
+            _userData = userDataResponse;
+          } else {
+            error = "Failed to load user data: ${userDataResponse.message}";
+          }
+        }
+      } catch (e) {
+        error = "Error: $e";
+      }
+    });
     notifyListeners();
   }
 

@@ -29,7 +29,8 @@ class _ProfileScreenState extends State<VendorProfileScreen> {
     super.initState();
     // Fetch local data once after frame is built
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<DashboardProvider>(context, listen: false).getCustomerDatafromLocal();
+      Provider.of<DashboardProvider>(context, listen: false)
+          .getCustomerDatafromLocal();
     });
   }
 
@@ -63,18 +64,6 @@ class _ProfileScreenState extends State<VendorProfileScreen> {
                   ),
                 ),
                 const SizedBox(height: 10),
-
-                // Wallet Toggle Card
-                WalletCardHeader(
-                  isExpanded: isWalletExpanded,
-                  onTap: () => setState(() => isWalletExpanded = !isWalletExpanded),
-                ),
-                const SizedBox(height: 12),
-
-                // Wallet Grid
-                if (isWalletExpanded) WalletGrid(),
-                const SizedBox(height: 20),
-
                 // Menu Options
                 Expanded(
                   child: ListView(
@@ -87,13 +76,23 @@ class _ProfileScreenState extends State<VendorProfileScreen> {
                       //     context, "Customers", Icons.people_alt_outlined),
                       // UiUtils().menuItem(
                       //     context, "Allocations", Icons.assignment_outlined),
-                      UiUtils().VendormenuItem(context, "Contact Us", Icons.connect_without_contact),
-                      SizedBox(height: 4,),
-                      UiUtils().VendormenuItem(context, "Terms & Conditions", Icons.description_outlined),
-                      SizedBox(height: 4,),
-                      UiUtils().VendormenuItem(context, "Privacy Policies", Icons.privacy_tip_outlined),
-                      SizedBox(height: 4,),
-                      UiUtils().VendormenuItem(context, "About Us", Icons.info_outline),
+                      UiUtils().VendormenuItem(
+                          context, "Contact Us", Icons.connect_without_contact),
+                      SizedBox(
+                        height: 4,
+                      ),
+                      UiUtils().VendormenuItem(context, "Terms & Conditions",
+                          Icons.description_outlined),
+                      SizedBox(
+                        height: 4,
+                      ),
+                      UiUtils().VendormenuItem(context, "Privacy Policies",
+                          Icons.privacy_tip_outlined),
+                      SizedBox(
+                        height: 4,
+                      ),
+                      UiUtils().VendormenuItem(
+                          context, "About Us", Icons.info_outline),
                       const LogoutButton(),
                     ],
                   ),

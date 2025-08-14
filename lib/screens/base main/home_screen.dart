@@ -5,9 +5,9 @@ import 'package:qt_distributer/screens/base%20main/distributor/agents_screen.dar
 import 'package:qt_distributer/screens/base%20main/distributor/dashboard_screen.dart';
 import 'package:qt_distributer/screens/base%20main/distributor/payments_screen.dart';
 import 'package:qt_distributer/screens/base%20main/distributor/profile_screen.dart';
-import 'package:qt_distributer/screens/base%20main/vendor/distributer_screen.dart';
+import 'package:qt_distributer/screens/base%20main/vendor/customers_screen.dart';
 import 'package:qt_distributer/screens/base%20main/vendor/vendor_dashboard_screen.dart';
-import 'package:qt_distributer/screens/base%20main/vendor/vendor_settlement_screen.dart';
+import 'package:qt_distributer/screens/base%20main/vendor/vendor_payments_screen.dart';
 import 'package:qt_distributer/screens/base%20main/vendor/vendor_profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -28,8 +28,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   List<Widget> non_distributer_pages = [
     VendorDashboardScreen(),
-    VendorSettlementScreen(),
-    DistributerScreen(),
+    VendorPaymentsScreen(),
+    CustomersScreen(),
     VendorProfileScreen(),
   ];
 
@@ -89,11 +89,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.assignment),
-                  label: 'Settlements',
+                  label: 'Payments',
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.person),
-                  label: 'Distributer',
+                  label: 'Customers',
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.account_circle),

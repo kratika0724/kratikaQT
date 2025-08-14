@@ -26,12 +26,12 @@ class AgentResponseModel {
   }
 
   Map<String, dynamic> toJson() => {
-    'success': success,
-    'status': status,
-    'message': message,
-    'data': data.map((agent) => agent.toJson()).toList(),
-    'meta': meta.toJson(),
-  };
+        'success': success,
+        'status': status,
+        'message': message,
+        'data': data.map((agent) => agent.toJson()).toList(),
+        'meta': meta.toJson(),
+      };
 }
 
 class AgentModel {
@@ -126,38 +126,38 @@ class AgentModel {
   }
 
   Map<String, dynamic> toJson() => {
-    '_id': id,
-    'company_name': companyName,
-    'first_name': firstName,
-    'middle_name': middleName,
-    'last_name': lastName,
-    'gender': gender,
-    'dob': dob.toIso8601String(),
-    'email': email,
-    'mobile': mobile,
-    'crm_id': crmId,
-    'quintus_id': quintusId,
-    'address': address.toJson(),
-    'roleId': roleId,
-    'topUser': topUser,
-    'created_at': createdAt.toIso8601String(),
-    'created_by': createdBy,
-    'updated_at': updatedAt.toIso8601String(),
-    'updated_by': updatedBy,
-    'updated_record': updatedRecord,
-    'is_email': isEmail,
-    'is_mobile': isMobile,
-    'is_approved': isApproved,
-    'is_blocked': isBlocked,
-    'kyc_status': kycStatus,
-    'is_wallet': isWallet,
-    'is_active': isActive,
-    'status_updated_record': statusUpdatedRecord,
-  };
+        '_id': id,
+        'company_name': companyName,
+        'first_name': firstName,
+        'middle_name': middleName,
+        'last_name': lastName,
+        'gender': gender,
+        'dob': dob.toIso8601String(),
+        'email': email,
+        'mobile': mobile,
+        'crm_id': crmId,
+        'quintus_id': quintusId,
+        'address': address.toJson(),
+        'roleId': roleId,
+        'topUser': topUser,
+        'created_at': createdAt.toIso8601String(),
+        'created_by': createdBy,
+        'updated_at': updatedAt.toIso8601String(),
+        'updated_by': updatedBy,
+        'updated_record': updatedRecord,
+        'is_email': isEmail,
+        'is_mobile': isMobile,
+        'is_approved': isApproved,
+        'is_blocked': isBlocked,
+        'kyc_status': kycStatus,
+        'is_wallet': isWallet,
+        'is_active': isActive,
+        'status_updated_record': statusUpdatedRecord,
+      };
 }
+
 class Address {
   final String address1;
-  final String address2;
   final String city;
   final String pin;
   final String state;
@@ -165,7 +165,6 @@ class Address {
 
   Address({
     required this.address1,
-    required this.address2,
     required this.city,
     required this.pin,
     required this.state,
@@ -175,7 +174,6 @@ class Address {
   factory Address.fromJson(Map<String, dynamic> json) {
     return Address(
       address1: json['address_1'],
-      address2: json['address_2'],
       city: json['city'],
       pin: json['pin'],
       state: json['state'],
@@ -184,14 +182,14 @@ class Address {
   }
 
   Map<String, dynamic> toJson() => {
-    'address_1': address1,
-    'address_2': address2,
-    'city': city,
-    'pin': pin,
-    'state': state,
-    'country': country,
-  };
+        'address_1': address1,
+        'city': city,
+        'pin': pin,
+        'state': state,
+        'country': country,
+      };
 }
+
 class Meta {
   final int currentPage;
   final int from;
@@ -210,21 +208,20 @@ class Meta {
   });
 
   factory Meta.fromJson(Map<String, dynamic> json) => Meta(
-    currentPage: json['current_page'],
-    from: json['from'],
-    lastPage: json['last_page'],
-    perPage: json['per_page'],
-    to: json['to'],
-    total: json['total'],
-  );
+        currentPage: json['current_page'],
+        from: json['from'],
+        lastPage: json['last_page'],
+        perPage: json['per_page'],
+        to: json['to'],
+        total: json['total'],
+      );
 
   Map<String, dynamic> toJson() => {
-    'current_page': currentPage,
-    'from': from,
-    'last_page': lastPage,
-    'per_page': perPage,
-    'to': to,
-    'total': total,
-  };
+        'current_page': currentPage,
+        'from': from,
+        'last_page': lastPage,
+        'per_page': perPage,
+        'to': to,
+        'total': total,
+      };
 }
-

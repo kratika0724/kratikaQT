@@ -12,7 +12,7 @@ class ApiPath {
 
   static const String createProduct = '/qt/product/create';
   static const String createCustomer = '/qt/customer/create';
-  static const String createAgent = '/qt/user/create';
+  static const String createAgent = '/qt/agents/create';
   static const String createAllocation = '/qt/allocation/create';
 
   static const String getProduct = '/qt/product/getList';
@@ -20,8 +20,11 @@ class ApiPath {
   static const String getAllocation = '/qt/allocation/getList';
   static const String getCustomer = '/qt/customer/getList';
   static const String getTransactions = '/qt/transaction/getList';
+  static const String getPendingBills = '/qt/wallet/pendingbills';
 
   static const String getVendorPayments = '/qt/vendorPayment/getList';
 
   static const String getAgentByArea = '/qt/user/getListByArea';
+  
+  static const String cashBalance = '/qt/wallet/cashBalance';
 }

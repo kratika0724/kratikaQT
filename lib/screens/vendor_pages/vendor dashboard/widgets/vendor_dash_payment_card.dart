@@ -41,7 +41,8 @@ class VendorDashPaymentCardWidget extends StatelessWidget {
                       width: 40,
                       decoration: BoxDecoration(
                         color: color.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(6), // Rounded corners
+                        borderRadius:
+                            BorderRadius.circular(6), // Rounded corners
                       ),
                     ),
                     Icon(
@@ -69,8 +70,7 @@ class VendorDashPaymentCardWidget extends StatelessWidget {
                             color: AppColors.secondary,
                           ),
                         ),
-                        Text(
-                            title,
+                        Text(title,
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
                             style: semiBoldTextStyle(

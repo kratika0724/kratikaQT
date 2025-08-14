@@ -46,7 +46,7 @@ class _AgentListState extends State<AgentList> {
   void _onScroll() {
     final provider = Provider.of<AgentProvider>(context, listen: false);
     if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200 &&
+            _scrollController.position.maxScrollExtent - 200 &&
         !provider.isFetchingMore &&
         provider.hasMoreData) {
       provider.getAgentData(context, loadMore: true);
@@ -63,12 +63,9 @@ class _AgentListState extends State<AgentList> {
   Widget build(BuildContext context) {
     final isWide = DeviceUtils.getDeviceWidth(context);
     final agentProvider = Provider.of<AgentProvider>(context);
-    final filteredAgents = agentProvider.FilteredAgents;
-
+    final filteredAgents = agentProvider.agents;
     if (filteredAgents.isEmpty) {
-      return const Center(
-          child: Text("No agents found.")
-      );
+      return const Center(child: Text("No agents found."));
     }
     return isWide
         ? _buildGridView(filteredAgents)

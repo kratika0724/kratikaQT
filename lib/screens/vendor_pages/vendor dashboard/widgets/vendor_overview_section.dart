@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qt_distributer/screens/vendor_pages/vendor%20dashboard/widgets/vendor_summary_card.dart';
 import '../../../../constants/app_textstyles.dart';
+import '../../../../constants/app_colors.dart';
 import '../../../../providers/dashboard_provider.dart';
 
 class VendorOverviewSection extends StatelessWidget {
@@ -10,50 +11,76 @@ class VendorOverviewSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final summaryItems = [
-      VendorSummaryCard(title: 'Users', count: dashboardProvider.userCount),
-      VendorSummaryCard(title: 'Customers', count: dashboardProvider.customerCount),
-      VendorSummaryCard(title: 'Distributors', count: dashboardProvider.customerCount),
-      VendorSummaryCard(title: 'Products', count: dashboardProvider.productCount),
+    final walletItems = [
+      VendorSummaryCard(
+        title: 'Wallet Balance',
+        count: dashboardProvider.walletBalance.toInt(),
+        isCurrency: true,
+      ),
+      VendorSummaryCard(
+        title: 'Hold Amount',
+        count: dashboardProvider.holdAmount.toInt(),
+        isCurrency: true,
+      ),
+      VendorSummaryCard(
+        title: 'Payout Balance',
+        count: dashboardProvider.payoutBalance.toInt(),
+        isCurrency: true,
+      ),
     ];
 
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8.0),
+        borderRadius: BorderRadius.circular(16.0),
         color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.08),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10),
+        padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 8),
-                child: FittedBox(
-                  fit: BoxFit.scaleDown,
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(8.0),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  child: const Icon(
+                    Icons.account_balance_wallet,
+                    color: AppColors.primary,
+                    size: 20,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
                   child: Text(
-                    "Overview",
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                    "Wallet Information",
                     style: boldTextStyle(
                       fontSize: dimen18,
-                      color: Colors.black,
-                      latterSpace: 1.0,
+                      color: Colors.black87,
+                      latterSpace: 0.5,
                     ),
                   ),
                 ),
-              ),
+              ],
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 20),
             GridView.count(
               crossAxisCount: 2,
               shrinkWrap: true,
-              crossAxisSpacing: 15,
-              mainAxisSpacing: 15,
-              childAspectRatio: 1.8,
+              crossAxisSpacing: 12,
+              mainAxisSpacing: 12,
+              childAspectRatio: 1,
               physics: const NeverScrollableScrollPhysics(),
-              children: summaryItems,
+              children: walletItems,
             ),
           ],
         ),
@@ -61,4 +88,3 @@ class VendorOverviewSection extends StatelessWidget {
     );
   }
 }
-
