@@ -29,22 +29,19 @@ class UserProfileCard extends StatelessWidget {
         ),
         child: Container(
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [AppColors.primary, Colors.indigo.withOpacity(0.8)],
-              begin: Alignment.topLeft,
-              end: Alignment.topRight,
-            ),
+            color: AppColors.primary,
             borderRadius: BorderRadius.circular(12),
           ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 12),
+            padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Icon(
-                  Icons.account_circle_sharp,
-                  size: 90,
-                  color: Colors.white,
+                CircleAvatar(
+                  radius: 30,
+                  backgroundColor: Colors.white,
+                  child:
+                      Image.network("https://avatar.iran.liara.run/public/35"),
                 ),
                 Expanded(
                   child: Padding(

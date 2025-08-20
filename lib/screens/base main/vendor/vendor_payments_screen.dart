@@ -1,14 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../../constants/app_colors.dart';
-import '../../../constants/app_textstyles.dart';
 import '../../../widgets/common_text_widgets.dart';
-import '../../../widgets/filter_button.dart';
-import '../../../widgets/filter_chips_widget.dart';
-import '../../vendor_pages/settlement/settlement_filter_bottom_sheet.dart';
-import '../../vendor_pages/settlement/settlement_list.dart';
 import '../../vendor_pages/vendor payments/vendor_paymentCard_list.dart';
 import '../../vendor_pages/vendor payments/pending_bills_list.dart';
-import '../../vendor_pages/vendor payments/venodr_payment_filter_bottom_sheet.dart';
 
 class VendorPaymentsScreen extends StatefulWidget {
   const VendorPaymentsScreen({super.key});

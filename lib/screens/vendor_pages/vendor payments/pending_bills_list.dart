@@ -73,7 +73,8 @@ class _PendingBillsListState extends State<PendingBillsList> {
         }
 
         return RefreshIndicator(
-          onRefresh: () => pendingBillsProvider.refreshPendingBillsData(context),
+          onRefresh: () =>
+              pendingBillsProvider.refreshPendingBillsData(context),
           child: ListView.separated(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
             itemCount: pendingBillsProvider.pendingBills.length,

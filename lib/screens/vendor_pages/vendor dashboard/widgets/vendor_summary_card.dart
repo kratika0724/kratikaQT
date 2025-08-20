@@ -45,37 +45,41 @@ class VendorSummaryCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Container(
-            padding: const EdgeInsets.all(8.0),
-            decoration: BoxDecoration(
-              color: AppColors.primary.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-            child: Icon(
-              _getIconForTitle(title),
-              color: AppColors.primary,
-              size: 20,
-            ),
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8.0),
+                decoration: BoxDecoration(
+                  color: AppColors.primary.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                child: Icon(
+                  _getIconForTitle(title),
+                  color: AppColors.primary,
+                  size: 20,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Text(
+                isCurrency ? '₹${count.toStringAsFixed(0)}' : count.toString(),
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: boldTextStyle(
+                  fontSize: dimen22,
+                  color: AppColors.secondary,
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 12),
-          Text(
-            isCurrency ? '₹ ${count.toStringAsFixed(0)}' : count.toString(),
-            textAlign: TextAlign.center,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: boldTextStyle(
-              fontSize: dimen22, 
-              color: AppColors.secondary,
-            ),
-          ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 10),
           Text(
             title,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.center,
             style: mediumTextStyle(
-              fontSize: dimen14, 
+              fontSize: dimen14,
               color: AppColors.secondary.withOpacity(0.8),
             ),
           ),

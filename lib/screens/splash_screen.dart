@@ -16,7 +16,6 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  late Animation<double> _fadeAnimation;
 
   @override
   void initState() {
@@ -25,7 +24,6 @@ class _SplashScreenState extends State<SplashScreen>
       duration: const Duration(seconds: 2),
       vsync: this,
     );
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(_controller);
     _controller.forward();
     _checkAuthState();
   }
@@ -65,21 +63,11 @@ class _SplashScreenState extends State<SplashScreen>
     return Scaffold(
       backgroundColor: AppColors.background,
       body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: AppColors.backgroundGradient,
-          ),
-        ),
         child: Center(
-          child: FadeTransition(
-            opacity: _fadeAnimation,
-            child: Image.asset(
-              AppAssets.distributer_logo,
-              width: 200,
-              height: 200,
-            ),
+          child: Image.asset(
+            AppAssets.logo,
+            width: 200,
+            height: 200,
           ),
         ),
       ),

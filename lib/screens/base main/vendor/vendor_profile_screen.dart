@@ -1,17 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qt_distributer/constants/app_colors.dart';
-import 'package:qt_distributer/screens/login/login_screen.dart';
 import 'package:qt_distributer/widgets/common_text_widgets.dart';
-import '../../../constants/app_textstyles.dart';
-import '../../../providers/auth_provider.dart';
 import '../../../providers/dashboard_provider.dart';
-import '../../../services/user_preferences.dart';
 import '../../../utils/ui_utils.dart';
-import '../../../widgets/app_theme_button.dart';
 import '../../../widgets/log_out_button.dart';
 import '../../../widgets/user_profile_card.dart';
-import '../../user profile/profile_wallet_widget.dart';
 import '../../user profile/show_userprofile_screen.dart';
 
 class VendorProfileScreen extends StatefulWidget {
@@ -41,10 +35,8 @@ class _ProfileScreenState extends State<VendorProfileScreen> {
         backgroundColor: AppColors.ghostWhite,
         appBar: AppBar(
           automaticallyImplyLeading: false,
-          title: HeaderTextBlack("User Profile"),
-          // centerTitle: true,
-          backgroundColor: Colors.white,
-          foregroundColor: AppColors.primary,
+          title: HeaderTextWhite("User Profile"),
+          backgroundColor: AppColors.primary,
           // elevation: 3,
         ),
         body: SafeArea(

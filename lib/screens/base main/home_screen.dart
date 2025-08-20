@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qt_distributer/constants/app_colors.dart';
 import 'package:qt_distributer/constants/commonString.dart';
-import 'package:qt_distributer/screens/base%20main/distributor/agents_screen.dart';
-import 'package:qt_distributer/screens/base%20main/distributor/dashboard_screen.dart';
-import 'package:qt_distributer/screens/base%20main/distributor/payments_screen.dart';
-import 'package:qt_distributer/screens/base%20main/distributor/profile_screen.dart';
 import 'package:qt_distributer/screens/base%20main/vendor/customers_screen.dart';
 import 'package:qt_distributer/screens/base%20main/vendor/vendor_dashboard_screen.dart';
 import 'package:qt_distributer/screens/base%20main/vendor/vendor_payments_screen.dart';
@@ -18,13 +14,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   PageController _pageController = PageController();
-
-  List<Widget> distributer_pages = [
-    DashboardScreen(),
-    PaymentsScreen(),
-    AgentsScreen(),
-    ProfileScreen(),
-  ];
 
   List<Widget> non_distributer_pages = [
     VendorDashboardScreen(),
@@ -47,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: Colors.white,
       body: PageView(
         controller: _pageController,
-        children: is_distributer ? distributer_pages : non_distributer_pages,
+        children: non_distributer_pages,
         onPageChanged: (index) {
           setState(() {
             _selectedIndex = index;

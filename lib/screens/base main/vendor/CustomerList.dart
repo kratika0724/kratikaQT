@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import '../../../models/response models/customer_response.dart';
 import '../../../providers/customer_provider.dart';
 import '../../../utils/device_utils.dart';
-import 'customer_card.dart';
+import 'CustomerCard.dart';
 
 class CustomerList extends StatefulWidget {
   final List<CustomerData> customers;
@@ -42,7 +42,7 @@ class _CustomerListState extends State<CustomerList> {
     _scrollController.addListener(() {
       final provider = Provider.of<CustomerProvider>(context, listen: false);
       if (_scrollController.position.pixels >=
-          _scrollController.position.maxScrollExtent - 200 &&
+              _scrollController.position.maxScrollExtent - 200 &&
           !provider.isFetchingMore &&
           provider.hasMoreData) {
         provider.getCustomerData(context, loadMore: true);
@@ -55,7 +55,6 @@ class _CustomerListState extends State<CustomerList> {
     _scrollController.dispose();
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -70,9 +69,7 @@ class _CustomerListState extends State<CustomerList> {
     return isWide
         ? _buildGridView(filteredCustomers)
         : _buildListView(filteredCustomers);
-
   }
-
 
   Widget _buildGridView(List<CustomerData> customers) {
     final isOdd = customers.length.isOdd;
@@ -110,11 +107,10 @@ class _CustomerListState extends State<CustomerList> {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
         child: CustomerCard(
           customer: widget.customers[index],
-          isExpanded:expandedIndex == index,
+          isExpanded: expandedIndex == index,
           onExpandToggle: () => toggleExpanded(index),
         ),
       ),
     );
   }
 }
-

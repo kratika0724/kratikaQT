@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../constants/app_colors.dart';
-import '../../../constants/app_textstyles.dart';
 import '../../../providers/customer_provider.dart';
 import '../../../widgets/common_text_widgets.dart';
-import '../../distributer_pages/customer/customer_card_list.dart';
-import '../../distributer_pages/customer/customer_filter_bottom_sheet.dart';
-import '../../distributer_pages/customer/add_customer_screen.dart';
-import '../../../widgets/filter_button.dart';
 import '../../../widgets/filter_chips_widget.dart';
-import '../../../widgets/bottom_add_button.dart';
+import 'CustomerList.dart';
 
 class CustomersScreen extends StatefulWidget {
   const CustomersScreen({super.key});
@@ -47,28 +42,6 @@ class _CustomersScreenState extends State<CustomersScreen> {
       filterEmail = null;
       _applyFilters();
     });
-  }
-
-  void _openFilterBottomSheet() {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-      ),
-      builder: (_) => CustomerFilterBottomSheet(
-        initialName: filterName,
-        initialEmail: filterEmail,
-        onApply: (name, email) {
-          setState(() {
-            filterName = name;
-            filterEmail = email;
-            _applyFilters();
-          });
-        },
-        onClear: _clearFilters,
-      ),
-    );
   }
 
   @override

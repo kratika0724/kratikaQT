@@ -19,8 +19,11 @@ class CustomerCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fullName = '${customer.firstName ?? ''} ${customer.middleName ?? ''} ${customer.lastName ?? ''}'.trim();
-    final formattedDate = DateFormat('dd MMM yyyy, hh:mm a').format(DateTime.parse(customer.createdAt!));
+    final fullName =
+        '${customer.firstName ?? ''} ${customer.middleName ?? ''} ${customer.lastName ?? ''}'
+            .trim();
+    final formattedDate = DateFormat('dd MMM yyyy, hh:mm a')
+        .format(DateTime.parse(customer.createdAt!));
 
     return AnimatedSize(
       duration: const Duration(milliseconds: 300),
@@ -68,14 +71,15 @@ class CustomerCard extends StatelessWidget {
             children: [
               Text(
                 name.toUpperCase(),
-                style: semiBoldTextStyle(fontSize: dimen15, color: AppColors.textSecondary),
+                style: semiBoldTextStyle(
+                    fontSize: dimen15, color: AppColors.textSecondary),
                 overflow: TextOverflow.ellipsis,
               ),
-
             ],
           ),
         ),
-        Icon(isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,color: Colors.black54),
+        Icon(isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+            color: Colors.black54),
       ],
     );
   }
@@ -87,7 +91,7 @@ class CustomerCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Mobile no.- " +contact,
+            "Mobile no.- " + contact,
             style: regularTextStyle(fontSize: dimen13, color: Colors.black),
           ),
           Text(

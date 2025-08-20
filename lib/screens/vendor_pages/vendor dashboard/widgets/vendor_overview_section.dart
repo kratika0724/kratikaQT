@@ -78,7 +78,7 @@ class VendorOverviewSection extends StatelessWidget {
               shrinkWrap: true,
               crossAxisSpacing: 12,
               mainAxisSpacing: 12,
-              childAspectRatio: 1,
+              childAspectRatio: 1.2,
               physics: const NeverScrollableScrollPhysics(),
               children: walletItems,
             ),

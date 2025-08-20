@@ -1,6 +1,6 @@
 class ApiPath {
-  static const String baseUrl = 'http://192.168.1.13:3001/api';
-  static const String baseUrlint = 'http://192.168.1.13:3001/api';
+  static const String baseUrl = 'http://192.168.1.11:3001/api';
+  static const String baseUrlint = 'http://192.168.1.11:3001/api';
 
   // static const String imageURL = 'https://api.qtcollector.com/uploads/images/';
 
@@ -25,6 +25,6 @@ class ApiPath {
   static const String getVendorPayments = '/qt/vendorPayment/getList';
 
   static const String getAgentByArea = '/qt/user/getListByArea';
-  
+
   static const String cashBalance = '/qt/wallet/cashBalance';
 }

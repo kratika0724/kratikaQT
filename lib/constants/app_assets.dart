@@ -1,7 +1,6 @@
 class AppAssets {
   // Image Paths
-  static const String logo = 'assets/images/logo.png';
-  static const String distributer_logo = 'assets/images/distributer_logo.png';
+  static const String logo = 'assets/images/app_logo.png';
   static const String sampleProduct = 'assets/images/sample_product.png';
 
   static const String sampleFile = 'assets/files/sample_file.xlsx';

@@ -15,7 +15,7 @@ class AppThemeButton extends StatelessWidget {
     required this.onPressed,
     this.fontSize = 14,
     this.padding = const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
-    this.backgroundColor = AppColors.secondary,
+    this.backgroundColor = AppColors.primary,
   }) : super(key: key);
 
   @override
@@ -23,11 +23,7 @@ class AppThemeButton extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        gradient:  LinearGradient(
-          colors: [AppColors.primary, Colors.indigo.withOpacity(0.8)],
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
-        ),
+        color: backgroundColor,
         borderRadius: BorderRadius.circular(10),
       ),
       child: ElevatedButton(
@@ -36,7 +32,8 @@ class AppThemeButton extends StatelessWidget {
           backgroundColor: Colors.transparent,
           shadowColor: Colors.transparent,
           padding: padding,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         ),
         child: Text(
           label,
