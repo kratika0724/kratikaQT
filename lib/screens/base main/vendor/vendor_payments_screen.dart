@@ -40,13 +40,13 @@ class _VendorPaymentsScreenState extends State<VendorPaymentsScreen>
       appBar: AppBar(
         elevation: 0,
         automaticallyImplyLeading: false,
-        title: HeaderTextBlack("Payments"),
-        backgroundColor: Colors.white,
+        title: HeaderTextWhite("Payments"),
+        backgroundColor: AppColors.primary,
         bottom: TabBar(
           controller: _tabController,
-          labelColor: AppColors.secondary,
+          labelColor: AppColors.background,
           unselectedLabelColor: Colors.grey,
-          indicatorColor: AppColors.secondary,
+          indicatorColor: AppColors.background,
           tabs: const [
             Tab(text: 'Paid'),
             Tab(text: 'Pending'),
@@ -57,13 +57,9 @@ class _VendorPaymentsScreenState extends State<VendorPaymentsScreen>
         controller: _tabController,
         children: [
           // Paid Tab
-          const Expanded(
-            child: VendorPaymentCardList(),
-          ),
+          const VendorPaymentCardList(),
           // Pending Tab
-          const Expanded(
-            child: PendingBillsList(),
-          ),
+          const PendingBillsList(),
         ],
       ),
     );

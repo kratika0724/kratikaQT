@@ -18,8 +18,8 @@ class AppColors {
   static const Color grey = Colors.grey;
 
   // Text Colors
-  static const Color textPrimary = Color(0xFF0C99D2);
-  static const Color textSecondary = Color(0xFF0A5F86);
+  static const Color textPrimary = Color(0xFF043838);
+  static const Color textSecondary = Color(0xFF024632);
   static const Color textBlack = Colors.black;
   static const Color textBlack54 = Colors.black54;
   static const Color textWhite = Colors.white;
@@ -31,14 +31,14 @@ class AppColors {
 
   // Input Colors
   static const Color inputBackground = Color(0xFFF5F5F5);
-  static const Color inputBorder = Color(0xFF0C99D2);
+  static const Color inputBorder = Color(0xFF024632);
 
   // Button Colors
-  static const Color buttonPrimary = Color(0xFF0C99D2);
+  static const Color buttonPrimary = Color(0xFF024632);
   static const Color buttonText = Colors.white;
 
   // Icon Colors
-  static const Color iconPrimary = Color(0xFF0C99D2);
+  static const Color iconPrimary = Color(0xFF043838);
 
   // Gradient Colors
   static List<Color> get backgroundGradient =>

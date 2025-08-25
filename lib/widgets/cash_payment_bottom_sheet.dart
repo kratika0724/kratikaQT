@@ -184,7 +184,9 @@ class _CashPaymentBottomSheetState extends State<CashPaymentBottomSheet> {
   Widget _buildSuccessPage() {
     if (_paymentResponse == null) return const SizedBox.shrink();
 
-    return Column(
+    return SingleChildScrollView(
+        child: Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Column(
           mainAxisSize: MainAxisSize.min,
@@ -361,7 +363,7 @@ class _CashPaymentBottomSheetState extends State<CashPaymentBottomSheet> {
           ],
         ),
       ],
-    );
+    ));
   }
 
   Widget _buildDetailRow(String label, String value,
@@ -388,276 +390,276 @@ class _CashPaymentBottomSheetState extends State<CashPaymentBottomSheet> {
   }
 
   Widget _buildPaymentForm() {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Handle bar
-        Center(
-          child: Container(
-            width: 40,
-            height: 4,
-            decoration: BoxDecoration(
-              color: Colors.grey[300],
-              borderRadius: BorderRadius.circular(2),
-            ),
-          ),
-        ),
-        const SizedBox(height: 24),
-
-        // Header
-        Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(8.0),
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Handle bar
+          Center(
+            child: Container(
+              width: 40,
+              height: 4,
               decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              child: const Icon(
-                Icons.payment,
-                color: AppColors.primary,
-                size: 20,
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(2),
               ),
             ),
-            const SizedBox(width: 12),
-            Text(
-              "Cash Payment",
-              style: boldTextStyle(
-                fontSize: dimen20,
-                color: Colors.black87,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 8),
-        Text(
-          "Enter payment details to proceed",
-          style: mediumTextStyle(
-            fontSize: dimen14,
-            color: Colors.grey[600],
           ),
-        ),
-        const SizedBox(height: 24),
-
-        // Form
-        Form(
-          key: _formKey,
-          child: Column(
+          const SizedBox(height: 24),
+          // Header
+          Row(
             children: [
-              // Email Field with Search
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  TextFormField(
-                    controller: _emailController,
-                    keyboardType: TextInputType.emailAddress,
-                    onChanged: (value) {
-                      // Debounce the search
-                      Future.delayed(const Duration(milliseconds: 500), () {
-                        if (mounted) {
-                          _searchCustomersByEmail(value);
-                        }
-                      });
-                    },
-                    decoration: InputDecoration(
-                      labelText: 'Email ID',
-                      hintText: 'Enter email address',
-                      prefixIcon: const Icon(
-                        Icons.email_outlined,
-                        color: AppColors.primary,
-                      ),
-                      suffixIcon: _isSearching
-                          ? const SizedBox(
-                              width: 20,
-                              height: 20,
-                              child: Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                ),
-                              ),
-                            )
-                          : null,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12.0),
-                        borderSide: BorderSide(color: Colors.grey[300]!),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12.0),
-                        borderSide: BorderSide(color: Colors.grey[300]!),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12.0),
-                        borderSide: const BorderSide(
-                            color: AppColors.primary, width: 2),
-                      ),
-                      filled: true,
-                      fillColor: Colors.grey[50],
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter email address';
-                      }
-                      if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
-                          .hasMatch(value)) {
-                        return 'Please enter a valid email address';
-                      }
-                      if (_selectedCustomer == null) {
-                        return 'Please select a customer from the list';
-                      }
-                      return null;
-                    },
-                  ),
-
-                  // Search Results Dropdown
-                  if (_searchResults.isNotEmpty &&
-                      _emailController.text.isNotEmpty)
-                    Container(
-                      margin: const EdgeInsets.only(top: 8),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: Colors.grey[300]!),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            blurRadius: 4,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      constraints: const BoxConstraints(maxHeight: 200),
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: _searchResults.length,
-                        itemBuilder: (context, index) {
-                          final customer = _searchResults[index];
-                          final isSelected =
-                              _selectedCustomer?.id == customer.id;
-
-                          return ListTile(
-                            dense: true,
-                            title: Text(
-                              customer.email,
-                              style: TextStyle(
-                                fontWeight: isSelected
-                                    ? FontWeight.w600
-                                    : FontWeight.normal,
-                                color: isSelected
-                                    ? AppColors.primary
-                                    : Colors.black87,
-                              ),
-                            ),
-                            subtitle: Text(
-                              '${customer.firstName ?? ''} ${customer.middleName ?? ''} ${customer.lastName ?? ''}'
-                                  .trim(),
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.grey[600],
-                              ),
-                            ),
-                            tileColor: isSelected
-                                ? AppColors.primary.withOpacity(0.1)
-                                : null,
-                            onTap: () => _selectCustomer(customer),
-                          );
-                        },
-                      ),
-                    ),
-                ],
-              ),
-              const SizedBox(height: 16),
-
-              // Amount Field
-              TextFormField(
-                controller: _amountController,
-                keyboardType: TextInputType.number,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                ],
-                decoration: InputDecoration(
-                  labelText: 'Amount',
-                  hintText: 'Enter amount',
-                  prefixIcon: const Icon(
-                    Icons.currency_rupee_outlined,
-                    color: AppColors.primary,
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12.0),
-                    borderSide: BorderSide(color: Colors.grey[300]!),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12.0),
-                    borderSide: BorderSide(color: Colors.grey[300]!),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12.0),
-                    borderSide:
-                        const BorderSide(color: AppColors.primary, width: 2),
-                  ),
-                  filled: true,
-                  fillColor: Colors.grey[50],
+              Container(
+                padding: const EdgeInsets.all(8.0),
+                decoration: BoxDecoration(
+                  color: AppColors.primary.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(8.0),
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter amount';
-                  }
-                  final amount = int.tryParse(value);
-                  if (amount == null || amount <= 0) {
-                    return 'Please enter a valid amount';
-                  }
-                  return null;
-                },
+                child: const Icon(
+                  Icons.payment,
+                  color: AppColors.primary,
+                  size: 20,
+                ),
               ),
-              const SizedBox(height: 24),
-
-              // Submit Button
-              SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: _isLoading ? null : _processCashPayment,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.0),
+              const SizedBox(width: 12),
+              Text(
+                "Cash Payment",
+                style: boldTextStyle(
+                  fontSize: dimen20,
+                  color: Colors.black87,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(
+            "Enter payment details to proceed",
+            style: mediumTextStyle(
+              fontSize: dimen14,
+              color: Colors.grey[600],
+            ),
+          ),
+          const SizedBox(height: 24),
+          // Form
+          Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                // Email Field with Search
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextFormField(
+                      controller: _emailController,
+                      keyboardType: TextInputType.emailAddress,
+                      onChanged: (value) {
+                        // Debounce the search
+                        Future.delayed(const Duration(milliseconds: 500), () {
+                          if (mounted) {
+                            _searchCustomersByEmail(value);
+                          }
+                        });
+                      },
+                      decoration: InputDecoration(
+                        labelText: 'Email ID',
+                        hintText: 'Enter email address',
+                        prefixIcon: const Icon(
+                          Icons.email_outlined,
+                          color: AppColors.primary,
+                        ),
+                        suffixIcon: _isSearching
+                            ? const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  ),
+                                ),
+                              )
+                            : null,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12.0),
+                          borderSide: BorderSide(color: Colors.grey[300]!),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12.0),
+                          borderSide: BorderSide(color: Colors.grey[300]!),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12.0),
+                          borderSide: const BorderSide(
+                              color: AppColors.primary, width: 2),
+                        ),
+                        filled: true,
+                        fillColor: Colors.grey[50],
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter email address';
+                        }
+                        if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                            .hasMatch(value)) {
+                          return 'Please enter a valid email address';
+                        }
+                        if (_selectedCustomer == null) {
+                          return 'Please select a customer from the list';
+                        }
+                        return null;
+                      },
                     ),
-                    elevation: 2,
-                    shadowColor: AppColors.primary.withOpacity(0.3),
-                  ),
-                  child: _isLoading
-                      ? const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            valueColor:
-                                AlwaysStoppedAnimation<Color>(Colors.white),
-                          ),
-                        )
-                      : Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Icon(Icons.payment, size: 20),
-                            const SizedBox(width: 8),
-                            Text(
-                              'Process Payment',
-                              style: boldTextStyle(
-                                fontSize: dimen16,
-                                color: Colors.white,
-                              ),
+
+                    // Search Results Dropdown
+                    if (_searchResults.isNotEmpty &&
+                        _emailController.text.isNotEmpty)
+                      Container(
+                        margin: const EdgeInsets.only(top: 8),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: Colors.grey[300]!),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              blurRadius: 4,
+                              offset: const Offset(0, 2),
                             ),
                           ],
                         ),
+                        constraints: const BoxConstraints(maxHeight: 200),
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: _searchResults.length,
+                          itemBuilder: (context, index) {
+                            final customer = _searchResults[index];
+                            final isSelected =
+                                _selectedCustomer?.id == customer.id;
+
+                            return ListTile(
+                              dense: true,
+                              title: Text(
+                                customer.email,
+                                style: TextStyle(
+                                  fontWeight: isSelected
+                                      ? FontWeight.w600
+                                      : FontWeight.normal,
+                                  color: isSelected
+                                      ? AppColors.primary
+                                      : Colors.black87,
+                                ),
+                              ),
+                              subtitle: Text(
+                                '${customer.firstName ?? ''} ${customer.middleName ?? ''} ${customer.lastName ?? ''}'
+                                    .trim(),
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey[600],
+                                ),
+                              ),
+                              tileColor: isSelected
+                                  ? AppColors.primary.withOpacity(0.1)
+                                  : null,
+                              onTap: () => _selectCustomer(customer),
+                            );
+                          },
+                        ),
+                      ),
+                  ],
                 ),
-              ),
-              const SizedBox(height: 16),
-            ],
+                const SizedBox(height: 16),
+
+                // Amount Field
+                TextFormField(
+                  controller: _amountController,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                  ],
+                  decoration: InputDecoration(
+                    labelText: 'Amount',
+                    hintText: 'Enter amount',
+                    prefixIcon: const Icon(
+                      Icons.currency_rupee_outlined,
+                      color: AppColors.primary,
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12.0),
+                      borderSide: BorderSide(color: Colors.grey[300]!),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12.0),
+                      borderSide: BorderSide(color: Colors.grey[300]!),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12.0),
+                      borderSide:
+                          const BorderSide(color: AppColors.primary, width: 2),
+                    ),
+                    filled: true,
+                    fillColor: Colors.grey[50],
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter amount';
+                    }
+                    final amount = int.tryParse(value);
+                    if (amount == null || amount <= 0) {
+                      return 'Please enter a valid amount';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 24),
+
+                // Submit Button
+                SizedBox(
+                  width: double.infinity,
+                  height: 50,
+                  child: ElevatedButton(
+                    onPressed: _isLoading ? null : _processCashPayment,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                      elevation: 2,
+                      shadowColor: AppColors.primary.withOpacity(0.3),
+                    ),
+                    child: _isLoading
+                        ? const SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor:
+                                  AlwaysStoppedAnimation<Color>(Colors.white),
+                            ),
+                          )
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(Icons.payment, size: 20),
+                              const SizedBox(width: 8),
+                              Text(
+                                'Process Payment',
+                                style: boldTextStyle(
+                                  fontSize: dimen16,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

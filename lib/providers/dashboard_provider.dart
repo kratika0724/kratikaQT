@@ -48,28 +48,6 @@ class DashboardProvider extends ChangeNotifier {
     return parts.where((part) => part.trim().isNotEmpty).join(" ");
   }
 
-  Future<void> fetchUserCountData(BuildContext context, String token) async {
-    isLoading = true;
-    error = null;
-    notifyListeners();
-    getDatabyId(context, token);
-    try {
-      final response =
-          await apiService.getAuth(context, ApiPath.getDashboardData, {});
-      final mResponse = DashboardResponse.fromJson(response);
-      if (mResponse.success) {
-        _userCountData = mResponse;
-      } else {
-        error = "Failed to load data: ${mResponse.message}";
-      }
-    } catch (e) {
-      error = "Error: $e";
-    }
-
-    isLoading = false;
-    notifyListeners();
-  }
-
   Future<void> getDatabyId(BuildContext context, String token) async {
     PreferencesServices.getPreferencesData(PreferencesServices.userId)
         .then((userid) async {
@@ -79,11 +57,11 @@ class DashboardProvider extends ChangeNotifier {
       try {
         final response = await apiService
             .getAuth(context, ApiPath.getDatabyId, {"id": uid ?? ""});
-        
         if (response != null) {
           final userDataResponse = UserDataResponse.fromJson(response);
           if (userDataResponse.success) {
             _userData = userDataResponse;
+            notifyListeners();
           } else {
             error = "Failed to load user data: ${userDataResponse.message}";
           }
@@ -92,7 +70,6 @@ class DashboardProvider extends ChangeNotifier {
         error = "Error: $e";
       }
     });
-    notifyListeners();
   }
 
   void getCustomerDatafromLocal() {
@@ -139,11 +116,10 @@ class DashboardProvider extends ChangeNotifier {
     });
     PreferencesServices.getPreferencesData(PreferencesServices.profileImg)
         .then((profileImg) {
-      user_profile_img = (profileImg?.toString() ?? "").isEmpty ||
-              profileImg == ""
-          // ? "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png"
-          ? "https://www.gravatar.com/avatar/2c7d99fe281ecd3bcd65ab915bac6dd5?s=250"
-          : profileImg.toString();
+      user_profile_img =
+          (profileImg?.toString() ?? "").isEmpty || profileImg == ""
+              ? "https://avatar.iran.liara.run/public/35"
+              : profileImg.toString();
     });
     PreferencesServices.getPreferencesData(PreferencesServices.roleName)
         .then((roleName) {

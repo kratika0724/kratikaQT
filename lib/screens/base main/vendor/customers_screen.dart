@@ -50,10 +50,9 @@ class _CustomersScreenState extends State<CustomersScreen> {
       backgroundColor: AppColors.ghostWhite.withOpacity(0.5),
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: HeaderTextBlack("Customers"),
+        title: HeaderTextWhite("Customers"),
         // centerTitle: true,
-        backgroundColor: Colors.white,
-        foregroundColor: AppColors.primary,
+        backgroundColor: AppColors.primary,
         // elevation: 3,
       ),
       body: Consumer<CustomerProvider>(

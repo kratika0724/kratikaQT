@@ -66,7 +66,8 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/images/background.png'), // Change path if needed
+            image: AssetImage(
+                'assets/images/background.png'), // Change path if needed
             fit: BoxFit.cover,
           ),
         ),
@@ -95,15 +96,25 @@ class _LoginScreenState extends State<LoginScreen> {
             // ),
             SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.only(
-                    right: 24.0, left: 24.0, top: 50.0),
+                padding:
+                    const EdgeInsets.only(right: 24.0, left: 24.0, top: 50.0),
                 child: Form(
                   key: _formKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const SizedBox(height: 60),
-                      Image.asset(AppAssets.logo, width: 200, height: 200),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Image.asset(AppAssets.logo, width: 200, height: 50),
+                          Text("Vendor",
+                              style: semiBoldTextStyle(
+                                fontSize: dimen16,
+                                color: Colors.black,
+                              ))
+                        ],
+                      ),
                       const SizedBox(height: 50),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -143,13 +154,12 @@ class _LoginScreenState extends State<LoginScreen> {
                         decoration: InputDecoration(
                           labelText: 'Mobile Number',
                           labelStyle:
-                          const TextStyle(fontSize: 14, color: Colors.grey),
+                              const TextStyle(fontSize: 14, color: Colors.grey),
                           hintText: 'Enter 10 digit mobile number',
-                          hintStyle: const TextStyle(fontSize: 14,
-                              color: Colors.grey),
-                          contentPadding:
-                          const EdgeInsets.symmetric(horizontal: 16,
-                              vertical: 16),
+                          hintStyle:
+                              const TextStyle(fontSize: 14, color: Colors.grey),
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 16),
                           fillColor: Colors.white,
                         ),
                         validator: (value) {
@@ -178,30 +188,26 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.transparent,
-                            shadowColor: Colors.transparent,
-                            padding:
-                            const EdgeInsets.symmetric(
-                                horizontal: 16),
+                            backgroundColor: AppColors.primary,
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10)),
                           ),
-                          onPressed: authProvider.isLoading
-                              ? null
-                              : _handleLogin,
+                          onPressed:
+                              authProvider.isLoading ? null : _handleLogin,
                           child: authProvider.isLoading
                               ? const SizedBox(
-                            // height: 20,
-                            width: 15,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 1,
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                  AppColors.buttonText),
-                            ),
-                          )
+                                  // height: 20,
+                                  width: 15,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 1,
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                        AppColors.buttonText),
+                                  ),
+                                )
                               : Text('Get OTP',
-                              style: boldTextStyle(
-                                  fontSize: dimen18, color: Colors.white)),
+                                  style: boldTextStyle(
+                                      fontSize: dimen18, color: Colors.white)),
                         ),
                       ),
                       const SizedBox(height: 400),
@@ -239,8 +245,6 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
-
-
 
 //   @override
 //   Widget build(BuildContext context) {

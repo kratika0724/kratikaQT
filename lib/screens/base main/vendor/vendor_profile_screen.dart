@@ -56,7 +56,6 @@ class _ProfileScreenState extends State<VendorProfileScreen> {
                   ),
                 ),
                 const SizedBox(height: 10),
-                // Menu Options
                 Expanded(
                   child: ListView(
                     children: [
