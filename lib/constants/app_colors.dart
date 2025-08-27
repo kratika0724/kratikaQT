@@ -5,6 +5,10 @@ class AppColors {
   static const Color primary = Color(0xFF043838);
   static const Color primaryLight = Color(0xFF043838);
 
+  static const Color primary_appbar = Color(0xFFF0F3F0);
+
+  static const Color yellow = Color(0xFFF6CE1B);
+
   // Secondary Colors
   static const Color secondary = Color(0xFF024632);
   static const Color secondaryLight = Color(0xFF024632);

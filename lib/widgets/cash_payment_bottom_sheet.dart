@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:qt_distributer/providers/dashboard_provider.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_textstyles.dart';
 import '../models/response models/customer_response.dart';
@@ -108,16 +109,16 @@ class _CashPaymentBottomSheetState extends State<CashPaymentBottomSheet> {
           "amount": amount,
           "id": customerId,
         };
-
         final response = await _apiService.post_auth(
           context,
           ApiPath.cashBalance,
           payload,
         );
-
         final paymentResponse = CashPaymentResponse.fromJson(response);
-
         if (paymentResponse.success) {
+          DashboardProvider provider =
+              Provider.of<DashboardProvider>(context, listen: false);
+          provider.getDatabyId(context);
           setState(() {
             _paymentResponse = paymentResponse;
             _showSuccessPage = true;

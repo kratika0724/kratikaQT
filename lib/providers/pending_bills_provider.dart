@@ -17,6 +17,9 @@ class PendingBillsProvider with ChangeNotifier {
   int currentPage = 1;
   final int limit = 10;
 
+  // Add loading state for payment link initiation
+  bool isInitiatingPayment = false;
+
   Future<void> refreshPendingBillsData(BuildContext context) async {
     currentPage = 1;
     hasMoreData = true;
@@ -24,7 +27,8 @@ class PendingBillsProvider with ChangeNotifier {
     await getPendingBills(context);
   }
 
-  Future<void> getPendingBills(BuildContext context, {bool loadMore = false}) async {
+  Future<void> getPendingBills(BuildContext context,
+      {bool loadMore = false}) async {
     if (loadMore) {
       if (isFetchingMore || !hasMoreData) return;
       isFetchingMore = true;
@@ -70,7 +74,8 @@ class PendingBillsProvider with ChangeNotifier {
         if (errorMessage != "No Data Found.") {
           // Fluttertoast.showToast(msg: errorMessage!);
         }
-        debugPrint("Pending bills fetch failed: ${pendingBillsResponse.message}");
+        debugPrint(
+            "Pending bills fetch failed: ${pendingBillsResponse.message}");
       }
     } catch (error) {
       errorMessage = "Error fetching pending bills: $error";
@@ -80,6 +85,40 @@ class PendingBillsProvider with ChangeNotifier {
       isLoading = false;
       isFetchingMore = false;
       notifyListeners();
+    }
+  }
+
+  Future<bool> initiatePaymentLink(BuildContext context,
+      PendingBillData pendingBillData, double amount) async {
+    isInitiatingPayment = true;
+    notifyListeners();
+
+    try {
+      final response = await apiService.post_auth(
+        context,
+        ApiPath.intiatePaymentLink,
+        {
+          'userName':
+              '${pendingBillData.firstName} ${pendingBillData.lastName}',
+          'Email': pendingBillData.email,
+          'user.mobile': pendingBillData.mobile,
+          'transactionAmount': "-${pendingBillData.balance}"
+        },
+      );
+
+      isInitiatingPayment = false;
+      notifyListeners();
+
+      if (response['success'] == true) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      isInitiatingPayment = false;
+      notifyListeners();
+      debugPrint("Error initiating payment link: $error");
+      return false;
     }
   }
 

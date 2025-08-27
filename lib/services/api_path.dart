@@ -20,6 +20,7 @@ class ApiPath {
   static const String getAllocation = '/qt/allocation/getList';
   static const String getCustomer = '/qt/customer/getList';
   static const String getTransactions = '/qt/transaction/getList';
+  static const String intiatePaymentLink = '/qt/transaction/intiatePaymentLink';
   static const String getPendingBills = '/qt/wallet/pendingbills';
 
   static const String getVendorPayments = '/qt/vendorPayment/getList';

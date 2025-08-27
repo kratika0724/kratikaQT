@@ -40,28 +40,17 @@ class _VendorPaymentsScreenState extends State<VendorPaymentsScreen>
       appBar: AppBar(
         elevation: 0,
         automaticallyImplyLeading: false,
-        title: HeaderTextWhite("Payments"),
+        title: HeaderTextWhite("Collected Payments"),
         backgroundColor: AppColors.primary,
-        bottom: TabBar(
-          controller: _tabController,
-          labelColor: AppColors.background,
-          unselectedLabelColor: Colors.grey,
-          indicatorColor: AppColors.background,
-          tabs: const [
-            Tab(text: 'Paid'),
-            Tab(text: 'Pending'),
-          ],
-        ),
       ),
-      body: TabBarView(
-        controller: _tabController,
-        children: [
-          // Paid Tab
-          const VendorPaymentCardList(),
-          // Pending Tab
-          const PendingBillsList(),
-        ],
-      ),
+      body: VendorPaymentCardList(),
+      // body: TabBarView(
+      //   controller: _tabController,
+      //   children: [
+      //     const VendorPaymentCardList(),
+      //     const PendingBillsList(),
+      //   ],
+      // ),
     );
   }
 }

@@ -24,7 +24,7 @@ class _DashboardScreenState extends State<VendorDashboardScreen> {
       if (token.isNotEmpty) {
         final provider = Provider.of<DashboardProvider>(context, listen: false);
         provider.getCustomerDatafromLocal();
-        provider.getDatabyId(context, token);
+        provider.getDatabyId(context);
         // provider.fetchUserCountData(context, token);
       }
     });

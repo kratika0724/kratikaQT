@@ -24,10 +24,9 @@ class UserDataResponse {
 class UserData {
   final String id;
   final String userId;
-  final double balance;
-  final double lien;
-  final double holdAmount;
-  final double payoutBalance;
+  final double cashCollected;
+  final double systemCollected;
+  final double totalCollected;
   final bool isActive;
   final String createdAt;
   final String createdBy;
@@ -44,10 +43,9 @@ class UserData {
   UserData({
     required this.id,
     required this.userId,
-    required this.balance,
-    required this.lien,
-    required this.holdAmount,
-    required this.payoutBalance,
+    required this.cashCollected,
+    required this.systemCollected,
+    required this.totalCollected,
     required this.isActive,
     required this.createdAt,
     required this.createdBy,
@@ -66,10 +64,9 @@ class UserData {
     return UserData(
       id: json['_id'] ?? '',
       userId: json['userId'] ?? '',
-      balance: (json['balance'] ?? 0).toDouble(),
-      lien: (json['lien'] ?? 0).toDouble(),
-      holdAmount: (json['hold_amount'] ?? 0).toDouble(),
-      payoutBalance: (json['payout_balance'] ?? 0).toDouble(),
+      cashCollected: (json['cashCollected'] ?? 0).toDouble(),
+      systemCollected: (json['systemCollected'] ?? 0).toDouble(),
+      totalCollected: (json['totalCollected'] ?? 0).toDouble(),
       isActive: json['is_active'] ?? false,
       createdAt: json['created_at'] ?? '',
       createdBy: json['created_by'] ?? '',

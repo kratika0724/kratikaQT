@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_textstyles.dart';
 import '../../../models/response models/pending_bills_response.dart';
+import '../../../providers/pending_bills_provider.dart';
 
 class PendingBillCard extends StatelessWidget {
   final PendingBillData pendingBill;
@@ -99,6 +102,8 @@ class PendingBillCard extends StatelessWidget {
                                   _formatDate(pendingBill
                                       .walletHistory.last.createdAt)),
                               _buildInfoRow("Last Paid Mode", "Cash"),
+                              const SizedBox(height: 12),
+                              _buildSendPaymentLinkButton(context),
                             ],
                           ),
                         ),
@@ -216,6 +221,76 @@ class PendingBillCard extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget _buildSendPaymentLinkButton(BuildContext context) {
+    return Consumer<PendingBillsProvider>(
+      builder: (context, provider, child) {
+        return SizedBox(
+          width: double.infinity,
+          child: ElevatedButton.icon(
+            onPressed: provider.isInitiatingPayment
+                ? null
+                : () => _handleSendPaymentLink(context, provider),
+            icon: provider.isInitiatingPayment
+                ? const SizedBox(
+                    width: 16,
+                    height: 16,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                : const Icon(
+                    Icons.payment,
+                    size: 18,
+                    color: AppColors.ghostWhite,
+                  ),
+            label: Text(
+              provider.isInitiatingPayment ? 'Sending...' : 'Send Payment Link',
+              style: mediumTextStyle(
+                  fontSize: dimen14, color: AppColors.ghostWhite),
+            ),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.yellow,
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(6),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _handleSendPaymentLink(
+      BuildContext context, PendingBillsProvider provider) async {
+    try {
+      final success = await provider.initiatePaymentLink(
+        context,
+        pendingBill,
+        pendingBill.balance.abs(),
+      );
+
+      if (success) {
+        Fluttertoast.showToast(
+          msg: "Payment link sent successfully!",
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+        );
+      } else {
+        Fluttertoast.showToast(
+          msg: "Failed to send payment link. Please try again.",
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+        );
+      }
+    } catch (e) {
+      Fluttertoast.showToast(
+        msg: "Error sending payment link: $e",
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+      );
+    }
   }
 
   Color _getStatusColor(String status) {

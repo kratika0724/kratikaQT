@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:qt_distributer/screens/base%20main/vendor/pending_bills_screen.dart';
 import 'package:qt_distributer/screens/vendor_pages/vendor%20dashboard/widgets/vendor_summary_card.dart';
 import '../../../../constants/app_textstyles.dart';
 import '../../../../constants/app_colors.dart';
@@ -13,18 +14,23 @@ class VendorOverviewSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final walletItems = [
       VendorSummaryCard(
-        title: 'Wallet Balance',
-        count: dashboardProvider.walletBalance.toInt(),
+        title: 'Cash Collected',
+        count: dashboardProvider.cashCollected.toInt(),
         isCurrency: true,
       ),
       VendorSummaryCard(
-        title: 'Hold Amount',
-        count: dashboardProvider.holdAmount.toInt(),
+        title: 'System Collected',
+        count: dashboardProvider.systemCollected.toInt(),
         isCurrency: true,
       ),
       VendorSummaryCard(
-        title: 'Payout Balance',
-        count: dashboardProvider.payoutBalance.toInt(),
+        title: 'Total Collected',
+        count: dashboardProvider.totalCollected.toInt(),
+        isCurrency: true,
+      ),
+      VendorSummaryCard(
+        title: 'Pending Bills →',
+        count: dashboardProvider.totalCollected.toInt(),
         isCurrency: true,
       ),
     ];

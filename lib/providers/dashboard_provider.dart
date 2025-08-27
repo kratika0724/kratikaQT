@@ -24,9 +24,9 @@ class DashboardProvider extends ChangeNotifier {
   int get customerCount => _userCountData?.total.customerCount ?? 0;
 
   // Wallet balance getters
-  double get walletBalance => _userData?.data.balance ?? 0.0;
-  double get holdAmount => _userData?.data.holdAmount ?? 0.0;
-  double get payoutBalance => _userData?.data.payoutBalance ?? 0.0;
+  double get cashCollected => _userData?.data.cashCollected ?? 0.0;
+  double get systemCollected => _userData?.data.systemCollected ?? 0.0;
+  double get totalCollected => _userData?.data.totalCollected ?? 0.0;
 
   String? user_firstname = "";
   String? user_middlename = "";
@@ -48,7 +48,7 @@ class DashboardProvider extends ChangeNotifier {
     return parts.where((part) => part.trim().isNotEmpty).join(" ");
   }
 
-  Future<void> getDatabyId(BuildContext context, String token) async {
+  Future<void> getDatabyId(BuildContext context) async {
     PreferencesServices.getPreferencesData(PreferencesServices.userId)
         .then((userid) async {
       String uid = (userid?.toString() ?? "").isEmpty || userid == ""

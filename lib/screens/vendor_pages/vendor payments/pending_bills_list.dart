@@ -40,7 +40,6 @@ class _PendingBillsListState extends State<PendingBillsList> {
             child: CircularProgressIndicator(),
           );
         }
-
         if (pendingBillsProvider.errorMessage != null) {
           return Center(
             child: Column(
