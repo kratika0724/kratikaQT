@@ -37,10 +37,8 @@ class PendingBillsProvider with ChangeNotifier {
       currentPage = 1; // reset on fresh fetch
       hasMoreData = true;
     }
-
     errorMessage = null;
     notifyListeners();
-
     try {
       final response = await apiService.getAuth(
         context,
@@ -50,9 +48,7 @@ class PendingBillsProvider with ChangeNotifier {
           "limit": limit.toString(),
         },
       );
-
       final pendingBillsResponse = PendingBillsResponseModel.fromJson(response);
-
       if (pendingBillsResponse.success) {
         final newPendingBills = pendingBillsResponse.data;
         meta = pendingBillsResponse.meta;
@@ -71,15 +67,12 @@ class PendingBillsProvider with ChangeNotifier {
         }
       } else {
         errorMessage = pendingBillsResponse.message;
-        if (errorMessage != "No Data Found.") {
-          // Fluttertoast.showToast(msg: errorMessage!);
-        }
+        if (errorMessage != "No Data Found.") {}
         debugPrint(
             "Pending bills fetch failed: ${pendingBillsResponse.message}");
       }
     } catch (error) {
       errorMessage = "Error fetching pending bills: $error";
-      // Fluttertoast.showToast(msg: errorMessage!);
       debugPrint(errorMessage);
     } finally {
       isLoading = false;
