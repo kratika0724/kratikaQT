@@ -220,7 +220,6 @@ class _CustomersScreenState extends State<CustomersScreen>
                 // Search Section
                 if (provider.isLoading)
                   Center(child: CircularProgressIndicator()),
-
                 if (provider.errorMessage != null)
                   Center(child: Text(provider.errorMessage!)),
                 if (_hasFilters)

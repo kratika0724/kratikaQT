@@ -15,18 +15,7 @@ class CustomerList extends StatefulWidget {
 }
 
 class _CustomerListState extends State<CustomerList> {
-  int? expandedIndex;
   final ScrollController _scrollController = ScrollController();
-
-  void toggleExpanded(int index) {
-    setState(() {
-      if (expandedIndex == index) {
-        expandedIndex = null;
-      } else {
-        expandedIndex = index;
-      }
-    });
-  }
 
   @override
   void initState() {
@@ -85,8 +74,6 @@ class _CustomerListState extends State<CustomerList> {
 
         return CustomerCard(
           customer: customers[index],
-          isExpanded: expandedIndex == index,
-          onExpandToggle: () => toggleExpanded(index),
         );
       },
     );
@@ -100,8 +87,6 @@ class _CustomerListState extends State<CustomerList> {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
         child: CustomerCard(
           customer: customers[index],
-          isExpanded: expandedIndex == index,
-          onExpandToggle: () => toggleExpanded(index),
         ),
       ),
     );
