@@ -18,6 +18,10 @@ class TransactionProvider with ChangeNotifier {
   String? filterEmail;
   DateTime? filterStartDate;
   DateTime? filterEndDate;
+  
+  // Search related fields
+  String? currentSearchQuery;
+  String? currentSearchType; // 'mobile' or 'name'
 
   void setFilters({
     String? transactionId,
@@ -36,6 +40,21 @@ class TransactionProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  // Search methods
+  Future<void> searchByMobile(BuildContext context, String mobile) async {
+    await getTransactions(context, searchQuery: mobile, searchType: 'mobile');
+  }
+
+  Future<void> searchByName(BuildContext context, String name) async {
+    await getTransactions(context, searchQuery: name, searchType: 'name');
+  }
+
+  Future<void> clearSearch(BuildContext context) async {
+    currentSearchQuery = null;
+    currentSearchType = null;
+    await getTransactions(context);
+  }
+
   List<TransactionData> transactions = [];
   Meta? meta;
 
@@ -44,6 +63,7 @@ class TransactionProvider with ChangeNotifier {
 
   List<TransactionData> get filteredTransactions {
     return transactions.where((txn) {
+      // Filter functionality
       final matchesId = filterTransactionId == null ||
           (txn.quintusTransactionId ?? '')
               .toLowerCase()
@@ -86,7 +106,7 @@ class TransactionProvider with ChangeNotifier {
     await getTransactions(context);
   }
 
-  Future<void> getTransactions(BuildContext context, {bool loadMore = false}) async {
+  Future<void> getTransactions(BuildContext context, {bool loadMore = false, String? searchQuery, String? searchType}) async {
     if (loadMore) {
       if (isFetchingMore || !hasMoreData) return;
       isFetchingMore = true;
@@ -97,16 +117,34 @@ class TransactionProvider with ChangeNotifier {
     }
 
     errorMessage = null;
+    
+    // Update search parameters
+    if (searchQuery != null) {
+      currentSearchQuery = searchQuery;
+      currentSearchType = searchType;
+    }
+    
     notifyListeners();
 
     try {
+      Map<String, String> params = {
+        "page": currentPage.toString(),
+        "limit": limit.toString(),
+      };
+      
+      // Add search parameters if provided
+      if (currentSearchQuery != null && currentSearchQuery!.isNotEmpty) {
+        if (currentSearchType == 'mobile') {
+          params['mobile'] = currentSearchQuery!;
+        } else if (currentSearchType == 'name') {
+          params['name'] = currentSearchQuery!;
+        }
+      }
+      
       final response = await apiService.getAuth(
         context,
         ApiPath.getTransactions,
-        {
-          "page": currentPage.toString(),
-          "limit": limit.toString(),
-        },
+        params,
       );
 
       final transactionResponse = TransactionResponseModel.fromJson(response);
@@ -151,6 +189,8 @@ class TransactionProvider with ChangeNotifier {
     meta = null;
     currentPage = 1;
     hasMoreData = true;
+    currentSearchQuery = null;
+    currentSearchType = null;
     notifyListeners();
   }
 }

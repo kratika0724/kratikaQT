@@ -6,6 +6,8 @@ import 'package:qt_distributer/screens/base%20main/vendor/vendor_dashboard_scree
 import 'package:qt_distributer/screens/base%20main/vendor/vendor_payments_screen.dart';
 import 'package:qt_distributer/screens/base%20main/vendor/vendor_profile_screen.dart';
 
+import '../../services/MessagingService.dart';
+
 class HomeScreen extends StatefulWidget {
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -21,6 +23,17 @@ class _HomeScreenState extends State<HomeScreen> {
     CustomersScreen(),
     VendorProfileScreen(),
   ];
+
+  void initializeNotificationService() {
+    final MessagingService _notificationService = MessagingService();
+    _notificationService.init(context);
+  }
+
+  @override
+  void initState() {
+    initializeNotificationService();
+    super.initState();
+  }
 
   void _onItemTapped(int index) {
     setState(() {

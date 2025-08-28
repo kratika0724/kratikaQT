@@ -49,24 +49,17 @@ class CustomerDetailScreen extends StatelessWidget {
                   customer.address.isNotEmpty
                       ? customer.address
                       : 'Not provided'),
-            ]),
-            const SizedBox(height: 16),
-            _buildInfoSection('System Information', [
-              _buildInfoRow('Customer ID', customer.id),
               _buildInfoRow('Created At', formattedCreatedDate),
-              _buildInfoRow('Created By', customer.createdBy),
-              _buildInfoRow('Updated At', formattedUpdatedDate),
-              _buildInfoRow('Updated By', customer.updatedBy),
             ]),
             const SizedBox(height: 16),
             _buildInfoSection('Associated Information', [
               _buildInfoRow(
-                  'Distributer',
+                  'Agent',
                   customer.agentName.isNotEmpty
                       ? customer.agentName
                       : 'Not assigned'),
               _buildInfoRow(
-                  'Distributer Name',
+                  'Distributer',
                   customer.topVendorName.isNotEmpty
                       ? customer.topVendorName
                       : 'Not assigned'),

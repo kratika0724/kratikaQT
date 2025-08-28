@@ -77,10 +77,10 @@ class _VendorPaymentCardListState extends State<VendorPaymentCardList> {
           onRefresh: () => transactionProvider.refreshTransactionData(context),
           child: ListView.separated(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-            itemCount: transactionProvider.transactions.length,
+            itemCount: transactionProvider.filteredTransactions.length,
             separatorBuilder: (_, __) => const SizedBox(height: 4),
             itemBuilder: (context, index) {
-              final transaction = transactionProvider.transactions[index];
+              final transaction = transactionProvider.filteredTransactions[index];
               return VendorPaymentCard(
                 transaction: transaction,
                 isExpanded: expandedIndex == index,

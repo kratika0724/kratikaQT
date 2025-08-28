@@ -16,51 +16,117 @@ class CashSubmissionHistoryScreen extends StatefulWidget {
 }
 
 class _CashSubmissionHistoryScreenState
-    extends State<CashSubmissionHistoryScreen> {
+    extends State<CashSubmissionHistoryScreen>
+    with SingleTickerProviderStateMixin {
   final ApiService _apiService = ApiService();
-  bool _isLoading = true;
-  String? _error;
-  List<CashSubmissionRequestData> _submissions = [];
+  late TabController _tabController;
+
+  // Data for each tab
+  Map<String, List<CashSubmissionRequestData>> _tabData = {
+    'pending': [],
+    'approved': [],
+    'rejected': [],
+  };
+
+  Map<String, bool> _isLoading = {
+    'pending': true,
+    'approved': true,
+    'rejected': true,
+  };
+
+  Map<String, String?> _errors = {
+    'pending': null,
+    'approved': null,
+    'rejected': null,
+  };
 
   @override
   void initState() {
     super.initState();
-    _fetchCashSubmissionHistory();
+    _tabController = TabController(length: 3, vsync: this);
+    _tabController.addListener(_onTabChanged);
+    _fetchCashSubmissionHistory(status: 'pending');
   }
 
-  Future<void> _fetchCashSubmissionHistory() async {
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  void _onTabChanged() {
+    final currentTab = _getCurrentTabKey();
+    _fetchCashSubmissionHistory(status: _getStatusForTab(currentTab));
+  }
+
+  String _getCurrentTabKey() {
+    switch (_tabController.index) {
+      case 0:
+        return 'pending';
+      case 1:
+        return 'approved';
+      case 2:
+        return 'rejected';
+      default:
+        return 'pending';
+    }
+  }
+
+  String _getStatusForTab(String tabKey) {
+    switch (tabKey) {
+      case 'pending':
+        return 'pending';
+      case 'approved':
+        return 'approved';
+      case 'rejected':
+        return 'rejected';
+      default:
+        return 'pending';
+    }
+  }
+
+  Future<void> _fetchCashSubmissionHistory({String? status = "pending"}) async {
+    final tabKey = status ?? 'pending';
     setState(() {
-      _isLoading = true;
-      _error = null;
+      _isLoading[tabKey] = true;
+      _errors[tabKey] = null;
     });
 
     try {
+      final Map<String, String> queryParams = {};
+      if (status != null) {
+        queryParams['status'] = status;
+      }
       final response = await _apiService.getAuth(
         context,
         ApiPath.cashSubmissionReqList,
-        {},
+        queryParams,
       );
 
       final submissionResponse =
           CashSubmissionRequestResponse.fromJson(response);
-
       if (submissionResponse.success) {
         setState(() {
-          _submissions = submissionResponse.data;
-          _isLoading = false;
+          _tabData[tabKey] = submissionResponse.data;
+          _isLoading[tabKey] = false;
         });
       } else {
         setState(() {
-          _error = submissionResponse.message;
-          _isLoading = false;
+          _errors[tabKey] = submissionResponse.message;
+          _isLoading[tabKey] = false;
         });
       }
     } catch (e) {
       setState(() {
-        _error = 'Failed to load cash submission history: $e';
-        _isLoading = false;
+        _errors[tabKey] = 'Failed to load cash submission history: $e';
+        _isLoading[tabKey] = false;
       });
     }
+  }
+
+  Future<void> _refreshCurrentTab() async {
+    final currentTab = _getCurrentTabKey();
+    await _fetchCashSubmissionHistory(status: _getStatusForTab(currentTab));
   }
 
   String _formatDate(String dateString) {
@@ -107,21 +173,54 @@ class _CashSubmissionHistoryScreenState
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh, color: Colors.white),
-            onPressed: _fetchCashSubmissionHistory,
+            onPressed: _refreshCurrentTab,
           ),
         ],
+        bottom: TabBar(
+          controller: _tabController,
+          indicatorColor: Colors.white,
+          indicatorWeight: 3,
+          labelColor: Colors.white,
+          unselectedLabelColor: Colors.white70,
+          labelStyle: mediumTextStyle(
+            fontSize: dimen12,
+            color: Colors.white,
+          ),
+          tabs: const [
+            Tab(text: 'Pending'),
+            Tab(text: 'Approved'),
+            Tab(text: 'Rejected'),
+          ],
+        ),
       ),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : _error != null
-              ? _buildErrorWidget()
-              : _submissions.isEmpty
-                  ? _buildEmptyWidget()
-                  : _buildSubmissionList(),
+      body: TabBarView(
+        controller: _tabController,
+        children: [
+          _buildTabContent('pending'),
+          _buildTabContent('approved'),
+          _buildTabContent('rejected'),
+        ],
+      ),
     );
   }
 
-  Widget _buildErrorWidget() {
+  Widget _buildTabContent(String tabKey) {
+    if (_isLoading[tabKey]!) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (_errors[tabKey] != null) {
+      return _buildErrorWidget(tabKey);
+    }
+
+    if (_tabData[tabKey]!.isEmpty) {
+      return _buildEmptyWidget(tabKey);
+    }
+
+    return _buildSubmissionList(tabKey);
+  }
+
+  Widget _buildErrorWidget(String tabKey) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -141,7 +240,7 @@ class _CashSubmissionHistoryScreenState
           ),
           const SizedBox(height: 8),
           Text(
-            _error!,
+            _errors[tabKey]!,
             style: mediumTextStyle(
               fontSize: dimen14,
               color: Colors.grey[500],
@@ -150,7 +249,8 @@ class _CashSubmissionHistoryScreenState
           ),
           const SizedBox(height: 16),
           ElevatedButton(
-            onPressed: _fetchCashSubmissionHistory,
+            onPressed: () =>
+                _fetchCashSubmissionHistory(status: _getStatusForTab(tabKey)),
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primary,
               foregroundColor: Colors.white,
@@ -165,7 +265,28 @@ class _CashSubmissionHistoryScreenState
     );
   }
 
-  Widget _buildEmptyWidget() {
+  Widget _buildEmptyWidget(String tabKey) {
+    String title;
+    String message;
+
+    switch (tabKey) {
+      case 'pending':
+        title = 'No Pending Submissions';
+        message = 'You don\'t have any pending cash submission requests.';
+        break;
+      case 'approved':
+        title = 'No Approved Submissions';
+        message = 'You don\'t have any approved cash submission requests.';
+        break;
+      case 'rejected':
+        title = 'No Rejected Submissions';
+        message = 'You don\'t have any rejected cash submission requests.';
+        break;
+      default:
+        title = 'No Cash Submissions';
+        message = 'You haven\'t made any cash submission requests yet.';
+    }
+
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(10.0),
@@ -179,7 +300,7 @@ class _CashSubmissionHistoryScreenState
             ),
             const SizedBox(height: 16),
             Text(
-              'No Cash Submissions',
+              title,
               style: boldTextStyle(
                 fontSize: dimen18,
                 color: Colors.grey[600],
@@ -187,7 +308,7 @@ class _CashSubmissionHistoryScreenState
             ),
             const SizedBox(height: 8),
             Text(
-              'You haven\'t made any cash submission requests yet.',
+              message,
               style: mediumTextStyle(
                 fontSize: dimen14,
                 color: Colors.grey[500],
@@ -200,14 +321,15 @@ class _CashSubmissionHistoryScreenState
     );
   }
 
-  Widget _buildSubmissionList() {
+  Widget _buildSubmissionList(String tabKey) {
     return RefreshIndicator(
-      onRefresh: _fetchCashSubmissionHistory,
+      onRefresh: () =>
+          _fetchCashSubmissionHistory(status: _getStatusForTab(tabKey)),
       child: ListView.builder(
         padding: const EdgeInsets.all(16),
-        itemCount: _submissions.length,
+        itemCount: _tabData[tabKey]!.length,
         itemBuilder: (context, index) {
-          final submission = _submissions[index];
+          final submission = _tabData[tabKey]![index];
           return _buildSubmissionCard(submission);
         },
       ),

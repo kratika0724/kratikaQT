@@ -26,8 +26,10 @@ class ApiPath {
   static const String getVendorPayments = '/qt/vendorPayment/getList';
 
   static const String getAgentByArea = '/qt/user/getListByArea';
+  static const String updateDeviceToken = '/qt/user/updateDeviceToken';
 
   static const String cashBalance = '/qt/wallet/cashBalance';
   static const String cashSubmission = '/qt/wallet/cashSubmission';
-  static const String cashSubmissionReqList = '/qt/wallet/cashSubmissionReqList';
+  static const String cashSubmissionReqList =
+      '/qt/wallet/cashSubmissionReqList';
 }

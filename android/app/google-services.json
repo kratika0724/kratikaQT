@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "290105774951",
+    "project_id": "qtcollector-84037",
+    "storage_bucket": "qtcollector-84037.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:290105774951:android:d3d8bc245360be54a7d5c2",
+        "android_client_info": {
+          "package_name": "qt.collector.distributer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBgTUm5MGtTYASw9Py45IPS30xWG6X4Uoo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:290105774951:android:c673bb12fe13ba80a7d5c2",
+        "android_client_info": {
+          "package_name": "qt.collector.vendor"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBgTUm5MGtTYASw9Py45IPS30xWG6X4Uoo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

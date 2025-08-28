@@ -112,7 +112,7 @@ class UiUtils {
         if (title.toLowerCase() == "terms & conditions") {
           CustomNavigators.pushNavigate(
               WebViewScreen(
-                url: "https://flutter.dev",
+                url: "https://qtcollector.com/terms-and-conditions",
                 title: "Terms & Conditions",
               ),
               context);
@@ -120,7 +120,7 @@ class UiUtils {
         if (title.toLowerCase() == "privacy policies") {
           CustomNavigators.pushNavigate(
               WebViewScreen(
-                url: "https://vosovyapar.com/privacy-policy",
+                url: "https://qtcollector.com/privacy-policy",
                 title: "Privacy Policies",
               ),
               context);
@@ -128,7 +128,7 @@ class UiUtils {
         if (title.toLowerCase() == "about us") {
           CustomNavigators.pushNavigate(
               WebViewScreen(
-                url: "https://vosovyapar.com/privacy-policy",
+                url: "https://qtcollector.com/about",
                 title: "About Us",
               ),
               context);

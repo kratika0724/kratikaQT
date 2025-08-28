@@ -132,6 +132,19 @@ class ApiService {
     }
   }
 
+  Future<Map<String, dynamic>> updateDeviceToken(
+      BuildContext context, String token) async {
+    try {
+      final response = await post_auth(context, ApiPath.updateDeviceToken, {
+        'token': token,
+      });
+
+      return response;
+    } catch (e) {
+      throw Exception('Error updating device token: $e');
+    }
+  }
+
   Future<Map<String, dynamic>> getAuth(BuildContext context, String endpoint,
       Map<String, String> queryParams) async {
     final url = Uri.parse("${ApiPath.baseUrl}$endpoint")
@@ -192,7 +205,6 @@ class ApiService {
     print('Request Body: $body');
     String token = await PreferencesServices.getPreferencesData(
         PreferencesServices.apiToken);
-
     try {
       var request = http.Request('POST', url);
       request.headers['Authorization'] = 'Bearer $token';
@@ -200,12 +212,8 @@ class ApiService {
       request.body = jsonEncode(body);
       final response = await request.send();
       final responseBody = await response.stream.bytesToString();
-
-      // Log the response
       print('Response Status Code: ${response.statusCode}');
       print('Response Body: $responseBody');
-
-      // Handle 450 status code (Session expired)
       if (response.statusCode == 450) {
         Fluttertoast.showToast(
             msg: "Your Session is expired please log in again to continue!");
@@ -217,7 +225,6 @@ class ApiService {
           (route) => false,
         );
       }
-
       try {
         return jsonDecode(responseBody);
       } catch (e) {
