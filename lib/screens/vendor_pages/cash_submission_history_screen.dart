@@ -167,32 +167,35 @@ class _CashSubmissionHistoryScreenState
 
   Widget _buildEmptyWidget() {
     return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.history,
-            size: 64,
-            color: Colors.grey[400],
-          ),
-          const SizedBox(height: 16),
-          Text(
-            'No Cash Submissions',
-            style: boldTextStyle(
-              fontSize: dimen18,
-              color: Colors.grey[600],
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.history,
+              size: 64,
+              color: Colors.grey[400],
             ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'You haven\'t made any cash submission requests yet.',
-            style: mediumTextStyle(
-              fontSize: dimen14,
-              color: Colors.grey[500],
+            const SizedBox(height: 16),
+            Text(
+              'No Cash Submissions',
+              style: boldTextStyle(
+                fontSize: dimen18,
+                color: Colors.grey[600],
+              ),
             ),
-            textAlign: TextAlign.center,
-          ),
-        ],
+            const SizedBox(height: 8),
+            Text(
+              'You haven\'t made any cash submission requests yet.',
+              style: mediumTextStyle(
+                fontSize: dimen14,
+                color: Colors.grey[500],
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -317,28 +320,6 @@ class _CashSubmissionHistoryScreenState
               ),
               const SizedBox(height: 12),
             ],
-
-            // User information
-            Row(
-              children: [
-                Icon(
-                  Icons.person,
-                  size: 16,
-                  color: Colors.grey[600],
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    'Agent: ${submission.agentName}',
-                    style: mediumTextStyle(
-                      fontSize: dimen12,
-                      color: Colors.grey[600],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 4),
             Row(
               children: [
                 Icon(
@@ -349,7 +330,7 @@ class _CashSubmissionHistoryScreenState
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    'Admin: ${submission.topUserName}',
+                    'Requested to : ${submission.topUserName}',
                     style: mediumTextStyle(
                       fontSize: dimen12,
                       color: Colors.grey[600],

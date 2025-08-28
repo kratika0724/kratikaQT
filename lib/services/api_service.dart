@@ -163,7 +163,8 @@ class ApiService {
       if (response.statusCode == 450) {
         await Provider.of<AuthProvider>(context, listen: false).logout();
         await PreferencesServices.clearData();
-        Fluttertoast.showToast(msg: "Your Session is expired please log in again to continue!");
+        Fluttertoast.showToast(
+            msg: "Your Session is expired please log in again to continue!");
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => const LoginScreen()),
@@ -206,7 +207,8 @@ class ApiService {
 
       // Handle 450 status code (Session expired)
       if (response.statusCode == 450) {
-        Fluttertoast.showToast(msg: "Your Session is expired please log in again to continue!");
+        Fluttertoast.showToast(
+            msg: "Your Session is expired please log in again to continue!");
         await Provider.of<AuthProvider>(context, listen: false).logout();
         await PreferencesServices.clearData();
         Navigator.pushAndRemoveUntil(
@@ -216,13 +218,9 @@ class ApiService {
         );
       }
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        try {
-          return jsonDecode(responseBody);
-        } catch (e) {
-          throw Exception('Something Error');
-        }
-      } else {
+      try {
+        return jsonDecode(responseBody);
+      } catch (e) {
         throw Exception('Something Error');
       }
     } catch (e) {

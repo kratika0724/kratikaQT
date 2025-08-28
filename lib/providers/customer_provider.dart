@@ -23,6 +23,10 @@ class CustomerProvider with ChangeNotifier {
 
   String? filterName;
   String? filterEmail;
+  
+  // Search related variables
+  String? currentSearchQuery;
+  String? currentSearchType; // 'mobile' or 'name'
 
   void setFilters({
     String? name,
@@ -123,7 +127,7 @@ class CustomerProvider with ChangeNotifier {
     }
   }
 
-  Future<void> getCustomerData(BuildContext context, {bool loadMore = false}) async {
+  Future<void> getCustomerData(BuildContext context, {bool loadMore = false, String? searchQuery, String? searchType}) async {
     if (loadMore) {
       if (isFetchingMore || !hasMoreData) return;
       isFetchingMore = true;
@@ -134,16 +138,34 @@ class CustomerProvider with ChangeNotifier {
     }
 
     errorMessage = null;
+    
+    // Update search parameters
+    if (searchQuery != null) {
+      currentSearchQuery = searchQuery;
+      currentSearchType = searchType;
+    }
+    
     notifyListeners();
 
     try {
+      Map<String, String> params = {
+        "page": currentPage_customer.toString(),
+        "limit": limit.toString(),
+      };
+      
+      // Add search parameters if provided
+      if (currentSearchQuery != null && currentSearchQuery!.isNotEmpty) {
+        if (currentSearchType == 'mobile') {
+          params['mobile'] = currentSearchQuery!;
+        } else if (currentSearchType == 'name') {
+          params['name'] = currentSearchQuery!;
+        }
+      }
+      
       final response = await apiService.getAuth(
           context,
           ApiPath.getCustomer,
-          {
-            "page": currentPage_customer.toString(),
-            "limit": limit.toString(),
-          },
+          params,
       );
 
       final customerResponse = CustomerResponse.fromJson(response);
@@ -181,11 +203,32 @@ class CustomerProvider with ChangeNotifier {
     }
   }
 
+  // Search by mobile number
+  Future<void> searchByMobile(BuildContext context, String mobile) async {
+    await getCustomerData(context, searchQuery: mobile, searchType: 'mobile');
+  }
+
+  // Search by name
+  Future<void> searchByName(BuildContext context, String name) async {
+    await getCustomerData(context, searchQuery: name, searchType: 'name');
+  }
+
+  // Clear search and get all customers
+  Future<void> clearSearch(BuildContext context) async {
+    currentSearchQuery = null;
+    currentSearchType = null;
+    filterName = null;
+    filterEmail = null;
+    await getCustomerData(context);
+  }
+
   void clearCustomers() {
     customers.clear();
     meta = null;
     currentPage_customer = 1;
     hasMoreData = true;
+    currentSearchQuery = null;
+    currentSearchType = null;
     notifyListeners();
   }
 

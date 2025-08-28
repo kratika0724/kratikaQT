@@ -6,15 +6,8 @@ import '../../../utils/device_utils.dart';
 import 'CustomerCard.dart';
 
 class CustomerList extends StatefulWidget {
-  final List<CustomerData> customers;
-  final String? filterName;
-  final String? filterEmail;
-
   const CustomerList({
     super.key,
-    required this.customers,
-    this.filterName,
-    this.filterEmail,
   });
 
   @override
@@ -60,15 +53,15 @@ class _CustomerListState extends State<CustomerList> {
   Widget build(BuildContext context) {
     final isWide = DeviceUtils.getDeviceWidth(context);
     final customerProvider = Provider.of<CustomerProvider>(context);
-    final filteredCustomers = customerProvider.FilteredCustomers;
+    final customers = customerProvider.customers;
 
-    if (filteredCustomers.isEmpty) {
+    if (customers.isEmpty) {
       return const Center(child: Text('No customers found.'));
     }
 
     return isWide
-        ? _buildGridView(filteredCustomers)
-        : _buildListView(filteredCustomers);
+        ? _buildGridView(customers)
+        : _buildListView(customers);
   }
 
   Widget _buildGridView(List<CustomerData> customers) {
@@ -106,7 +99,7 @@ class _CustomerListState extends State<CustomerList> {
       itemBuilder: (context, index) => Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
         child: CustomerCard(
-          customer: widget.customers[index],
+          customer: customers[index],
           isExpanded: expandedIndex == index,
           onExpandToggle: () => toggleExpanded(index),
         ),
