@@ -6,6 +6,8 @@ import '../../../providers/auth_provider.dart';
 import '../../../providers/dashboard_provider.dart';
 import '../../vendor_pages/vendor dashboard/widgets/vendor_overview_section.dart';
 import 'package:qt_distributer/widgets/cash_payment_bottom_sheet.dart';
+import 'package:qt_distributer/widgets/cash_submission_bottom_sheet.dart';
+import 'package:qt_distributer/screens/vendor_pages/cash_submission_history_screen.dart';
 
 class VendorDashboardScreen extends StatefulWidget {
   const VendorDashboardScreen({super.key});
@@ -70,17 +72,18 @@ class _DashboardScreenState extends State<VendorDashboardScreen> {
                           ),
                         ),
                       ),
-                      _buildCashPaymentButton(),
+                      _buildBottomButtons(),
+                      _buildViewHistoryButton(),
                     ],
                   ),
       ),
     );
   }
 
-  Widget _buildCashPaymentButton() {
+  Widget _buildBottomButtons() {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.only(top: 16, bottom: 0, left: 16, right: 16),
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: [
@@ -91,39 +94,86 @@ class _DashboardScreenState extends State<VendorDashboardScreen> {
           ),
         ],
       ),
-      child: ElevatedButton(
-        onPressed: () {
-          _showCashPaymentBottomSheet(context);
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primary,
-          foregroundColor: Colors.white,
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12.0),
-          ),
-          elevation: 2,
-          shadowColor: AppColors.primary.withOpacity(0.3),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(
-              Icons.payment,
-              size: 24,
-              color: Colors.white,
-            ),
-            const SizedBox(width: 12),
-            Text(
-              'Cash Payment',
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-                color: Colors.white,
+      child: Row(
+        children: [
+          Expanded(
+            child: ElevatedButton(
+              onPressed: () {
+                _showCashPaymentBottomSheet(context);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(vertical: 12.0),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12.0),
+                ),
+                elevation: 2,
+                shadowColor: AppColors.primary.withOpacity(0.3),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(
+                    Icons.payment,
+                    size: 20,
+                    color: Colors.white,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    'Cash Payment',
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: ElevatedButton(
+              onPressed: () {
+                _showCashSubmissionBottomSheet(context);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.ghostWhite,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(vertical: 12.0),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12.0),
+                  side: const BorderSide(
+                    color: AppColors.textPrimary, // Border color
+                    width: 1, // Border width
+                  ),
+                ),
+                elevation: 2,
+                shadowColor: Colors.green.withOpacity(0.3),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(
+                    Icons.account_balance_wallet,
+                    size: 20,
+                    color: AppColors.textPrimary,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    'Submit Cash',
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.textPrimary,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -134,8 +184,80 @@ class _DashboardScreenState extends State<VendorDashboardScreen> {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (BuildContext context) {
-        return CashPaymentBottomSheet();
+        return CashPaymentBottomSheet(
+          customerEmail: null, // Allow manual email entry from dashboard
+          customerName: null,
+        );
       },
+    );
+  }
+
+  void _showCashSubmissionBottomSheet(BuildContext context) {
+    final dashboardProvider =
+        Provider.of<DashboardProvider>(context, listen: false);
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (BuildContext context) {
+        return CashSubmissionBottomSheet(
+          availableCashWallet: dashboardProvider.cashCollected,
+        );
+      },
+    );
+  }
+
+  Widget _buildViewHistoryButton() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 5,
+            offset: const Offset(0, -1),
+          ),
+        ],
+      ),
+      child: OutlinedButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const CashSubmissionHistoryScreen(),
+            ),
+          );
+        },
+        style: OutlinedButton.styleFrom(
+          foregroundColor: AppColors.grey,
+          padding: const EdgeInsets.symmetric(vertical: 12.0),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12.0),
+          ),
+          side: BorderSide(color: AppColors.grey),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(
+              Icons.history,
+              size: 16,
+              color: AppColors.primary,
+            ),
+            const SizedBox(width: 8),
+            Text(
+              'View Cash Submission History',
+              style: const TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w300,
+                color: AppColors.primary,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

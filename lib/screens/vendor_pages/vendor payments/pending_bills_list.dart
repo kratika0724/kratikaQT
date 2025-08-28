@@ -4,6 +4,7 @@ import '../../../providers/pending_bills_provider.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_textstyles.dart';
 import 'pending_bill_card.dart';
+import 'dart:async'; // Added for Timer
 
 class PendingBillsList extends StatefulWidget {
   const PendingBillsList({Key? key}) : super(key: key);
@@ -16,19 +17,21 @@ class _PendingBillsListState extends State<PendingBillsList> {
   int? expandedIndex;
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
-  String _selectedFilter = 'all'; // 'all', 'email', 'mobile'
+  Timer? _debounceTimer;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<PendingBillsProvider>().getPendingBills(context);
+      context.read<PendingBillsProvider>().clearSearch(context);
     });
   }
 
   @override
   void dispose() {
     _searchController.dispose();
+    _debounceTimer?.cancel();
+
     super.dispose();
   }
 
@@ -46,23 +49,63 @@ class _PendingBillsListState extends State<PendingBillsList> {
     setState(() {
       _searchQuery = query;
     });
+
+    // Cancel previous timer
+    _debounceTimer?.cancel();
+
+    // Debounce search to avoid too many API calls
+    _debounceTimer = Timer(const Duration(milliseconds: 500), () {
+      if (query.length >= 3) {
+        _performSearch(query);
+      }
+    });
   }
 
-  void _onFilterChanged(String filter) {
+  void _performSearch(String query) {
+    if (query.isEmpty) {
+      // Clear search and get all bills
+      context.read<PendingBillsProvider>().clearSearch(context);
+      return;
+    }
+
+    // Check if query contains only digits and has 3 or more characters
+    if (RegExp(r'^\d{3,}$').hasMatch(query)) {
+      context.read<PendingBillsProvider>().searchByMobile(context, query);
+    } else {
+      // Search by name
+      context.read<PendingBillsProvider>().searchByName(context, query);
+    }
+  }
+
+  void _clearSearch() {
+    _searchController.clear();
     setState(() {
-      _selectedFilter = filter;
+      _searchQuery = '';
     });
+    context.read<PendingBillsProvider>().clearSearch(context);
+  }
+
+  String _getSearchHint() {
+    if (_searchQuery.isEmpty) {
+      return 'Search by name or mobile number...';
+    }
+
+    // Check if current query is numeric
+    if (RegExp(r'^\d+$').hasMatch(_searchQuery)) {
+      if (_searchQuery.length >= 3) {
+        return 'Searching by mobile number...';
+      } else {
+        return 'Type 3+ digits to search by mobile...';
+      }
+    } else {
+      return 'Searching by name...';
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Consumer<PendingBillsProvider>(
       builder: (context, pendingBillsProvider, child) {
-        if (pendingBillsProvider.isLoading) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
         if (pendingBillsProvider.errorMessage != null) {
           return Center(
             child: Column(
@@ -84,22 +127,22 @@ class _PendingBillsListState extends State<PendingBillsList> {
             ),
           );
         }
-
         if (pendingBillsProvider.pendingBills.isEmpty) {
-          return const Center(
+          Center(
             child: Text(
-              'No pending bills found',
+              'No customer found',
               style: TextStyle(fontSize: 16, color: Colors.grey),
             ),
           );
         }
+
         return Column(
           children: [
             // Search Section
             Container(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.primary_appbar,
                 boxShadow: [
                   BoxShadow(
                     color: Colors.grey.withOpacity(0.1),
@@ -114,7 +157,7 @@ class _PendingBillsListState extends State<PendingBillsList> {
                   // Search Bar
                   Container(
                     decoration: BoxDecoration(
-                      color: Colors.grey[100],
+                      color: Colors.white,
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(color: Colors.grey[300]!),
                     ),
@@ -122,7 +165,7 @@ class _PendingBillsListState extends State<PendingBillsList> {
                       controller: _searchController,
                       onChanged: _onSearchChanged,
                       decoration: InputDecoration(
-                        hintText: 'Search by email, mobile, or name...',
+                        hintText: _getSearchHint(),
                         hintStyle: TextStyle(
                           color: Colors.grey[600],
                           fontSize: 14,
@@ -137,10 +180,7 @@ class _PendingBillsListState extends State<PendingBillsList> {
                                   Icons.clear,
                                   color: Colors.grey[600],
                                 ),
-                                onPressed: () {
-                                  _searchController.clear();
-                                  _onSearchChanged('');
-                                },
+                                onPressed: _clearSearch,
                               )
                             : null,
                         border: InputBorder.none,
@@ -153,6 +193,7 @@ class _PendingBillsListState extends State<PendingBillsList> {
                   ),
                   const SizedBox(height: 12),
 
+                  // Search Info
                   if (_searchQuery.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.only(top: 8),
@@ -161,14 +202,34 @@ class _PendingBillsListState extends State<PendingBillsList> {
                           Icon(
                             Icons.info_outline,
                             size: 16,
-                            color: Colors.grey[600],
+                            color: Colors.white,
                           ),
                           const SizedBox(width: 4),
                           Text(
                             '${pendingBillsProvider.pendingBills.length} result${pendingBillsProvider.pendingBills.length != 1 ? 's' : ''} found',
                             style: TextStyle(
                               fontSize: 12,
-                              color: Colors.grey[600],
+                              color: AppColors.grey,
+                            ),
+                          ),
+                          const Spacer(),
+                          // Show search type indicator
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Text(
+                              RegExp(r'^\d{3,}$').hasMatch(_searchQuery)
+                                  ? 'Mobile Search'
+                                  : 'Name Search',
+                              style: TextStyle(
+                                fontSize: 10,
+                                color: AppColors.grey,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
                           ),
                         ],
@@ -178,88 +239,74 @@ class _PendingBillsListState extends State<PendingBillsList> {
               ),
             ),
 
-            // Bills List
-            Expanded(
-              child: pendingBillsProvider.pendingBills.isEmpty &&
-                      _searchQuery.isNotEmpty
-                  ? Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.search_off,
-                            size: 64,
-                            color: Colors.grey[400],
-                          ),
-                          const SizedBox(height: 16),
-                          Text(
-                            'No results found for "$_searchQuery"',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.grey[600],
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            'Try adjusting your search terms or filters',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey[500],
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
-                    )
-                  : RefreshIndicator(
-                      onRefresh: () =>
-                          pendingBillsProvider.refreshPendingBillsData(context),
-                      child: ListView.separated(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 12),
-                        itemCount: pendingBillsProvider.pendingBills.length,
-                        separatorBuilder: (_, __) => const SizedBox(height: 4),
-                        itemBuilder: (context, index) {
-                          final pendingBill =
-                              pendingBillsProvider.pendingBills[index];
-                          return PendingBillCard(
-                            pendingBill: pendingBill,
-                            isExpanded: expandedIndex == index,
-                            onExpandToggle: () => toggleExpanded(index),
-                          );
-                        },
-                      ),
+            pendingBillsProvider.isLoading
+                ? Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Center(
+                      child: CircularProgressIndicator(),
                     ),
-            ),
+                  )
+                : // Bills List
+                Expanded(
+                    child: pendingBillsProvider.pendingBills.isEmpty &&
+                            _searchQuery.isNotEmpty
+                        ? Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.search_off,
+                                  size: 64,
+                                  color: Colors.grey[400],
+                                ),
+                                const SizedBox(height: 16),
+                                Text(
+                                  'No results found for "$_searchQuery"',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.grey[600],
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  RegExp(r'^\d{3,}$').hasMatch(_searchQuery)
+                                      ? 'No mobile numbers match your search'
+                                      : 'No names match your search',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.grey[500],
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                          )
+                        : RefreshIndicator(
+                            onRefresh: () => pendingBillsProvider
+                                .refreshPendingBillsData(context),
+                            child: ListView.separated(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 12),
+                              itemCount:
+                                  pendingBillsProvider.pendingBills.length,
+                              separatorBuilder: (_, __) =>
+                                  const SizedBox(height: 4),
+                              itemBuilder: (context, index) {
+                                final pendingBill =
+                                    pendingBillsProvider.pendingBills[index];
+                                return PendingBillCard(
+                                  pendingBill: pendingBill,
+                                  isExpanded: expandedIndex == index,
+                                  onExpandToggle: () => toggleExpanded(index),
+                                );
+                              },
+                            ),
+                          ),
+                  ),
           ],
         );
       },
-    );
-  }
-
-  Widget _buildFilterChip(String value, String label) {
-    final isSelected = _selectedFilter == value;
-    return GestureDetector(
-      onTap: () => _onFilterChanged(value),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-        decoration: BoxDecoration(
-          color: isSelected ? AppColors.primary : Colors.grey[200],
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: isSelected ? AppColors.primary : Colors.grey[300]!,
-          ),
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w500,
-            color: isSelected ? Colors.white : Colors.grey[700],
-          ),
-        ),
-      ),
     );
   }
 }

@@ -19,6 +19,10 @@ class PendingBillsProvider with ChangeNotifier {
 
   // Add loading state for payment link initiation
   bool isInitiatingPayment = false;
+  
+  // Search related variables
+  String? currentSearchQuery;
+  String? currentSearchType; // 'mobile' or 'name'
 
   Future<void> refreshPendingBillsData(BuildContext context) async {
     currentPage = 1;
@@ -28,7 +32,7 @@ class PendingBillsProvider with ChangeNotifier {
   }
 
   Future<void> getPendingBills(BuildContext context,
-      {bool loadMore = false}) async {
+      {bool loadMore = false, String? searchQuery, String? searchType}) async {
     if (loadMore) {
       if (isFetchingMore || !hasMoreData) return;
       isFetchingMore = true;
@@ -38,15 +42,33 @@ class PendingBillsProvider with ChangeNotifier {
       hasMoreData = true;
     }
     errorMessage = null;
+    
+    // Update search parameters
+    if (searchQuery != null) {
+      currentSearchQuery = searchQuery;
+      currentSearchType = searchType;
+    }
+    
     notifyListeners();
     try {
+      Map<String, String> params = {
+        "page": currentPage.toString(),
+        "limit": limit.toString(),
+      };
+      
+      // Add search parameters if provided
+      if (currentSearchQuery != null && currentSearchQuery!.isNotEmpty) {
+        if (currentSearchType == 'mobile') {
+          params['mobile'] = currentSearchQuery!;
+        } else if (currentSearchType == 'name') {
+          params['name'] = currentSearchQuery!;
+        }
+      }
+      
       final response = await apiService.getAuth(
         context,
         ApiPath.getPendingBills,
-        {
-          "page": currentPage.toString(),
-          "limit": limit.toString(),
-        },
+        params,
       );
       final pendingBillsResponse = PendingBillsResponseModel.fromJson(response);
       if (pendingBillsResponse.success) {
@@ -79,6 +101,23 @@ class PendingBillsProvider with ChangeNotifier {
       isFetchingMore = false;
       notifyListeners();
     }
+  }
+
+  // Search by mobile number
+  Future<void> searchByMobile(BuildContext context, String mobile) async {
+    await getPendingBills(context, searchQuery: mobile, searchType: 'mobile');
+  }
+
+  // Search by name
+  Future<void> searchByName(BuildContext context, String name) async {
+    await getPendingBills(context, searchQuery: name, searchType: 'name');
+  }
+
+  // Clear search and get all bills
+  Future<void> clearSearch(BuildContext context) async {
+    currentSearchQuery = null;
+    currentSearchType = null;
+    await getPendingBills(context);
   }
 
   Future<bool> initiatePaymentLink(BuildContext context,

@@ -10,7 +10,14 @@ import '../services/api_path.dart';
 import '../services/api_service.dart';
 
 class CashPaymentBottomSheet extends StatefulWidget {
-  const CashPaymentBottomSheet({Key? key}) : super(key: key);
+  final String? customerEmail;
+  final String? customerName;
+  
+  const CashPaymentBottomSheet({
+    Key? key, 
+    this.customerEmail,
+    this.customerName,
+  }) : super(key: key);
 
   @override
   State<CashPaymentBottomSheet> createState() => _CashPaymentBottomSheetState();
@@ -27,6 +34,19 @@ class _CashPaymentBottomSheetState extends State<CashPaymentBottomSheet> {
   CustomerData? _selectedCustomer;
   CashPaymentResponse? _paymentResponse;
   final ApiService _apiService = ApiService();
+
+  @override
+  void initState() {
+    super.initState();
+    // Pre-fill email if provided
+    if (widget.customerEmail != null) {
+      _emailController.text = widget.customerEmail!;
+      // Auto-search for the customer
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _searchCustomersByEmail(widget.customerEmail!);
+      });
+    }
+  }
 
   @override
   void dispose() {
@@ -424,11 +444,26 @@ class _CashPaymentBottomSheetState extends State<CashPaymentBottomSheet> {
                 ),
               ),
               const SizedBox(width: 12),
-              Text(
-                "Cash Payment",
-                style: boldTextStyle(
-                  fontSize: dimen20,
-                  color: Colors.black87,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Cash Payment",
+                      style: boldTextStyle(
+                        fontSize: dimen20,
+                        color: Colors.black87,
+                      ),
+                    ),
+                    if (widget.customerName != null)
+                      Text(
+                        "for ${widget.customerName}",
+                        style: mediumTextStyle(
+                          fontSize: dimen14,
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                  ],
                 ),
               ),
             ],
@@ -454,17 +489,18 @@ class _CashPaymentBottomSheetState extends State<CashPaymentBottomSheet> {
                     TextFormField(
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
-                      onChanged: (value) {
+                      enabled: widget.customerEmail == null, // Disable if email is pre-filled
+                      onChanged: widget.customerEmail == null ? (value) {
                         // Debounce the search
                         Future.delayed(const Duration(milliseconds: 500), () {
                           if (mounted) {
                             _searchCustomersByEmail(value);
                           }
                         });
-                      },
+                      } : null,
                       decoration: InputDecoration(
                         labelText: 'Email ID',
-                        hintText: 'Enter email address',
+                        hintText: widget.customerEmail != null ? 'Customer email' : 'Enter email address',
                         prefixIcon: const Icon(
                           Icons.email_outlined,
                           color: AppColors.primary,
@@ -480,7 +516,13 @@ class _CashPaymentBottomSheetState extends State<CashPaymentBottomSheet> {
                                   ),
                                 ),
                               )
-                            : null,
+                            : widget.customerEmail != null
+                                ? const Icon(
+                                    Icons.lock,
+                                    color: Colors.grey,
+                                    size: 20,
+                                  )
+                                : null,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12.0),
                           borderSide: BorderSide(color: Colors.grey[300]!),
@@ -495,7 +537,7 @@ class _CashPaymentBottomSheetState extends State<CashPaymentBottomSheet> {
                               color: AppColors.primary, width: 2),
                         ),
                         filled: true,
-                        fillColor: Colors.grey[50],
+                        fillColor: widget.customerEmail != null ? Colors.grey[100] : Colors.grey[50],
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
