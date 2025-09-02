@@ -108,7 +108,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Image.asset(AppAssets.logo, width: 200, height: 50),
-                          Text("Vendor",
+                          Text("Agents",
                               style: semiBoldTextStyle(
                                 fontSize: dimen16,
                                 color: Colors.black,
