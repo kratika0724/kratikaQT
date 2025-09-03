@@ -12,9 +12,9 @@ import '../services/api_service.dart';
 class CashPaymentBottomSheet extends StatefulWidget {
   final String? customerEmail;
   final String? customerName;
-  
+
   const CashPaymentBottomSheet({
-    Key? key, 
+    Key? key,
     this.customerEmail,
     this.customerName,
   }) : super(key: key);
@@ -107,6 +107,7 @@ class _CashPaymentBottomSheetState extends State<CashPaymentBottomSheet> {
     setState(() {
       _selectedCustomer = customer;
       _emailController.text = customer.email;
+      _searchResults = []; // Clear search results when customer is selected
     });
   }
 
@@ -489,18 +490,24 @@ class _CashPaymentBottomSheetState extends State<CashPaymentBottomSheet> {
                     TextFormField(
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
-                      enabled: widget.customerEmail == null, // Disable if email is pre-filled
-                      onChanged: widget.customerEmail == null ? (value) {
-                        // Debounce the search
-                        Future.delayed(const Duration(milliseconds: 500), () {
-                          if (mounted) {
-                            _searchCustomersByEmail(value);
-                          }
-                        });
-                      } : null,
+                      enabled: widget.customerEmail ==
+                          null, // Disable if email is pre-filled
+                      onChanged: widget.customerEmail == null
+                          ? (value) {
+                              // Debounce the search
+                              Future.delayed(const Duration(milliseconds: 500),
+                                  () {
+                                if (mounted) {
+                                  _searchCustomersByEmail(value);
+                                }
+                              });
+                            }
+                          : null,
                       decoration: InputDecoration(
                         labelText: 'Email ID',
-                        hintText: widget.customerEmail != null ? 'Customer email' : 'Enter email address',
+                        hintText: widget.customerEmail != null
+                            ? 'Customer email'
+                            : 'Enter email address',
                         prefixIcon: const Icon(
                           Icons.email_outlined,
                           color: AppColors.primary,
@@ -537,7 +544,9 @@ class _CashPaymentBottomSheetState extends State<CashPaymentBottomSheet> {
                               color: AppColors.primary, width: 2),
                         ),
                         filled: true,
-                        fillColor: widget.customerEmail != null ? Colors.grey[100] : Colors.grey[50],
+                        fillColor: widget.customerEmail != null
+                            ? Colors.grey[100]
+                            : Colors.grey[50],
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -579,7 +588,6 @@ class _CashPaymentBottomSheetState extends State<CashPaymentBottomSheet> {
                             final customer = _searchResults[index];
                             final isSelected =
                                 _selectedCustomer?.id == customer.id;
-
                             return ListTile(
                               dense: true,
                               title: Text(

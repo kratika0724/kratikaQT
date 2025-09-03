@@ -60,358 +60,279 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
       backgroundColor: AppColors.ghostWhite,
       body: Container(
+        height: double.infinity,
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage(
-                'assets/images/background.png'), // Change path if needed
+            image: AssetImage('assets/images/background.png'),
             fit: BoxFit.cover,
           ),
         ),
-        child: Stack(
-          children: [
-            // Positioned(
-            //   top: -300,
-            //   child: Align(
-            //     alignment: Alignment.bottomCenter,
-            //     child: Container(
-            //       height: 500,
-            //       width: 500,
-            //       decoration: BoxDecoration(
-            //         shape: BoxShape.circle,
-            //         gradient: RadialGradient(
-            //           colors: [
-            //             AppColors.primary.withOpacity(0.2),
-            //             AppColors.primary.withOpacity(0.01),
-            //             Colors.transparent,
-            //           ],
-            //           radius: 0.9,
-            //         ),
-            //       ),
-            //     ),
-            //   ),
-            // ),
-            SingleChildScrollView(
-              child: Padding(
-                padding:
-                    const EdgeInsets.only(right: 24.0, left: 24.0, top: 50.0),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const SizedBox(height: 60),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
+        child: SafeArea(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: screenWidth * 0.06,
+                vertical: screenHeight * 0.04,
+              ),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    // Logo and Title Section
+                    SizedBox(height: screenHeight * 0.08),
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      child: Column(
                         children: [
-                          Image.asset(AppAssets.logo, width: 200, height: 50),
-                          Text("Agents",
-                              style: semiBoldTextStyle(
-                                fontSize: dimen16,
-                                color: Colors.black,
-                              ))
-                        ],
-                      ),
-                      const SizedBox(height: 50),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text('Sign in to your Account',
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 2,
-                              style: boldTextStyle(
-                                  fontSize: dimen24,
-                                  color: Colors.black,
-                                  latterSpace: 0.2)),
-                        ],
-                      ),
-                      const SizedBox(height: 5),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text('Enter your phone number',
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 2,
-                              style: mediumTextStyle(
-                                  fontSize: dimen15, color: Colors.grey)),
-                        ],
-                      ),
-                      const SizedBox(height: 30),
-                      TextFormField(
-                        controller: _phoneController,
-                        keyboardType: TextInputType.phone,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly,
-                          LengthLimitingTextInputFormatter(10),
-                        ],
-                        style: const TextStyle(
-                          fontSize: 16,
-                          color: AppColors.textPrimary,
-                        ),
-                        decoration: InputDecoration(
-                          labelText: 'Mobile Number',
-                          labelStyle:
-                              const TextStyle(fontSize: 14, color: Colors.grey),
-                          hintText: 'Enter 10 digit mobile number',
-                          hintStyle:
-                              const TextStyle(fontSize: 14, color: Colors.grey),
-                          contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 16),
-                          fillColor: Colors.white,
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your mobile number';
-                          }
-                          if (value.length != 10) {
-                            return 'Please enter a valid 10 digit mobile number';
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 30),
-                      Container(
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [
-                              AppColors.primary,
-                              Colors.indigo.withOpacity(0.8),
-                            ],
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
+                          Image.asset(
+                            AppAssets.logo,
+                            width: 180,
+                            height: 45,
                           ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.primary,
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
+                          const SizedBox(height: 8),
+                          Text(
+                            "Agents",
+                            style: semiBoldTextStyle(
+                              fontSize: dimen18,
+                              color: AppColors.primary,
+                            ),
                           ),
-                          onPressed:
-                              authProvider.isLoading ? null : _handleLogin,
-                          child: authProvider.isLoading
-                              ? const SizedBox(
-                                  // height: 20,
-                                  width: 15,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 1,
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                        AppColors.buttonText),
+                        ],
+                      ),
+                    ),
+
+                    SizedBox(height: screenHeight * 0.06),
+
+                    // Welcome Text Section
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(24),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.95),
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 20,
+                            offset: const Offset(0, 10),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Sign in to your Account',
+                            style: boldTextStyle(
+                              fontSize: dimen24,
+                              color: AppColors.primary,
+                              latterSpace: 0.2,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'Enter your phone number to continue',
+                            style: mediumTextStyle(
+                              fontSize: dimen16,
+                              color: Colors.grey[600],
+                            ),
+                          ),
+                          const SizedBox(height: 30),
+
+                          // Phone Number Input Field
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.05),
+                                  blurRadius: 10,
+                                  offset: const Offset(0, 5),
+                                ),
+                              ],
+                            ),
+                            child: TextFormField(
+                              controller: _phoneController,
+                              keyboardType: TextInputType.phone,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly,
+                                LengthLimitingTextInputFormatter(10),
+                              ],
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: AppColors.textPrimary,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              decoration: InputDecoration(
+                                labelText: 'Mobile Number',
+                                labelStyle: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey[600],
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                hintText: 'Enter 10 digit mobile number',
+                                hintStyle: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey[400],
+                                ),
+                                prefixIcon: Icon(
+                                  Icons.phone_android,
+                                  color: AppColors.primary,
+                                  size: 20,
+                                ),
+                                contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 20,
+                                  vertical: 18,
+                                ),
+                                fillColor: Colors.white,
+                                filled: true,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                  borderSide: BorderSide.none,
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                  borderSide: BorderSide(
+                                    color: Colors.grey[300]!,
+                                    width: 1.5,
                                   ),
-                                )
-                              : Text('Get OTP',
-                                  style: boldTextStyle(
-                                      fontSize: dimen18, color: Colors.white)),
-                        ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                  borderSide: BorderSide(
+                                    color: AppColors.primary,
+                                    width: 2,
+                                  ),
+                                ),
+                                errorBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                  borderSide: BorderSide(
+                                    color: Colors.red[300]!,
+                                    width: 1.5,
+                                  ),
+                                ),
+                                focusedErrorBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                  borderSide: BorderSide(
+                                    color: Colors.red,
+                                    width: 2,
+                                  ),
+                                ),
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter your mobile number';
+                                }
+                                if (value.length != 10) {
+                                  return 'Please enter a valid 10 digit mobile number';
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+
+                          const SizedBox(height: 35),
+
+                          // Get OTP Button
+                          Container(
+                            width: double.infinity,
+                            height: 55,
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [
+                                  AppColors.primary,
+                                  AppColors.secondary,
+                                ],
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight,
+                              ),
+                              borderRadius: BorderRadius.circular(15),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: AppColors.primary.withOpacity(0.3),
+                                  blurRadius: 15,
+                                  offset: const Offset(0, 8),
+                                ),
+                              ],
+                            ),
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.transparent,
+                                shadowColor: Colors.transparent,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                elevation: 0,
+                              ),
+                              onPressed:
+                                  authProvider.isLoading ? null : _handleLogin,
+                              child: authProvider.isLoading
+                                  ? const SizedBox(
+                                      width: 24,
+                                      height: 24,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2.5,
+                                        valueColor:
+                                            AlwaysStoppedAnimation<Color>(
+                                          AppColors.buttonText,
+                                        ),
+                                      ),
+                                    )
+                                  : Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.send,
+                                          color: Colors.white,
+                                          size: 20,
+                                        ),
+                                        const SizedBox(width: 10),
+                                        Text(
+                                          'Get OTP',
+                                          style: boldTextStyle(
+                                            fontSize: dimen18,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                            ),
+                          ),
+                        ],
                       ),
-                      const SizedBox(height: 400),
-                    ],
-                  ),
+                    ),
+
+                    SizedBox(height: screenHeight * 0.05),
+
+                    // Bottom decorative element
+                    Container(
+                      width: 100,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            AppColors.primary.withOpacity(0.3),
+                            AppColors.secondary.withOpacity(0.3),
+                          ],
+                        ),
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
-
-            /// Faded circle at the bottom
-            // Positioned(
-            //   bottom: -200,
-            //   child: Align(
-            //     alignment: Alignment.bottomCenter,
-            //     child: Container(
-            //       height: 300,
-            //       width: 300,
-            //       decoration: BoxDecoration(
-            //         shape: BoxShape.circle,
-            //         gradient: RadialGradient(
-            //           colors: [
-            //             AppColors.primary.withOpacity(0.2),
-            //             AppColors.primary.withOpacity(0.01),
-            //             Colors.transparent,
-            //           ],
-            //           radius: 0.9,
-            //         ),
-            //       ),
-            //     ),
-            //   ),
-            // ),
-          ],
+          ),
         ),
       ),
     );
   }
 }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     final authProvider = Provider.of<AuthProvider>(context);
-//
-//     return Scaffold(
-//       backgroundColor: Colors.white,
-//       body: Container(
-//         decoration: const BoxDecoration(
-//           gradient: LinearGradient(
-//             begin: Alignment.topCenter,
-//             end: Alignment.center,
-//             colors: [
-//               Color(0xFFCCE9FF), // Light sky blue
-//               Color(0xFFFFFFFF), // White
-//             ],
-//             stops: [0.1,0.4],
-//           ),
-//         ),
-//         child: Stack(
-//           children: [
-//           SingleChildScrollView(
-//                 child: Padding(
-//                   padding: const EdgeInsets.only(right: 24.0,left: 24.0,top:50.0),
-//                   child: Form(
-//                     key: _formKey,
-//                     child: Column(
-//                       crossAxisAlignment: CrossAxisAlignment.center,
-//                       children: [
-//                         const SizedBox(height: 60),
-//                         // Distributor Logo
-//                         Image.asset(
-//                           AppAssets.logo,
-//                           width: 200,
-//                           height: 200,
-//                         ),
-//                         const SizedBox(height: 50),
-//                         Row(
-//                           mainAxisAlignment: MainAxisAlignment.start,
-//                           children: [
-//                             Text(
-//                               'Sign in to your Account',
-//                               style: boldTextStyle(
-//                                 fontSize: dimen24,
-//                                 color: Colors.black,
-//                                 latterSpace: 0.2
-//                               ),
-//                             ),
-//                           ],
-//                         ),
-//                         const SizedBox(height: 5),
-//                         Row(
-//                           mainAxisAlignment: MainAxisAlignment.start,
-//                           children: [
-//                             Text(
-//                               'Enter your phone number',
-//                               style: mediumTextStyle(
-//                                 fontSize: dimen15,
-//                                 color: Colors.grey,
-//                               ),
-//                             ),
-//                           ],
-//                         ),
-//                         const SizedBox(height: 30),
-//                         TextFormField(
-//                           controller: _phoneController,
-//                           keyboardType: TextInputType.phone,
-//                           inputFormatters: [
-//                             FilteringTextInputFormatter.digitsOnly,
-//                             LengthLimitingTextInputFormatter(10),
-//                           ],
-//                           style: const TextStyle(
-//                             fontSize: 16,
-//                             color: AppColors.textPrimary,
-//                           ),
-//                           decoration: InputDecoration(
-//                             labelText: 'Mobile Number',
-//                             labelStyle: TextStyle(
-//                               fontSize: 14,
-//                               color: Colors.grey,
-//                             ),
-//                             hintText: 'Enter 10 digit mobile number',
-//                             hintStyle: TextStyle(
-//                               fontSize: 14,
-//                               color: Colors.grey,
-//                             ),
-//                             // prefixIcon: Icon(
-//                             //   Icons.phone,
-//                             //   color: AppColors.secondary,
-//                             //   size: 20,
-//                             // ),
-//                             contentPadding: EdgeInsets.symmetric(
-//                               horizontal: 16,
-//                               vertical: 16,
-//                             ),
-//                             fillColor: Colors.white,
-//                           ),
-//                           validator: (value) {
-//                             if (value == null || value.isEmpty) {
-//                               return 'Please enter your mobile number';
-//                             }
-//                             if (value.length != 10) {
-//                               return 'Please enter a valid 10 digit mobile number';
-//                             }
-//                             return null;
-//                           },
-//                         ),
-//                         const SizedBox(height: 30),
-//                     Container(
-//                       width: double.infinity,
-//                       decoration: BoxDecoration(
-//                         gradient:  LinearGradient(
-//                           colors: [AppColors.primary, AppColors.primary.withOpacity(0.6),],
-//                           begin: Alignment.centerLeft,
-//                           end: Alignment.centerRight,
-//                         ),
-//                         borderRadius: BorderRadius.circular(10),
-//                       ),
-//                       child: ElevatedButton(
-//                         style: ElevatedButton.styleFrom(
-//                           backgroundColor: Colors.transparent,
-//                           shadowColor: Colors.transparent,
-//                           padding: EdgeInsets.symmetric(horizontal: 16, vertical: 13),
-//                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-//                         ),
-//                         onPressed: authProvider.isLoading ? null : _handleLogin,
-//                         child: authProvider.isLoading
-//                             ? const SizedBox(
-//                           height: 20,
-//                           width: 10,
-//                           child: CircularProgressIndicator(
-//                             strokeWidth: 2,
-//                             valueColor: AlwaysStoppedAnimation<Color>(
-//                                 AppColors.buttonText),
-//                           ),
-//                         )
-//                             : Text(
-//                             'Get OTP',
-//                             style: boldTextStyle(fontSize: dimen20, color: Colors.white)
-//                         ),
-//                       ),
-//                     )],),),),),
-//             Positioned(
-//               bottom: -500, // Pull it partially outside the screen for a subtle fade
-//               left: -50,
-//               right: -50,
-//               child: Container(
-//                 width: 1000,
-//                 height: 1000,
-//                 decoration: BoxDecoration(
-//                   shape: BoxShape.circle,
-//                   gradient: RadialGradient(
-//                     colors: [
-//                       AppColors.primary.withOpacity(0.3),
-//                       Colors.white.withOpacity(0.1),
-//                       Colors.white,
-//                     ],
-//                     center: Alignment.center,
-//                     radius: 0.8,
-//                   ),
-//                 ),
-//               ),
-//             ),
-//
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
