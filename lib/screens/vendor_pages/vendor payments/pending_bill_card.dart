@@ -90,7 +90,8 @@ class PendingBillCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 8),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 4, vertical: 2),
                         child: Row(
                           children: [
                             _buildSendPaymentLinkButton(context),
@@ -168,11 +169,13 @@ class PendingBillCard extends StatelessWidget {
                   const SizedBox(width: 8),
                   Flexible(
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 6, vertical: 4),
                       decoration: BoxDecoration(
                         color: textColorStatus.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(6),
-                        border: Border.all(color: textColorStatus.withOpacity(0.3)),
+                        border:
+                            Border.all(color: textColorStatus.withOpacity(0.3)),
                       ),
                       child: Text(
                         "$prefix ₹${balance.abs().toStringAsFixed(2)}",
@@ -210,31 +213,6 @@ class PendingBillCard extends StatelessWidget {
     );
   }
 
-  Widget _buildStatusRow(
-      String status, Color bgColorStatus, Color textColorStatus) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Container(
-          constraints: const BoxConstraints(maxWidth: 120),
-          padding: const EdgeInsets.symmetric(vertical: 1, horizontal: 4),
-          decoration: BoxDecoration(
-            color: bgColorStatus,
-            borderRadius: BorderRadius.circular(6),
-          ),
-          child: Text(
-            status,
-            overflow: TextOverflow.ellipsis,
-            maxLines: 1,
-            style: mediumTextStyle(fontSize: dimen12, color: textColorStatus),
-          ),
-        ),
-        Icon(isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
-            color: Colors.black, size: 20),
-      ],
-    );
-  }
-
   Widget _buildInfoRow(String label, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
@@ -243,14 +221,14 @@ class PendingBillCard extends StatelessWidget {
           Expanded(
               flex: 3,
               child: Text(label,
-                  style:
-                      mediumTextStyle(fontSize: dimen13, color: Colors.grey[700]))),
+                  style: mediumTextStyle(
+                      fontSize: dimen13, color: Colors.grey[700]))),
           const Text(": "),
           Expanded(
               flex: 6,
               child: Text(value,
-                  style:
-                      semiBoldTextStyle(fontSize: dimen13, color: Colors.black87))),
+                  style: semiBoldTextStyle(
+                      fontSize: dimen13, color: Colors.black87))),
         ],
       ),
     );
@@ -261,7 +239,6 @@ class PendingBillCard extends StatelessWidget {
       builder: (context, provider, child) {
         return Expanded(
           child: Container(
-            height: 40,
             margin: const EdgeInsets.only(right: 6),
             child: ElevatedButton.icon(
               onPressed: provider.isInitiatingPayment
@@ -280,13 +257,13 @@ class PendingBillCard extends StatelessWidget {
                     ),
               label: Text(
                 provider.isInitiatingPayment ? 'Sending...' : 'Payment Link',
-                style: mediumTextStyle(
-                    fontSize: dimen12, color: Colors.white),
+                style: mediumTextStyle(fontSize: dimen12, color: Colors.white),
               ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
@@ -303,7 +280,6 @@ class PendingBillCard extends StatelessWidget {
   Widget _buildCashPaymentButton(BuildContext context) {
     return Expanded(
       child: Container(
-        height: 40,
         margin: const EdgeInsets.only(left: 6),
         child: ElevatedButton.icon(
           onPressed: () => _showCashPaymentBottomSheet(context),
@@ -314,8 +290,7 @@ class PendingBillCard extends StatelessWidget {
           ),
           label: Text(
             'Cash Payment',
-            style: mediumTextStyle(
-                fontSize: dimen12, color: Colors.white),
+            style: mediumTextStyle(fontSize: dimen12, color: Colors.white),
           ),
           style: ElevatedButton.styleFrom(
             backgroundColor: AppColors.yellow,
