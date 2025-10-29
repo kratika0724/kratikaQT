@@ -42,10 +42,22 @@ class _DashboardScreenState extends State<VendorDashboardScreen> {
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Image.asset(
-          AppAssets.logo,
-          color: Colors.white,
-          height: 30,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Image.asset(
+              AppAssets.logo,
+              color: Colors.white,
+              height: 30,
+            ),
+            ToggleButtons(
+              children: [
+                Icon(Icons.sunny), // Light mode
+                Icon(Icons.dark_mode)
+              ],
+              isSelected: [true, false], // Dark mode, isSelected: isSelected)
+            ),
+          ],
         ),
         backgroundColor: AppColors.primary,
         elevation: 2,

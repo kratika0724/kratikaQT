@@ -111,10 +111,13 @@ class _PendingBillsListState extends State<PendingBillsList> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  pendingBillsProvider.errorMessage!,
-                  style: const TextStyle(color: Colors.red),
-                  textAlign: TextAlign.center,
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    pendingBillsProvider.errorMessage!,
+                    style: const TextStyle(color: Colors.red),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
                 const SizedBox(height: 16),
                 ElevatedButton(

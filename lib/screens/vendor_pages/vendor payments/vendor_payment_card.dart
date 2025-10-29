@@ -130,7 +130,7 @@ class VendorPaymentCard extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(6),
-            color: isExpanded ? bgColorStatus.withOpacity(0.1) : Colors.white,
+            color: isExpanded ? bgColorStatus.withOpacity(0.1) : AppColors.textWhite,
           ),
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
           child: Padding(
@@ -236,7 +236,7 @@ class VendorPaymentCard extends StatelessWidget {
                   Text(
                     refId,
                     style: regularTextStyle(
-                        fontSize: dimen15, color: Colors.black),
+                        fontSize: dimen15, color: AppColors.textBlack),
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
@@ -252,7 +252,7 @@ class VendorPaymentCard extends StatelessWidget {
                 "$dateLabel $formattedDate",
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
-                style: thinTextStyle(fontSize: dimen13, color: Colors.grey),
+                style: thinTextStyle(fontSize: dimen13, color: AppColors.textBlack),
               ),
             ],
           ),
@@ -365,7 +365,7 @@ class VendorPaymentCard extends StatelessWidget {
       case 'debit':
         return const Color(0xfffb0e00);
       default:
-        return Colors.grey;
+        return Colors.black;
     }
   }
 

@@ -25,12 +25,13 @@ class LogoutButton extends StatelessWidget {
             ),
             TextButton(
               onPressed: () async {
-                await Provider.of<AuthProvider>(context, listen: false).logout();
+                await Provider.of<AuthProvider>(context, listen: false)
+                    .logout();
                 await PreferencesServices.clearData();
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) => const LoginScreen()),
-                      (route) => false,
+                  (route) => false,
                 );
               },
               child: const Text(

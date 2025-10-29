@@ -9,6 +9,7 @@ import 'package:qt_distributer/providers/dashboard_provider.dart';
 import 'package:qt_distributer/providers/pending_bills_provider.dart';
 import 'package:qt_distributer/providers/product_provider.dart';
 import 'package:qt_distributer/providers/transaction_provider.dart';
+import 'package:qt_distributer/screens/base%20main/home_screen.dart';
 import 'screens/splash_screen.dart';
 import 'constants/app_colors.dart';
 import 'constants/app_theme.dart';
@@ -74,7 +75,7 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ),
-        home: const SplashScreen(),
+        home:  HomeScreen(),
       ),
     );
   }

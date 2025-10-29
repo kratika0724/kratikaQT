@@ -9,14 +9,15 @@ import '../services/api_service.dart';
 
 class CashSubmissionBottomSheet extends StatefulWidget {
   final double availableCashWallet;
-  
+
   const CashSubmissionBottomSheet({
-    Key? key, 
+    Key? key,
     required this.availableCashWallet,
   }) : super(key: key);
 
   @override
-  State<CashSubmissionBottomSheet> createState() => _CashSubmissionBottomSheetState();
+  State<CashSubmissionBottomSheet> createState() =>
+      _CashSubmissionBottomSheetState();
 }
 
 class _CashSubmissionBottomSheetState extends State<CashSubmissionBottomSheet> {
@@ -61,7 +62,7 @@ class _CashSubmissionBottomSheetState extends State<CashSubmissionBottomSheet> {
           DashboardProvider provider =
               Provider.of<DashboardProvider>(context, listen: false);
           provider.getDatabyId(context);
-          
+
           setState(() {
             _showSuccessPage = true;
             _isLoading = false;
@@ -245,7 +246,7 @@ class _CashSubmissionBottomSheetState extends State<CashSubmissionBottomSheet> {
             ),
           ),
           const SizedBox(height: 24),
-          
+
           // Header
           Row(
             children: [
@@ -286,7 +287,7 @@ class _CashSubmissionBottomSheetState extends State<CashSubmissionBottomSheet> {
             ],
           ),
           const SizedBox(height: 24),
-          
+
           // Form
           Form(
             key: _formKey,
@@ -312,7 +313,8 @@ class _CashSubmissionBottomSheetState extends State<CashSubmissionBottomSheet> {
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12.0),
-                      borderSide: const BorderSide(color: AppColors.primary, width: 2),
+                      borderSide:
+                          const BorderSide(color: AppColors.primary, width: 2),
                     ),
                     filled: true,
                     fillColor: Colors.grey[50],
@@ -352,7 +354,8 @@ class _CashSubmissionBottomSheetState extends State<CashSubmissionBottomSheet> {
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12.0),
-                      borderSide: const BorderSide(color: AppColors.primary, width: 2),
+                      borderSide:
+                          const BorderSide(color: AppColors.primary, width: 2),
                     ),
                     filled: true,
                     fillColor: Colors.grey[50],
@@ -381,7 +384,8 @@ class _CashSubmissionBottomSheetState extends State<CashSubmissionBottomSheet> {
                             width: 20,
                             child: CircularProgressIndicator(
                               strokeWidth: 2,
-                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                              valueColor:
+                                  AlwaysStoppedAnimation<Color>(Colors.white),
                             ),
                           )
                         : Row(

@@ -59,6 +59,8 @@ dependencies:
   firebase_crashlytics: ^4.3.4
   firebase_messaging: ^15.2.4
   firebase_analytics: ^11.5.2
+  flutter_launcher_icons: ^0.14.4
+  image_picker: ^1.1.2
 
 
 

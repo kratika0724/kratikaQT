@@ -159,7 +159,7 @@ class _VendorPaymentsScreenState extends State<VendorPaymentsScreen>
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.grey[300]!),
+                      border: Border.all(color: AppColors.textWhite!),
                     ),
                     child: TextField(
                       controller: _searchController,
@@ -167,12 +167,12 @@ class _VendorPaymentsScreenState extends State<VendorPaymentsScreen>
                       decoration: InputDecoration(
                         hintText: _getSearchHint(),
                         hintStyle: TextStyle(
-                          color: Colors.grey[600],
+                          color: AppColors.grey,
                           fontSize: 14,
                         ),
                         prefixIcon: Icon(
                           Icons.search,
-                          color: Colors.grey[600],
+                          color: AppColors.grey,
                         ),
                         suffixIcon: _searchQuery.isNotEmpty
                             ? IconButton(
@@ -196,7 +196,10 @@ class _VendorPaymentsScreenState extends State<VendorPaymentsScreen>
                 if (provider.isLoading)
                   Center(child: CircularProgressIndicator()),
                 if (provider.errorMessage != null)
-                  Center(child: Text(provider.errorMessage!)),
+                  Center(child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Text(provider.errorMessage!),
+                  )),
                 Expanded(
                   child: provider.filteredTransactions.isEmpty &&
                           _searchQuery.isNotEmpty
@@ -207,7 +210,7 @@ class _VendorPaymentsScreenState extends State<VendorPaymentsScreen>
                               Icon(
                                 Icons.search_off,
                                 size: 64,
-                                color: Colors.grey[400],
+                                color: AppColors.grey,
                               ),
                               const SizedBox(height: 16),
                               Text(

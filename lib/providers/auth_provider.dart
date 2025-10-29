@@ -22,10 +22,8 @@ class AuthProvider extends ChangeNotifier {
   VerifyOtpResponse? get loginResponse => _loginResponse;
   bool get isAuthenticated => _isAuthenticated;
 
-
   bool _isInitialized = false;
   bool get isInitialized => _isInitialized;
-
 
   AuthProvider() {
     _loadAuthState();
@@ -43,7 +41,8 @@ class AuthProvider extends ChangeNotifier {
           _loginResponse = VerifyOtpResponse.fromJson(json);
 
           // Restore roleName and is_distributer flag
-          final roleName = await PreferencesServices.getPreferencesData(PreferencesServices.roleName);
+          final roleName = await PreferencesServices.getPreferencesData(
+              PreferencesServices.roleName);
           is_distributer = (roleName?.toLowerCase().trim() == 'distributor');
           debugPrint('Restored role: $roleName');
           debugPrint('Is distributor: $is_distributer');
@@ -65,7 +64,6 @@ class AuthProvider extends ChangeNotifier {
       await prefs.setBool(_isAuthenticatedKey, _isAuthenticated);
     }
   }
-
 
   // Send OTP
   Future<bool> sendOtp(String phoneNumber) async {

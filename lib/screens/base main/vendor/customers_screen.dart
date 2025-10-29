@@ -184,7 +184,7 @@ class _CustomersScreenState extends State<CustomersScreen>
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.grey[300]!),
+                      // border: Border.all(color: Colors.grey[300]!),
                     ),
                     child: TextField(
                       controller: _searchController,
@@ -221,7 +221,10 @@ class _CustomersScreenState extends State<CustomersScreen>
                 if (provider.isLoading)
                   Center(child: CircularProgressIndicator()),
                 if (provider.errorMessage != null)
-                  Center(child: Text(provider.errorMessage!)),
+                  Center(child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Text(provider.errorMessage!),
+                  )),
                 if (_hasFilters)
                   FilterChipsWidget(
                     filters: {
